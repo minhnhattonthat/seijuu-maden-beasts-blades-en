@@ -18,7 +18,7 @@ def test_roundtrip_every_entry():
     for entries in UNITS.values():
         for off, w, s in entries:
             ln = extract.slot(ROM, T, off, w)
-            assert extract.encode(T, s, w) == ROM[off:off + ln], f"{off | 0xC00000:06X} {s!r}"
+            assert extract.encode(T, s, w, off) == ROM[off:off + ln], f"{off | 0xC00000:06X} {s!r}"
             n += 1
     assert n > 6000
 

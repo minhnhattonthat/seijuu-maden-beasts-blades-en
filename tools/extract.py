@@ -57,6 +57,13 @@ RUNS = [
 ]
 # RUNS whose lines are read in order (no pointer per line): build.py packs them as a list of {call} stubs
 SEQ = {"prologue", "intro", "endings", "credits"}
+# menu windows drawn as BG tiles from the 8x8 font (tools/tilescan.py): record = <w> <h> then w*h words
+# (tile = code - $10, high byte $20; $E7 = blank cell), one row per item. Opened by menu-script op 10 lo hi
+# (C1 scripts C14094-C14C18); build.py moves that pointer when a record grows.
+MENUS = [0xC14C19, 0xC14C39, 0xC14C4D, 0xC14C63, 0xC14C85, 0xC14CA7, 0xC14CBB, 0xC14CC9, 0xC14CEB, 0xC14D29,
+         0xC14D37, 0xC14D4B, 0xC14D5D]
+MENU_SET = {a & 0x3FFFFF for a in MENUS}
+MENU_ATTR, BLANK = 0x20, 0xE7
 # name, single {end}-terminated strings (built-in event scripts in C0: 0A 01 lo hi FF + inline text)
 STRINGS = [
     ("system", [0xC03A64, 0xC03A71, 0xC03A78, 0xC03AA3, 0xC03ADC, 0xC03B01, 0xC03B11, 0xC03B23, 0xC042F1,
@@ -156,6 +163,9 @@ def units(rom, t=None):
                 add(name, p, gap, t.decode(rom, p, length=gap)[0])
             else:
                 add(name, p, None, s)
+    for a in MENUS:
+        s, n = menu_text(t, rom, a & 0x3FFFFF)
+        add("menus", a & 0x3FFFFF, n, s)
     for name, lo, stride, n in FIELDS:
         offs = [(lo & 0x3FFFFF) + stride * i for i in range(n)]
         names = [rom[o:o + stride].split(b"\0")[0] for o in offs]
@@ -171,10 +181,26 @@ def field_offsets():
     return {(lo & 0x3FFFFF) + stride * i for _, lo, stride, n in FIELDS for i in range(n)}
 
 
-def encode(t, s, w):
-    """Bytes for an entry; fields and spans are 00-padded to their slot."""
+def encode(t, s, w, off=None):
+    """Bytes for an entry; fields and spans are 00-padded to their slot, a menu record is rebuilt (its width =
+    the longest row, so it may outgrow its slot)."""
+    if off in MENU_SET:
+        rows = [t.encode(r) for r in s.split("{nl}")]
+        wd = max(map(len, rows))
+        return bytes([wd, len(rows)]) + b"".join(
+            bytes(x for c in r.ljust(wd, b"\xf7") for x in (BLANK if c == 0x10 else c - 0x10, MENU_ATTR))
+            for r in rows)  # space (tile 0 is not blank in this font) -> the blank cell
     b = t.encode(s)
     return b if w is None else b + bytes(max(0, w - len(b)))
+
+
+def menu_text(t, rom, off):
+    """A menu record as its rows joined by {nl}; trailing blank cells dropped, inner ones kept as [F7]."""
+    w, h = rom[off], rom[off + 1]
+    cells = [rom[off + 2 + 2 * i] for i in range(w * h)]
+    rows = ["".join("[F7]" if c == BLANK else t.dec[bytes([c + 0x10])] for c in cells[r * w:(r + 1) * w])
+            for r in range(h)]
+    return "{nl}".join(re.sub(r"(\[F7\])+$", "", r) for r in rows), 2 + 2 * w * h
 
 
 def slot(rom, t, off, w):

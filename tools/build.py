@@ -111,6 +111,7 @@ RUN_TABLES = [(0xC0BBCB, 8), (0xC0BBDD, 14), (0xC0BBFB, 21), (0xC0E4BB, 5), (0xC
               (0xC60B3C, 98), (0xC60E44, 11), (0xC60ECA, 11), (0xC63008, 11), (0xC630C3, 4), (0xC63129, 96),
               (0xC634E6, 69)]
 RUN_PTRS = [0xC14814, 0xC1481B, 0xC26919]
+MENU_SCRIPTS = (0x014094, 0x014C19)  # C1 menu scripts: their op 10 lo hi points at an extract.MENUS record
 
 
 def pointer_sites(orig):
@@ -123,25 +124,35 @@ def pointer_sites(orig):
         o, bank = tab & 0x3FFFFF, tab & 0x3F0000
         for i in range(n):
             sites.setdefault(bank | orig[o + 2 * i] | orig[o + 2 * i + 1] << 8, []).append(o + 2 * i)
+    lo, hi = MENU_SCRIPTS
+    for p in range(lo, hi):  # menu-script op 10 lo hi: open a menu record
+        r = 0x010000 | orig[p + 1] | orig[p + 2] << 8
+        if orig[p] == 0x10 and r in extract.MENU_SET:
+            sites.setdefault(r, []).append(p + 1)
     return sites
 
 
 def repoint(w, t, orig, text, short, free, strict):
-    """Strings whose slot can't hold a 6-byte stub: put the stub in a freed tail in the same bank and move every
-    pointer to it there."""
+    """Strings whose slot can't hold a 6-byte stub, and menu records that grew: put the stub (or the record) in a
+    freed tail in the same bank and move every pointer to it there."""
     sites, errs = pointer_sites(orig) if short else {}, []
     for off in short:
         wd, s = text[off]
-        hole = next((h for h in free if h[0] >> 16 == off >> 16 and h[1] - h[0] >= 6), None)
+        menu = off in extract.MENU_SET
+        b = extract.encode(t, s, wd, off) if menu else None
+        need = len(b) if menu else 6
+        hole = next((h for h in free if h[0] >> 16 == off >> 16 and h[1] - h[0] >= need), None)
         if off in extract.field_offsets() or off not in sites or not hole:
-            errs.append(f"text {0xC00000 | off:06X}: {len(extract.encode(t, s, wd))} bytes > "
+            errs.append(f"text {0xC00000 | off:06X}: {len(extract.encode(t, s, wd, off))} bytes > "
                         f"{extract.slot(orig, t, off, wd)}-byte slot")
             continue
         name = f"text_{0xC00000 | off:06X}"
-        w.write(hole[0], stub(w.put(t.encode(s if s.endswith("{end}") else s + "{end}"), "reloc" + name[4:])), name)
+        if not menu:
+            b = stub(w.put(t.encode(s if s.endswith("{end}") else s + "{end}"), "reloc" + name[4:]))
+        w.write(hole[0], b, name)
         for p in sites[off]:
             w.write(p, (hole[0] & 0xFFFF).to_bytes(2, "little"), "ptr" + name[4:])
-        hole[0] += 6
+        hole[0] += need
     if errs and strict:
         raise SystemExit("\n".join(errs))
     for e in errs:
@@ -187,10 +198,10 @@ def repack(orig, text, gfx, strict=True, asm=False):
     for off, (wd, s) in sorted(text.items()):
         if any(lo <= off < hi for _, lo, hi in seq) or base[off][1] == s:  # untouched: keep the original bytes
             continue
-        b = extract.encode(t, s, wd)
+        b = extract.encode(t, s, wd, off)
         n = extract.slot(orig, t, off, wd)
         if len(b) > n:
-            if off in fields or n < 6:
+            if off in fields or n < 6 or off in extract.MENU_SET:
                 short.append(off)
                 continue
             b = stub(w.put(t.encode(s if s.endswith("{end}") else s + "{end}"), f"reloc_{0xC00000 | off:06X}"))
@@ -235,30 +246,34 @@ def marker(t, off, w, s):
     return "".join(out)
 
 
-def build(orig, mark=False):
+def build(orig, mark=False, qa=()):
+    """qa: ["ID=text", ...] overrides single entries after the script/marker overlay (width tests)."""
     text, gfx = unpack_text(orig), unpack_gfx(orig)
     gfx[MENU_FONT] = font.menu_font(gfx[MENU_FONT])
     if mark:
         skip = {o for n, es in extract.units(orig).items() if n in NO_MARKER for o, *_ in es}
         t = Table.load(ROOT / "tbl" / "jp.tbl")
-        return repack(orig, {o: (w, s if o in skip else marker(t, o, w, s)) for o, (w, s) in text.items()},
-                      gfx, strict=False, asm=True)
-    for off, en in extract.load_en().items():  # script/*.json translations over the original units
+        text = {o: (w, s if o in skip else marker(t, o, w, s)) for o, (w, s) in text.items()}
+    else:
+        en = extract.load_en()  # script/*.json translations over the original units
+    over = {int(k, 16) & 0x3FFFFF: v for k, v in (q.split("=", 1) for q in qa)}
+    for off, s in (({} if mark else en) | over).items():
         if off not in text:
-            raise SystemExit(f"script: {0xC00000 | off:06X} is not a text unit (re-run tools/extract.py)")
-        text[off] = (text[off][0], en)
-    return repack(orig, text, gfx, asm=True)
+            raise SystemExit(f"{0xC00000 | off:06X} is not a text unit (re-run tools/extract.py)")
+        text[off] = (text[off][0], s)
+    return repack(orig, text, gfx, strict=not mark, asm=True)
 
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--out", type=Path)
     ap.add_argument("--marker", action="store_true", help="every line -> [id] filler (build/seijuu_marker.sfc)")
+    ap.add_argument("--qa", action="append", default=[], metavar="ID=TEXT", help="override one entry (en.tbl text)")
     a = ap.parse_args()
     a.out = a.out or ROOT / "build" / ("seijuu_marker.sfc" if a.marker else "seijuu_en.sfc")
     check_rom.check()
     orig = ROM.read_bytes()
-    w = build(orig, a.marker)
+    w = build(orig, a.marker, a.qa)
     errs, _ = romdiff.check(orig, bytes(w.rom), set(), w.log)
     if errs:
         sys.exit("romdiff:\n" + "\n".join(errs))
