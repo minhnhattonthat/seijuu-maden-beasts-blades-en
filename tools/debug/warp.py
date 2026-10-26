@@ -37,10 +37,11 @@ def scenes():
     return out
 
 
-def run(name, frames, rom, states, sheet):
+def run(name, frames, rom, states, sheet, lua=()):
     out = ROOT / "work" / "qa" / "warp" / name
     cmd = [sys.executable, "-X", "utf8", str(Path(SKILL) / "scripts" / "emu.py"), str(rom), "--out", str(out),
            "--script", str(SCENES), "--script", str(ROOT / "tools" / "debug" / "warp.lua"),
+           *[x for f in lua for x in ("--script", str(Path(f).resolve()))],
            "--var", f"SCENE='{name}'", "--frames", str(frames), "--timeout", "900"]
     if states:
         cmd += ["--state-out", str(ROOT / "work" / "states" / f"{name}.mss")]
@@ -63,6 +64,7 @@ def main():
     ap.add_argument("--sheet", action="store_true")
     ap.add_argument("--jobs", type=int, default=3)
     ap.add_argument("--list", action="store_true")
+    ap.add_argument("--lua", action="append", default=[], help="extra probe script(s), e.g. tools/lua/textlog.lua")
     a = ap.parse_args()
     sc = scenes()
     if a.list or not a.names:
@@ -75,7 +77,7 @@ def main():
             sys.exit(f"unknown scene {n} (see --list)")
     fails = 0
     with ThreadPoolExecutor(a.jobs) as ex:
-        for name, ok, msg, out in ex.map(lambda n: run(n, sc[n], a.rom, a.states, a.sheet), names):
+        for name, ok, msg, out in ex.map(lambda n: run(n, sc[n], a.rom, a.states, a.sheet, a.lua), names):
             fails += not ok
             print(f"{'ok  ' if ok else 'FAIL'} {name:24} {msg}  {out / f'scene_{name}.png'}")
     return 1 if fails else 0

@@ -24,7 +24,7 @@ def test_edits_land_and_log():
     gfx_off = 0x0CAB70  # intro poem graphic
     raw = bytearray(GFX[gfx_off])
     raw[0] ^= 0xFF
-    w = build.repack(ORIG, {**TEXT, off: "あ{end}"}, {**GFX, gfx_off: bytes(raw)})
+    w = build.repack(ORIG, {**TEXT, off: (None, "あ{end}")}, {**GFX, gfx_off: bytes(raw)})
     b = build.Table.load(ROOT / "tbl" / "jp.tbl").encode("あ{end}")
     assert w.rom[off:off + len(b)] == b
     assert lz.decompress(w.rom, gfx_off)[0] == bytes(raw)

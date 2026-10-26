@@ -1,11 +1,11 @@
-# Glossary - <Game title>
+# Glossary - Seijuu Maden: Beasts & Blades
 
 Binding for every translator and reviewer. Agents propose additions in reports; only the controller edits this file.
 
 ## Rulings (asked of the user once; options and reasons in docs/decisions.md)
-- Honorifics: <kept, hyphenated (Johannes-san) | dropped>. Name order: <JP | Western>.
-- Romanisation source: <official art / anime / Hepburn>.
-- Credits: <stay kanji | English>.
+- Honorifics: kept, hyphenated (Johannes-san). Name order: Western (D1).
+- Romanisation source: the game's own English (title, intro crawl, credits), else an earlier fan patch (none found), else Hepburn without macrons (D2).
+- Credits: English (D3; the staff names are already English in the ROM).
 - Register / flavour: <e.g. keep light JP flavour>. Sound effects: <*Slam!*>.
 - Abbreviations: <default: full names and terms everywhere, prefer engine changes over shortening>.
 

@@ -1,8 +1,8 @@
 """build.py: build build/seijuu_en.sfc from the original ROM (checked against rom.sha1 first).
 
 Unpack -> repack: every unit the translation can change is read out of the original and written back:
-  - text: every string an event-script message op (0A/0C) points at (tools/evdis.py walk), decoded with
-    tbl/jp.tbl and re-encoded in place;
+  - text: every unit tools/extract.py finds (event messages, code-read lists, pointer tables, name fields),
+    decoded with tbl/jp.tbl, overlaid with the "en" fields of script/*.json and re-encoded in place;
   - graphics: every LZ block tools/lzblocks.py finds; a block whose raw data is unchanged keeps its original
     bytes, a changed one is recompressed (tools/lz.py) and must fit its old slot.
 Then the header checksum is recomputed. With no edits the output equals the original byte for byte
@@ -18,6 +18,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import bps  # noqa: E402
 import check_rom  # noqa: E402
 import evdis  # noqa: E402
+import extract  # noqa: E402
 import lz  # noqa: E402
 import lzblocks  # noqa: E402
 import romdiff  # noqa: E402
@@ -25,29 +26,11 @@ from tbl import Table  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 ROM = evdis.ROM
-DUMMY = 0xCE3467  # unused scenario slots point here (tests/test_events.py)
 
 
 def unpack_text(rom):
-    """{file offset: text} for every event-script message string."""
-    t = Table.load(ROOT / "tbl" / "jp.tbl")
-    out = {}
-    for s in range(evdis.NSCN):
-        sc = evdis.scenario(rom, s)
-        if sc["base"] == DUMMY:
-            continue
-        seen = set()
-        for e in sc["events"]:
-            try:
-                for a, _ in evdis.walk(rom, e, seen):
-                    o = a & 0x3FFFFF
-                    if rom[o] in (0x0A, 0x0C):
-                        p = (a & 0x3F0000) | rom[o + 2] | rom[o + 3] << 8
-                        if p not in out:
-                            out[p] = t.decode(rom, p)[0]
-            except evdis.Bad:
-                pass  # known dead path (tests/test_events.py KNOWN_BAD); its earlier messages are kept
-    return out
+    """{file offset: (slot width or None for {end}-terminated, text)} for every unit tools/extract.py knows."""
+    return {off: (w, s) for entries in extract.units(rom).values() for off, w, s in entries}
 
 
 def unpack_gfx(rom):
@@ -73,9 +56,9 @@ class Writer:
 def repack(orig, text, gfx):
     t = Table.load(ROOT / "tbl" / "jp.tbl")
     w = Writer(orig)
-    for off, s in sorted(text.items()):
-        b = t.encode(s)
-        n = t.decode(orig, off)[1]
+    for off, (wd, s) in sorted(text.items()):
+        b = extract.encode(t, s, wd)
+        n = extract.slot(orig, t, off, wd)
         if len(b) > n:  # relocation via {call} comes with the engine work (phase 5)
             raise SystemExit(f"text {0xC00000 | off:06X}: {len(b)} bytes > {n}-byte slot")
         w.write(off, b, f"text_{0xC00000 | off:06X}")
@@ -93,8 +76,12 @@ def repack(orig, text, gfx):
 
 
 def build(orig):
-    # phase 4 overlays script/*.json translations on these units
-    return repack(orig, unpack_text(orig), unpack_gfx(orig))
+    text = unpack_text(orig)
+    for off, en in extract.load_en().items():  # script/*.json translations over the original units
+        if off not in text:
+            raise SystemExit(f"script: {0xC00000 | off:06X} is not a text unit (re-run tools/extract.py)")
+        text[off] = (text[off][0], en)
+    return repack(orig, text, unpack_gfx(orig))
 
 
 def main():

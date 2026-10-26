@@ -13,7 +13,8 @@ Addresses are for the dump in `rom.sha1` unless a note says otherwise.
 | File | Covers | State |
 |---|---|---|
 | [rom.md](rom.md) | header, bank map, free space, expansion plan | verified header; free space candidates only |
-| [text.md](text.md) | encoding, fonts, text engines, control codes, pointer forms, text ranges | encoding verified; some control codes guessed |
+| [text.md](text.md) | encoding, fonts, text engines, control codes, pointer forms (event VM, menu-script VM, tables, name fields), text ranges | encoding verified; units roundtrip (`tests/test_extract.py`); some control codes guessed |
+| [not_text.tsv](not_text.tsv) | text-like regions read by eye and found to be code/data (coverage test allowlist) | by eye |
 | [events.md](events.md) | event-script VM, every opcode length (`tools/evdis.py`), scenarios, story vars, relocation plan | verified (full walk of all scripts; warps) |
 | [compression.md](compression.md) | LZSS format, decompressor `C3035D`, block list tool | verified (roundtrip test) |
 | [graphics.md](graphics.md) | graphics-text survey (G1-G8), fonts, what is not covered yet | static sweep + early tour |

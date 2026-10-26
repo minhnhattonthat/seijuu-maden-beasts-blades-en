@@ -55,7 +55,12 @@ Argument bytes follow the code. "verified" = handler read; "corpus" = decoded st
 1. **Event scripts** (most dialogue): opcode `0A`/`0C` + flags byte + **16-bit pointer into the script's own bank** (`docs/re/events.md`). Verified: `E771BE: 0A 03 D3 78` shows `E778D3` (ガイアス cutscene, watch probe on the bytes).
 2. **Code immediates:** `LDA #lo / STA $32 / LDX #bank / STX $34` (prologue `C16096` -> `C1621D`, then the following strings in order until `00 00`), or `LDA #lo / STA $4B90 / LDA #bank / STA $4B92` (name entry `C114A9` -> `C11A9C`).
 3. **Fixed-width records:** item names in bank C6, 8-byte name field (`00`-padded) inside 18-byte records (`C6281F` ほしのこな, next `C62831`). Kana-only, drawn with the 8x8 menu font (`docs/re/graphics.md`).
-4. Others not yet traced (menus, battle messages, shop): find them by `textlog.lua` on the tour.
+4. **Common event table** `CE0128` (247 16-bit entries into bank CE, right after the scenario table): event scripts not in any scenario header (recruit/hire lines per character). Walked like scenario events.
+5. **Menu-script VM** (building menus): interpreter `C0C4E7`, pointer 24-bit at DP `$72-$74`, op byte -> handler table `C0BF8F` (`FF` ends; `00 lo hi` goto). Menu ops `60`-`76` of the event VM set `$72` to a C1 script (`60` -> `C14094`). Its message op is also `0A ff lo hi` (bank C1). Scripts `C14094`-`C14D72`, their text `C14D73`-`C15DA4`. Opcode lengths not mapped (not needed: the text is one contiguous list).
+6. **Pointer tables** (16-bit, own bank): ending scrolls `C17044` (5), ranks `C60E44`/`C60ECA`, armor types `C630C3`, monster retreat lines `C50ABE` (11), battle messages `C57CD8` (21; the shouts at `C57DCB`-`C57E02` are packed with no `00` between them, so a string ends at the next pointer), battle idle lines `C57E03` (7).
+7. **Fixed-width name fields** in C6 records (`00`-padded; record stride differs per table): weapons `C60F50` (19 B), armor `C61CE5` (18), food `C62489` (12), items `C6253D` (18), items2 `C62BFD` (15), skills `C6368D` (13), beasts `C6686C` (37), named people `C674AE` (29), enemy classes `C6760C` (31), monster bosses `C679CF` (33). Width = longest name in the table for now; the menu code that reads them sets the real width (phase 5).
+
+All of these are units in `tools/extract.py` (`RUNS`, `PTRS`, `FIELDS`, `EVENT_TABLES`) -> `script/*.json`.
 
 ## Text ranges (survey, `tools/textscan.py`)
 
