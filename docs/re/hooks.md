@@ -22,5 +22,8 @@ shadow. A lone English glyph before a control code or kanji gets a blank right h
 - Slots under 6 bytes: the stub goes into a freed tail (old bytes after an in-place stub) in the same bank, and
   every 16-bit pointer to the line moves there: event `0A`/`0C` ops (`extract.event_sites`), `PTRS` tables,
   `RUN_TABLES` / `RUN_PTRS` in build.py.
+- C6 name fields (8x8 menu printer `C32912`: `00`-terminated, codes < $10 via table `C328F2`; its code `0F FF lo hi
+  bank` is a call, `C32A1D`): a long name becomes a stub too, the rest of the field zero-filled.
+- Menu records (`extract.MENUS`) that grow move to a freed tail in bank C1; the menu-script op `10 lo hi` is moved.
 - SEQ runs (prologue, intro, endings, credits; `extract.SEQ`) are read line after line (`C160DE`: measure, draw,
   `INC $32`): the whole run is rewritten in place as one stub per line, and the ending table `C17044` is moved.

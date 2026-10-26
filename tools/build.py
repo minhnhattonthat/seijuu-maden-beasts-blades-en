@@ -201,11 +201,15 @@ def repack(orig, text, gfx, strict=True, asm=False):
         b = extract.encode(t, s, wd, off)
         n = extract.slot(orig, t, off, wd)
         if len(b) > n:
-            if off in fields or n < 6 or off in extract.MENU_SET:
+            if n < 6 or off in extract.MENU_SET:
                 short.append(off)
                 continue
+            # the 8x8 menu printer (C32912) has {call} too (its code 0F, C32A1D), so a name field takes a stub
             b = stub(w.put(t.encode(s if s.endswith("{end}") else s + "{end}"), f"reloc_{0xC00000 | off:06X}"))
-            free.append([off + 6, off + n])  # the old string's tail: nothing points into it
+            if off in fields:
+                b += bytes(n - 6)
+            else:
+                free.append([off + 6, off + n])  # the old string's tail: nothing points into it
         w.write(off, b, f"text_{0xC00000 | off:06X}")
     repoint(w, t, orig, text, short, free, strict)
     for name, lo, hi in seq:
@@ -230,10 +234,8 @@ NO_MARKER = {"name_grid"}  # layout codes, not lines
 
 def marker(t, off, w, s):
     """Marker text for one entry: every run of glyphs becomes filler of the same width in 6 px cells, the first
-    run led by [id]; control codes stay. Fields get the id's last hex digits (their width is fixed)."""
+    run led by [id]; control codes stay."""
     tag = f"{0xC00000 | off:06X}"
-    if w is not None and off in extract.field_offsets():
-        return tag[-min(w, 4):]
     out, first = [], True
     for k, part in enumerate(re.split(r"(\{\w+(?::[0-9A-Fa-f]*)?\})", s)):
         if k % 2 or not part:

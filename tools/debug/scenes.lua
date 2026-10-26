@@ -15,6 +15,8 @@ SCENES = {
   -- Lunas Castle (scenario 1) building events: each runs the shopkeeper's lines and its menu op
   -- (event op in the name: 60 buy/sell/forge, 62, 64, 66 inn, 68, 6A, 6C, 6E, 70, 72, 74, 76; then A on item 1)
   shop_60 = { scn = 1, map = 0, ev = 12, after = "500 -;6 a;200 -", frames = 8000 },
+  -- weapon shop: buy list (C6 name fields in the 8x8 font)
+  shop_buy = { scn = 1, map = 0, ev = 12, after = "500 -;6 a;200 -;6 a;200 -", frames = 8200 },
   shop_62 = { scn = 1, map = 0, ev = 9, after = "500 -;6 a;200 -", frames = 8000 },
   shop_64 = { scn = 1, map = 0, ev = 2, after = "500 -;6 a;200 -", frames = 8000 },
   inn_66 = { scn = 1, map = 0, ev = 21, after = "500 -;6 a;200 -", frames = 8000 },
