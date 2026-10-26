@@ -48,6 +48,7 @@ def unpack_gfx(rom):
 
 EXP, END = 0x280000, 0x400000  # banks E8-FF, the 4 MB expansion (docs/re/rom.md)
 ASM, ASAR = ROOT / "tools" / "asm" / "text.asm", ROOT / "tools" / "asar" / "asar.exe"
+MENU_FONT = 0x0BC255  # LZ block: the 8x8 menu font (docs/re/graphics.md), lowercase from fonts/en8.txt
 ASM_SPACE = 0x4000  # E80000-E83FFF belong to tools/asm/text.asm; relocated text starts after it
 SEQ_PTRS = {"endings": [(0xC17044, 5)]}  # 16-bit pointer tables into a SEQ run, rewritten when it is packed
 
@@ -235,17 +236,18 @@ def marker(t, off, w, s):
 
 
 def build(orig, mark=False):
-    text = unpack_text(orig)
+    text, gfx = unpack_text(orig), unpack_gfx(orig)
+    gfx[MENU_FONT] = font.menu_font(gfx[MENU_FONT])
     if mark:
         skip = {o for n, es in extract.units(orig).items() if n in NO_MARKER for o, *_ in es}
         t = Table.load(ROOT / "tbl" / "jp.tbl")
         return repack(orig, {o: (w, s if o in skip else marker(t, o, w, s)) for o, (w, s) in text.items()},
-                      unpack_gfx(orig), strict=False, asm=True)
+                      gfx, strict=False, asm=True)
     for off, en in extract.load_en().items():  # script/*.json translations over the original units
         if off not in text:
             raise SystemExit(f"script: {0xC00000 | off:06X} is not a text unit (re-run tools/extract.py)")
         text[off] = (text[off][0], en)
-    return repack(orig, text, unpack_gfx(orig), asm=True)
+    return repack(orig, text, gfx, asm=True)
 
 
 def main():
