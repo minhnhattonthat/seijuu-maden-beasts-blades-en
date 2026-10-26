@@ -1,6 +1,6 @@
 # ROM map, header, free space
 
-- Dump in `rom.sha1`: 2,621,440 bytes (2.5 MB), no copier header. Header at `$FFC0`: title `ﾋﾞｰｽﾄ ｱﾝﾄﾞﾌﾞﾚｲﾄﾞ`, map mode `$31` (HiROM, FastROM), cart type `$02` (ROM+RAM+battery), ROM size byte `$0C` (declares 4 MB), SRAM `$03` (8 KB), region `$00` (Japan), checksum `$1C37` / complement `$C8E3`.
+- Dump in `rom.sha1`: 2,621,440 bytes (2.5 MB), no copier header. Header at `$FFC0`: title `ﾋﾞｰｽﾄ ｱﾝﾄﾞﾌﾞﾚｲﾄﾞ`, map mode `$31` (HiROM, FastROM), cart type `$02` (ROM+RAM+battery), ROM size byte `$0C` (declares 4 MB), SRAM `$03` (8 KB), region `$00` (Japan), checksum `$1C37` / complement `$C8E3` (verified: mirrored sum, first 2 MB + 4 x the last 0.5 MB; `tools/bps.py snes_checksum`).
 - Banks `$C0-$E7` hold the file (offset = addr & 0x3FFFFF). Code lives in C0-C5 (event VM C0, text engine C3); fonts CA; LZ graphics C4/C7/CB/CC/CD/D2/E1; dialogue + event scripts CE, CF, E3-E7 (docs/re/text.md).
 
 ## Free space (verified only where noted)
