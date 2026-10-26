@@ -15,7 +15,13 @@ Static sweep: every LZ block `tools/lzblocks.py --render work/gfx` finds (docs/r
 | G7 | Party/battle UI labels: フォーメーション アイテム パーティ 第N聖獣王 引ける 捨てる 使う 貴重品 陣形 前... | LZ `CD3838`, `CD4381` (`C25828`/`C25839`) | 2bpp, 16 px in 2 tile rows | in block only | redraw |
 | G8 | Unknown text-like strips | LZ `D2A94E`, `D2AD77` (`C52B83`/`C52B95`) | 4bpp | in block only | identify on the tour |
 
-Not Japanese (no work): PUSH START, the English intro verses, PAUSE sprite, battle UI `CD51CD` (STATUS ACTION HEART), status UI `CD498F` (NAME LV EXP HP MALE FEMALE STATUS EQUIP ITEM NEXT SEX).
+| G9 | Battle command menu: 移動 攻撃 アイテム 防御 (outlined 16 px, same style as G6) | not yet matched | ? | seen (warp `battle_t10`) | find source with G6, redraw |
+| G10 | World-map party commands: 移動 キャンプ ステータス; 移動 sub-menu 移動/入る; X menu マップ/セーブ | not yet matched | ? | seen (warp `world_cmd`, explore1 notes) | find source with G6, redraw |
+| G11 | Location title box on entering a map (山賊砦, どうぐや) | text engine or tiles: check in the marker build | ? | seen (warp `battle_fort`) | marker build decides |
+
+Not Japanese (no work): town menu "OK?" bubble and EXIT sign, save screen NO DATA, battle REMAIN/MAXIMUM/HP gauges,
+world-map POINT/FOOD/USE box, staff credits (English names in the text engine, C17C03).
+Not Japanese (no work, earlier list): PUSH START, the English intro verses, PAUSE sprite, battle UI `CD51CD` (STATUS ACTION HEART), status UI `CD498F` (NAME LV EXP HP MALE FEMALE STATUS EQUIP ITEM NEXT SEX).
 
 ## Fonts (text work, not graphics text)
 
@@ -25,4 +31,7 @@ Not Japanese (no work): PUSH START, the English intro verses, PAUSE sprite, batt
 
 ## Not covered yet (tour with the debug tool, phases 2 and 5)
 
-Battle screens, monster/beast names, shop/inn/church, save/load screen, world map and place names, chapter or "第N聖獣王" cards, game over, ending, credits. LZ loaders that take bank/address from registers (`C5037D`, `C50C3B`, `C54094`, `C2405A`, `C2C609`) are not swept statically; raw (uncompressed) graphics banks are not swept either (only the sprite bank `DB` was seen).
+Seen through warps in phase 2 (`tools/debug/scenes.lua`): battles, shops/inn, save screen, world map, town menu,
+endings and credits (ending text is the 12 px text engine over a picture). Still to check in the marker build:
+beast/monster name plates, the 第N聖獣王 banner on the world map (C60xxx list is text: likely the text engine),
+grid field battles (world-map encounters; no warp yet). LZ loaders that take bank/address from registers (`C5037D`, `C50C3B`, `C54094`, `C2405A`, `C2C609`) are not swept statically; raw (uncompressed) graphics banks are not swept either (only the sprite bank `DB` was seen).
