@@ -1,4 +1,7 @@
-# Cold boot: logos + intro crawl to the title (~1450 frames), Start -> name entry (new game, no save)
+# Cold boot: logos + intro crawl to the title (~1450 frames), Start -> name entry (new game, no save).
+# The first Start at 1500 can land during the title fade-in; the second one opens name entry.
 1500 -
-10 start
+8 start
+120 -
+8 start
 300 -

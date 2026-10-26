@@ -1,0 +1,27 @@
+# code	char	how read (font cells the MS Gothic matcher got wrong; tools/make_tbl.py applies these)
+FB91	々	work/font/tail.png, cell 2611
+FB99	　	cell 2619 is blank: full-width space
+FB9A	（	cell 2620
+FB9B	）	cell 2621
+F271	違	fontreview chunk00 (matcher: 遺)
+F27D	一	chunk00: 一杯 (matcher: box-drawing ─)
+F288	員	chunk00: 一員, 全員 (matcher: 肓)
+F2E8	慣	chunk00 (matcher: 槓)
+F302	開	chunk00 (matcher: 閲)
+F316	間	chunk00: 仲間 (matcher: 聞)
+F318	関	chunk00 (matcher: 閤)
+F477	貢	chunk00 (matcher: 貫)
+F478	購	chunk00 (matcher: 騎)
+F523	事	chunk01 (matcher: 辜)
+F86F	読	chunk02 (matcher: 続)
+FABC	堀	chunk03 (matcher: 崛)
+FB8D	暁	chunk03 (matcher: 硯)
+F409	警	work/fontreview/dupes.png (matcher: 茎, taken by F3FD)
+F476	講	dupes.png (matcher: 護)
+F4A6	誇	dupes.png (matcher: 護)
+F54E	柵	dupes.png (matcher: 冊)
+F586	珊	dupes.png (matcher: 冊)
+F6D9	噌	dupes.png (matcher: 贈)
+FB51	覧	dupes.png (matcher: 量)
+FB93	嘘	dupes.png (matcher: 遇)
+F6D0	糧	dupes.png: the font has 糧 twice (F6D0, FAD2), so FAD2 reads ‹糧› (matcher: 糎)
