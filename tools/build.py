@@ -269,10 +269,36 @@ def marker(t, off, w, s):
     return "".join(out)
 
 
+NAME_GRID = 0x07EAC9  # LZ: name-entry grid tilemap, 20 tiles x 39 rows (tile = code - $10, $20xx; E7 = blank).
+# The picked cell's tile is the stored letter (C1156C reads it from the map in RAM), so the map is the alphabet.
+# Pages of 8 lines (every other tilemap row): hiragana, katakana, then 0-9 A-Z and END (kept, ー -> -).
+GRID_PAGE1 = ["ABCDEFGHIJ", "KLMNOPQRST", "UVWXYZ.,'-", "abcdefghij", "klmnopqrst", "uvwxyz!?&/",
+              "0123456789", "():+=#*~\"_"]
+
+
+def name_grid(t, raw):
+    """The grid tilemap with English on page 1, page 2 blank."""
+    w = [raw[i] | raw[i + 1] << 8 for i in range(0, len(raw), 2)]
+    letters = iter("".join(GRID_PAGE1))
+    for i, x in enumerate(w):
+        row = i // 20
+        if x >> 8 != 0x20 or x & 0xFF == extract.BLANK:
+            continue
+        if row < 16:
+            c = next(letters)
+            w[i] = 0x2000 | (extract.BLANK if c == "_" else t.encode(c)[0] - 0x10)
+        elif row < 32:
+            w[i] = 0x2000 | extract.BLANK
+        elif x & 0xFF == 0xE1:  # ー
+            w[i] = 0x2000 | (t.encode("-")[0] - 0x10)
+    return b"".join(x.to_bytes(2, "little") for x in w)
+
+
 def build(orig, mark=False, qa=()):
     """qa: ["ID=text", ...] overrides single entries after the script/marker overlay (width tests)."""
     text, gfx = unpack_text(orig), unpack_gfx(orig)
     gfx[MENU_FONT] = font.menu_font(gfx[MENU_FONT])
+    gfx[NAME_GRID] = name_grid(Table.load(ROOT / "tbl" / "en.tbl"), gfx[NAME_GRID])
     if mark:
         skip = {o for n, es in extract.units(orig).items() if n in NO_MARKER for o, *_ in es}
         t = Table.load(ROOT / "tbl" / "jp.tbl")
