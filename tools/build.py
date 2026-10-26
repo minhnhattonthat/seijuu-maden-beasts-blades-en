@@ -103,6 +103,7 @@ def pack_run(w, t, orig, text, name, lo, hi):
         for i in range(cnt):
             q = moved[bank | orig[o + 2 * i] | orig[o + 2 * i + 1] << 8] & 0xFFFF
             w.write(o + 2 * i, q.to_bytes(2, "little"), f"ptr_{name}")
+    return lo + len(out)
 
 
 # 16-bit pointer tables into RUNS strings (own bank; found by a whole-ROM scan for >= 3 words that
@@ -129,7 +130,25 @@ def pointer_sites(orig):
         r = 0x010000 | orig[p + 1] | orig[p + 2] << 8
         if orig[p] == 0x10 and r in extract.MENU_SET:
             sites.setdefault(r, []).append(p + 1)
+    for p in town_lists(orig):
+        sites.setdefault(0x0E0000 | orig[p] | orig[p + 1] << 8, []).append(p)
     return sites
+
+
+def town_lists(orig):
+    """Offsets of the 16-bit building-name pointers in every town's building list (55 nn, then (ptr, map)
+    triples until FF FF; one list per town, in its scenario's bank; the names are in CE, the buildings run)."""
+    lo, hi = next((a & 0xFFFF, b & 0xFFFF) for n, a, b in extract.RUNS if n == "buildings")
+    out = []
+    for i in range(len(orig) - 6):
+        if orig[i] == 0x55 and lo <= (orig[i + 2] | orig[i + 3] << 8) < hi:
+            j, ptrs = i + 2, []
+            while lo <= (orig[j] | orig[j + 1] << 8) < hi:
+                ptrs.append(j)
+                j += 3
+            if orig[j:j + 2] == b"\xff\xff" and len(ptrs) >= 2:
+                out += ptrs
+    return out
 
 
 def repoint(w, t, orig, text, short, free, strict):
@@ -211,10 +230,12 @@ def repack(orig, text, gfx, strict=True, asm=False):
             else:
                 free.append([off + 6, off + n])  # the old string's tail: nothing points into it
         w.write(off, b, f"text_{0xC00000 | off:06X}")
-    repoint(w, t, orig, text, short, free, strict)
+    if asm:  # the old half-width glyph code text.asm cut off (docs/re/hooks.md): free space in bank C3
+        free += [[0x031B84, 0x031C12], [0x03276D, 0x03278C]]
     for name, lo, hi in seq:
         if any(lo <= o < hi and text[o][1] != t.decode(orig, o)[0] for o in text):
-            pack_run(w, t, orig, text, name, lo, hi)
+            free.append([pack_run(w, t, orig, text, name, lo, hi), hi])  # nothing points past the packed list
+    repoint(w, t, orig, text, short, free, strict)
     for off, raw in sorted(gfx.items()):
         old, used = lz.decompress(orig, off)
         if raw == old:
