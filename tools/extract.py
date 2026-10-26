@@ -55,6 +55,8 @@ RUNS = [
     ("effects2", 0xC63570, 0xC6368D),
     ("buildings", 0xCE3419, 0xCE3467),      # town-menu building names
 ]
+# RUNS whose lines are read in order (no pointer per line): build.py packs them as a list of {call} stubs
+SEQ = {"prologue", "intro", "endings", "credits"}
 # name, single {end}-terminated strings (built-in event scripts in C0: 0A 01 lo hi FF + inline text)
 STRINGS = [
     ("system", [0xC03A64, 0xC03A71, 0xC03A78, 0xC03AA3, 0xC03ADC, 0xC03B01, 0xC03B11, 0xC03B23, 0xC042F1,
@@ -91,6 +93,11 @@ def cpu(off):
 
 def event_strings(rom, t):
     """{offset: text} for every 0A/0C message string, scenario walk + common tables."""
+    return {p: t.decode(rom, p)[0] for p in event_sites(rom)}
+
+
+def event_sites(rom):
+    """{string offset: [offsets of the 0A/0C ops pointing at it]} (in walk order)."""
     out = {}
 
     def take(entries):
@@ -101,8 +108,8 @@ def event_strings(rom, t):
                     o = a & 0x3FFFFF
                     if rom[o] in (0x0A, 0x0C):
                         p = (a & 0x3F0000) | rom[o + 2] | rom[o + 3] << 8
-                        if p not in out:
-                            out[p] = t.decode(rom, p)[0]
+                        if o not in out.setdefault(p, []):
+                            out[p].append(o)
             except evdis.Bad:
                 pass  # known dead path (tests/test_events.py KNOWN_BAD); its earlier messages are kept
 
@@ -157,6 +164,11 @@ def units(rom, t=None):
             if b:
                 add(name, o, w, t.decode(b, 0, length=len(b))[0])
     return out
+
+
+def field_offsets():
+    """Offsets of every FIELDS slot (fixed-width records: no {call}, must fit)."""
+    return {(lo & 0x3FFFFF) + stride * i for _, lo, stride, n in FIELDS for i in range(n)}
 
 
 def encode(t, s, w):

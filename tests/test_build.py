@@ -30,3 +30,16 @@ def test_edits_land_and_log():
     assert lz.decompress(w.rom, gfx_off)[0] == bytes(raw)
     assert romdiff.check(ORIG, bytes(w.rom), set(), w.log)[0] == []
     assert {n for *_, n in w.log} >= {"text_E77A0A", "lz_CCAB70", "checksum"}
+
+
+def test_relocation_and_packed_runs():
+    en = build.Table.load(ROOT / "tbl" / "en.tbl")
+    long = "Good morning! " * 20 + "{end}"
+    pro = 0x1622A  # a prologue line (SEQ run): the whole run is rewritten as stubs
+    w = build.repack(ORIG, {**TEXT, 0x277A0A: (None, long), pro: (None, "Long ago...{end}")}, GFX, asm=True)
+    rom = bytes(w.rom)
+    assert len(rom) == build.END and rom[0x277A0A:0x277A0C] == b"\x0f\xff" and rom[0x277A0F] == 0
+    dest = int.from_bytes(rom[0x277A0C:0x277A0F], "little") & 0x3FFFFF
+    assert dest >= build.EXP + build.ASM_SPACE and en.decode(rom, dest)[0] == long
+    assert "run_prologue" in {n for *_, n in w.log}
+    assert romdiff.check(ORIG, rom, set(), w.log)[0] == []
