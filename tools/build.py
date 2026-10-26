@@ -111,7 +111,7 @@ def pack_run(w, t, orig, text, name, lo, hi):
 RUN_TABLES = [(0xC0BBCB, 8), (0xC0BBDD, 14), (0xC0BBFB, 21), (0xC0E4BB, 5), (0xC252E5, 13), (0xC38DFF, 4),
               (0xC60B3C, 98), (0xC60E44, 11), (0xC60ECA, 11), (0xC63008, 11), (0xC630C3, 4), (0xC63129, 96),
               (0xC634E6, 69)]
-RUN_PTRS = [0xC14814, 0xC1481B, 0xC26919]
+RUN_PTRS = [0xC14814, 0xC1481B, 0xC26919, 0xC0A29A, 0xC0C75C]  # + menu records C0BAF7, C0C30D (extract.MENUS)
 MENU_SCRIPTS = (0x014094, 0x014C19)  # C1 menu scripts: their op 10 lo hi points at an extract.MENUS record
 
 

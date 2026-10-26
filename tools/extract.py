@@ -60,10 +60,14 @@ SEQ = {"prologue", "intro", "endings", "credits"}
 # menu windows drawn as BG tiles from the 8x8 font (tools/tilescan.py): record = <w> <h> then w*h words
 # (tile = code - $10, high byte $20; $E7 = blank cell), one row per item. Opened by menu-script op 10 lo hi
 # (C1 scripts C14094-C14C18); build.py moves that pointer when a record grows.
+# Two more are loaded by code: C0BAF7 (world-map info box, LDX #$BAF7 at C0A299; its [00] cells are where the
+# numbers go) and C0C30D (yes/no, LDA #$C30D at C0C75B).
 MENUS = [0xC14C19, 0xC14C39, 0xC14C4D, 0xC14C63, 0xC14C85, 0xC14CA7, 0xC14CBB, 0xC14CC9, 0xC14CEB, 0xC14D29,
-         0xC14D37, 0xC14D4B, 0xC14D5D]
+         0xC14D37, 0xC14D4B, 0xC14D5D, 0xC0BAF7, 0xC0C30D]
 MENU_SET = {a & 0x3FFFFF for a in MENUS}
 MENU_ATTR, BLANK = 0x20, 0xE7
+MENU_TILE = {0x10: BLANK, 0x00: 0x00}  # text code -> tile where not code - $10: space is the blank cell (tile 0
+                                       # isn't blank in this font); [00] = tile 0, the number cells of C0BAF7
 # name, single {end}-terminated strings (built-in event scripts in C0: 0A 01 lo hi FF + inline text)
 STRINGS = [
     ("system", [0xC03A64, 0xC03A71, 0xC03A78, 0xC03AA3, 0xC03ADC, 0xC03B01, 0xC03B11, 0xC03B23, 0xC042F1,
@@ -186,10 +190,9 @@ def encode(t, s, w, off=None):
     the longest row, so it may outgrow its slot)."""
     if off in MENU_SET:
         rows = [t.encode(r) for r in s.split("{nl}")]
-        wd = max(map(len, rows))
+        wd = max(max(map(len, rows)), (w - 2) // (2 * len(rows)) if w else 0)  # never narrower than the original
         return bytes([wd, len(rows)]) + b"".join(
-            bytes(x for c in r.ljust(wd, b"\xf7") for x in (BLANK if c == 0x10 else c - 0x10, MENU_ATTR))
-            for r in rows)  # space (tile 0 is not blank in this font) -> the blank cell
+            bytes(x for c in r.ljust(wd, b"\xf7") for x in (MENU_TILE.get(c, c - 0x10), MENU_ATTR)) for r in rows)
     b = t.encode(s)
     return b if w is None else b + bytes(max(0, w - len(b)))
 
@@ -198,8 +201,8 @@ def menu_text(t, rom, off):
     """A menu record as its rows joined by {nl}; trailing blank cells dropped, inner ones kept as [F7]."""
     w, h = rom[off], rom[off + 1]
     cells = [rom[off + 2 + 2 * i] for i in range(w * h)]
-    rows = ["".join("[F7]" if c == BLANK else t.dec[bytes([c + 0x10])] for c in cells[r * w:(r + 1) * w])
-            for r in range(h)]
+    rows = ["".join("[F7]" if c == BLANK else "[00]" if c == 0 else t.dec[bytes([c + 0x10])]
+                    for c in cells[r * w:(r + 1) * w]) for r in range(h)]
     return "{nl}".join(re.sub(r"(\[F7\])+$", "", r) for r in rows), 2 + 2 * w * h
 
 

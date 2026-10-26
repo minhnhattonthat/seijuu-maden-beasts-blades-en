@@ -29,7 +29,7 @@ def main():
     for f in logs:
         for m in re.finditer(r"str ([0-9A-F]{6})", f.read_text(encoding="utf-8", errors="replace")):
             a = int(m[1], 16)
-            if (a >> 16) in (0x7E, 0x7F) or a < 0xC00000:
+            if (a >> 16) in (0x7E, 0x7F) or a < 0xC00000 or a >= 0xE80000:  # RAM, expansion (relocated)
                 continue
             o = a & 0x3FFFFF
             seen.setdefault(o, f.parent.name)

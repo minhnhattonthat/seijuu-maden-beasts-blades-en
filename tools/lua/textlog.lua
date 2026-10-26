@@ -15,6 +15,13 @@ local function log_str()
 end
 L.on_exec(0xC318EA, 0xC318EA, log_str)  -- typed dialogue engine: LDA [$32]
 L.on_exec(0xC32589, 0xC32589, log_str)  -- bulk print engine (prologue scroll, choices)
+L.on_exec(0xC32912, 0xC32912, function()  -- 8x8 menu printer (names, menu labels): pointer at DP $4F
+  local d = emu.getState()["cpu.d"]
+  local p = emu.read(d + 0x4F, mem) | emu.read(d + 0x50, mem) << 8 | emu.read(d + 0x51, mem) << 16
+  local t = {}
+  for i = 0, n - 1 do t[#t + 1] = string.format("%02X", emu.read(p + i, mem)) end
+  L.log(string.format("f%d str %06X %s menu", L.frame, p, table.concat(t, " ")))
+end)
 L.on_exec(0xC31979, 0xC31979, log_str)  -- full-width glyph, typed
 L.on_exec(0xC31B74, 0xC31B74, log_str)  -- half-width glyph
 L.on_exec(0xC32614, 0xC32614, log_str)  -- full-width glyph, bulk

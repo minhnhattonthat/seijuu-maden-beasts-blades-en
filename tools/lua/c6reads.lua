@@ -2,6 +2,7 @@
 -- with the address read and registers: finds the routines that draw item/skill/beast names and their widths.
 --   python -X utf8 tools/debug/warp.py shop_buy --lua tools/lua/c6reads.lua   (log: work/qa/warp/<scene>/)
 -- FROM (default 7000, about where warps land): only reads from that frame on (boot copies records too).
+-- LO/HI (emu.py --var LO=0xC18440 --var HI=0xC18590) watch another range.
 local from = FROM or 7000
 local seen = {}
 local function hook(addr, value)
@@ -13,5 +14,5 @@ local function hook(addr, value)
   L.log(string.format("f%d pc=%06X read %06X=%02X A=%04X X=%04X Y=%04X", L.frame, pc, addr, value, s["cpu.a"],
     s["cpu.x"], s["cpu.y"]))
 end
-emu.addMemoryCallback(L.safe(hook), emu.callbackType.read, 0xC60F50, 0xC67C00, emu.cpuType.snes,
+emu.addMemoryCallback(L.safe(hook), emu.callbackType.read, LO or 0xC60F50, HI or 0xC67C00, emu.cpuType.snes,
   emu.memType.snesMemory)
