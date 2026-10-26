@@ -1,2 +1,3 @@
-# SHA-1 of the supported dump, in sha1sum format (`sha1sum -c rom.sha1` works too). One line per file for discs.
-<sha1>  rom/<file>
+# SHA-1 of the supported dump, in sha1sum format (`sha1sum -c rom.sha1` works too).
+# No-Intro: Seijuu Maden - Beasts & Blades (Japan), 2,621,440 bytes, HiROM FastROM, no copier header.
+e0067694f59e5190bcf02c92ddf016ec3c55fb7a  rom/Seijuu Maden Beasts & Blades (Japan).sfc

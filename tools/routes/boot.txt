@@ -1,0 +1,4 @@
+# Cold boot: logos + intro crawl to the title (~1450 frames), Start -> name entry (new game, no save)
+1500 -
+10 start
+300 -
