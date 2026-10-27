@@ -21,7 +21,8 @@ English text: 6 px per character (fonts/en6.txt, two per 12 px cell) in the 12 p
 | Item screen prompt (`C25342` and the other 17-byte `party_menu` prompts, top line from col 8) | **16 chars** (the FRONT/REAR legend sprites start at col 24) | `--qa C25342=1234...`, warp `status_items` | measured (`work/qa/item/prompt.png`) |
 | Item type label over the list (`item_types` C6301E..) | **14 chars** (cols 17-30) | `--qa C6301E=1234...`, warp `status_items` | measured (`work/qa/item/mk_qa.png`) |
 | Formation name (`C2C8EB`.. in `party_menu`, `name{nl}{nl}フォーメーション`, right-aligned by leading spaces) | **8 chars per line**, 2 lines (cols 23-30; a 9th char lands on col 31, the screen edge: "Formation" doesn't fit, the screen title already says it) | `--qa "C2C8EB=1234567890ABCDEF{nl}{nl}abcdefghijklmnop"`, warp `status_formation` | measured (`work/qa/item/form_qa.png`) |
-| Shouts (C57DCB..), battle idle lines | not reached yet | | guess |
+| Battle idle lines (`C57E03`, name + line) | 35 x 3 assumed: printed by `C57C40` (called from `C55EB6`) through the battle-message printer `C57C25` | not reached in 20000 idle frames from `battle_t10` | guess |
+| Shouts (`C57DCB`..`C57E02`, entries 10-20 of `C57CD8`) | no reader: every `C57C00` caller loads `$B1` = 2/4/6/A/C/10/12, `C57C70` uses entry 4, no other ref to the table; no read in the defeat path or 20000 battle frames. Probably unused: translate short | | guess |
 
 Glyph torture: `--qa 'E7792E=abcdefghijklmnopqrstuvwxyz  ABCDEFGHIJ{nl}KLMNOPQRSTUVWXYZ 0123456789 !?.,;:...'`:
 every printable glyph renders; 「 and 」 are drawn at the cell edges (Japanese style), so `「」` shows a gap.
