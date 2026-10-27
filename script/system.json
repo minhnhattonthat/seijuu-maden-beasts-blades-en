@@ -1,13 +1,13 @@
 [
-{"id": "C03A64", "jp": "誰もいない。{end}", "en": ""},
-{"id": "C03A71", "jp": "何もない。{end}", "en": ""},
-{"id": "C03A78", "jp": "外に出ますか?{choice:0201} はい{nl} いいえ{end}", "en": ""},
-{"id": "C03AA3", "jp": "{sfx:10}体の中から力があふれてくる!{delay:FF}{delay:80}{c0C}{var:00}は気がつかなかった{nl}{num:A0B30000}の経験値をものにした!{end}", "en": ""},
-{"id": "C03ADC", "jp": "{sfx:11}{var:00}のレベルが上がった!{delay:5A}{end}", "en": ""},
-{"id": "C03AEE", "jp": "何かと遭遇しました。{end}", "en": ""},
-{"id": "C03B01", "jp": "カギがかかっている。{end}", "en": ""},
-{"id": "C03B11", "jp": "{icall:2F4F7E}をてにいれた!{end}", "en": ""},
-{"id": "C03B23", "jp": "持ち物が一杯です。{end}", "en": ""},
-{"id": "C042F1", "jp": "{icall:2F4F7E}をてにいれた!{end}", "en": ""},
-{"id": "C044E9", "jp": "{sfx:09}{num:A09CA17E}Gてにいれた!{end}", "en": ""}
+{"id": "C03A64", "jp": "誰もいない。{end}", "en": "No one is here.{end}"},
+{"id": "C03A71", "jp": "何もない。{end}", "en": "There's nothing here.{end}"},
+{"id": "C03A78", "jp": "外に出ますか?{choice:0201} はい{nl} いいえ{end}", "en": "Go outside?{choice:0201} Yes{nl} No{end}"},
+{"id": "C03AA3", "jp": "{sfx:10}体の中から力があふれてくる!{delay:FF}{delay:80}{c0C}{var:00}は気がつかなかった{nl}{num:A0B30000}の経験値をものにした!{end}", "en": "{sfx:10}Power wells up from deep within!{delay:FF}{delay:80}{c0C}Without even noticing, {var:00}{nl}gained {num:A0B30000} experience points!{end}"},
+{"id": "C03ADC", "jp": "{sfx:11}{var:00}のレベルが上がった!{delay:5A}{end}", "en": "{sfx:11}{var:00} leveled up!{delay:5A}{end}"},
+{"id": "C03AEE", "jp": "何かと遭遇しました。{end}", "en": "You've encountered something.{end}"},
+{"id": "C03B01", "jp": "カギがかかっている。{end}", "en": "It's locked.{end}"},
+{"id": "C03B11", "jp": "{icall:2F4F7E}をてにいれた!{end}", "en": "Obtained {icall:2F4F7E}!{end}"},
+{"id": "C03B23", "jp": "持ち物が一杯です。{end}", "en": "Your inventory is full.{end}"},
+{"id": "C042F1", "jp": "{icall:2F4F7E}をてにいれた!{end}", "en": "Obtained {icall:2F4F7E}!{end}"},
+{"id": "C044E9", "jp": "{sfx:09}{num:A09CA17E}Gてにいれた!{end}", "en": "{sfx:09}Obtained {num:A09CA17E}G!{end}"}
 ]

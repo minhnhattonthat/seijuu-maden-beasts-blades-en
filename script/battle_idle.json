@@ -1,9 +1,9 @@
 [
-{"id": "C57E11", "jp": "は 祈っている{end}", "en": ""},
-{"id": "C57E1A", "jp": "は 気持ちを高めている{end}", "en": ""},
-{"id": "C57E29", "jp": "は 瞑想している{end}", "en": ""},
-{"id": "C57E34", "jp": "は がまんしている{end}", "en": ""},
-{"id": "C57E3E", "jp": "  考え中……{end}", "en": ""},
-{"id": "C57E48", "jp": "は 気合いをためている{end}", "en": ""},
-{"id": "C57E56", "jp": " き、切れそう{end}", "en": ""}
+{"id": "C57E11", "jp": "は 祈っている{end}", "en": " is praying.{end}"},
+{"id": "C57E1A", "jp": "は 気持ちを高めている{end}", "en": " is psyching up.{end}"},
+{"id": "C57E29", "jp": "は 瞑想している{end}", "en": " is meditating.{end}"},
+{"id": "C57E34", "jp": "は がまんしている{end}", "en": " is enduring.{end}"},
+{"id": "C57E3E", "jp": "  考え中……{end}", "en": "  Thinking...{end}"},
+{"id": "C57E48", "jp": "は 気合いをためている{end}", "en": " is charging up.{end}"},
+{"id": "C57E56", "jp": " き、切れそう{end}", "en": " A-about to snap...{end}"}
 ]

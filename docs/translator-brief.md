@@ -38,8 +38,11 @@ the English, no Japanese or fullwidth characters, no `\uXXXX`.
 ## Style
 - Faithful: keep the information and order of ideas; adapt idiom, not meaning. Don't add details the Japanese
   doesn't state; don't summarise or skip. Adapt wordplay so the joke still lands (no translator notes).
-- Names and terms exactly as in the glossary. Never abbreviate to fit; if a name/menu line can't fit, keep the
-  meaning, write the best fit you can and report `LONG: id`.
+- Names and terms exactly as in the glossary. Never abbreviate or squeeze to fit (no "Brz.Dagger", no CamelCase
+  "FireDagger", no dropped words): write the full, natural English name ("Bronze Dagger"). The check reports
+  over-limit names/menus as `LONG` warnings, not errors; those screens get widened by engine work (D4).
+  Dialogue lines are word-wrapped, so they never need squeezing.
+- Honorifics on a variable are fine ("{var:00}-san"); the no-suffix rule is about ordinals.
 - Honorifics kept, hyphenated (Lang-sama, Elma-san, Zona-dono); 王よ -> "my king"; 姫 -> Princess.
 - Placeholders: no suffix glued to a variable ("Holy Beast King No. {num:..}", never "{num}th"); no a/an right
   before a name variable; sentences must read whatever name the player typed.

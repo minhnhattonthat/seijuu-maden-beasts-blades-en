@@ -1,7 +1,7 @@
 [
-{"id": "C0E4C8", "jp": "あずかり{end}", "en": ""},
-{"id": "C0E4CD", "jp": "とっくんちゅう{end}", "en": ""},
-{"id": "C0E4D5", "jp": "とっくんしゅうりょう{end}", "en": ""},
-{"id": "C0E4E0", "jp": "ちょうきょうちゅう{end}", "en": ""},
-{"id": "C0E4EA", "jp": "ちょうきょうしゅうりょう{end}", "en": ""}
+{"id": "C0E4C8", "jp": "あずかり{end}", "en": "Kept{end}"},
+{"id": "C0E4CD", "jp": "とっくんちゅう{end}", "en": "Training{end}"},
+{"id": "C0E4D5", "jp": "とっくんしゅうりょう{end}", "en": "Trained{end}"},
+{"id": "C0E4E0", "jp": "ちょうきょうちゅう{end}", "en": "Taming{end}"},
+{"id": "C0E4EA", "jp": "ちょうきょうしゅうりょう{end}", "en": "Tamed{end}"}
 ]

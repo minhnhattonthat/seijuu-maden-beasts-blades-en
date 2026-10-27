@@ -1,6 +1,6 @@
 [
-{"id": "C38E0A", "jp": "ぼうぐ{end}", "en": ""},
-{"id": "C38E0E", "jp": "しょくりょう{end}", "en": ""},
-{"id": "C38E15", "jp": "どうぐ1{end}", "en": ""},
-{"id": "C38E1A", "jp": "どうぐ2{end}", "en": ""}
+{"id": "C38E0A", "jp": "ぼうぐ{end}", "en": "Armor{end}"},
+{"id": "C38E0E", "jp": "しょくりょう{end}", "en": "Food{end}"},
+{"id": "C38E15", "jp": "どうぐ1{end}", "en": "Items 1{end}"},
+{"id": "C38E1A", "jp": "どうぐ2{end}", "en": "Items 2{end}"}
 ]

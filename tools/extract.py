@@ -60,7 +60,8 @@ RUNS = [
     ("buildings", 0xCE3419, 0xCE3467),      # town-menu building names
 ]
 # RUNS whose lines are read in order (no pointer per line): build.py packs them as a list of {call} stubs
-SEQ = {"copy_warning", "prologue", "intro", "endings", "credits"}
+SEQ = {"copy_warning", "prologue", "intro", "endings", "credits",
+       "locations"}  # locations: no pointer to any name (read by index, walking {end}s); short slots need packing
 # menu windows drawn as BG tiles from the 8x8 font (tools/tilescan.py): record = <w> <h> then w*h words
 # (tile = code - $10, high byte $20; $E7 = blank cell), one row per item. Opened by menu-script op 10 lo hi
 # (C1 scripts C14094-C14C18); build.py moves that pointer when a record grows.

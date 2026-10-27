@@ -77,7 +77,7 @@ def body(jp):
 
 
 def lines(s):
-    return re.split(r"\{nl\}|\{c0C\}|\{clear\}", s)
+    return re.split(r"\{nl\}|\{c0C\}|\{c0B\}|\{clear\}", s)
 
 
 def wrap(text, limit, engine):
@@ -85,7 +85,7 @@ def wrap(text, limit, engine):
     out = []
     for page in text.split("{c0C}"):
         segs = []
-        for seg in page.split(" / "):
+        for seg in re.split(r" / |(?<=\{c0B\})", page):  # {c0B} (shop text) is the translator's own line break
             # a quote's (or an indented page's) continuation lines sit one cell in, under the text, as in the JP
             indent = " " if seg[:1] in ('"', " ") else ""
             words = seg.split(" ")
@@ -265,7 +265,9 @@ def check(b, idx=None, en_tbl=None, terms=None):
             errs.append((i, f"not encodable with en.tbl: {x}"))
         for ln in lines(body(s)[0]):
             if cells(ln, engine) > lim:
-                errs.append((i, f"line over {lim} cells ({cells(ln, engine)}): {ln!r}"))
+                msg = f"line over {lim} cells ({cells(ln, engine)}): {ln!r}"
+                # names/menus: full English stays (D4); the screen gets widened (engine work), `long` lists them
+                (warns if f in ("name", "menu") else errs).append((i, ("LONG " if f in ("name", "menu") else "") + msg))
         if f == "dlg":
             for pg in body(s)[0].split("{c0C}"):
                 if pg.count("{nl}") >= 6:  # the JP itself often runs name + 3 lines; the 4th+ waits for a button
@@ -308,7 +310,8 @@ def merge(bs):
             touched.add(name)
     for name in touched:
         (SCRIPT / f"{name}.json").write_text(
-            "[\n" + ",\n".join(json.dumps(r, ensure_ascii=False) for r in script[name]) + "\n]\n", encoding="utf-8")
+            "[\n" + ",\n".join(json.dumps(r, ensure_ascii=False) for r in script[name]) + "\n]\n", encoding="utf-8",
+            newline="\n")
     print(f"merged {', '.join(bs)} into {', '.join(sorted(touched))}")
 
 

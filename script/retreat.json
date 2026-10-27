@@ -1,13 +1,13 @@
 [
-{"id": "C50AD4", "jp": "ここはひとまずひこう!{end}", "en": ""},
-{"id": "C50AE0", "jp": "神がおまえたちを滅ぼすだろう!{end}", "en": ""},
-{"id": "C50AF2", "jp": "あぶない あぶない{end}", "en": ""},
-{"id": "C50AFC", "jp": " また会おう!{end}", "en": ""},
-{"id": "C50B05", "jp": "それ にげろ!{end}", "en": ""},
-{"id": "C50B0D", "jp": "たすかった{end}", "en": ""},
-{"id": "C50B13", "jp": "バイバーイ{end}", "en": ""},
-{"id": "C50B19", "jp": "くそっ、ちょっときゅうけいだ!{end}", "en": ""},
-{"id": "C50B29", "jp": "つぎがあるとおもうなよ!{end}", "en": ""},
-{"id": "C50B36", "jp": "それじゃ、そういう事で…{end}", "en": ""},
-{"id": "C50B44", "jp": "こわいよー{end}", "en": ""}
+{"id": "C50AD4", "jp": "ここはひとまずひこう!{end}", "en": "Let's fall back for now!{end}"},
+{"id": "C50AE0", "jp": "神がおまえたちを滅ぼすだろう!{end}", "en": "God will destroy you all!{end}"},
+{"id": "C50AF2", "jp": "あぶない あぶない{end}", "en": "Close one, close one!{end}"},
+{"id": "C50AFC", "jp": " また会おう!{end}", "en": " See you again!{end}"},
+{"id": "C50B05", "jp": "それ にげろ!{end}", "en": "Come on, run for it!{end}"},
+{"id": "C50B0D", "jp": "たすかった{end}", "en": "Phew, saved...{end}"},
+{"id": "C50B13", "jp": "バイバーイ{end}", "en": "Bye-byeee!{end}"},
+{"id": "C50B19", "jp": "くそっ、ちょっときゅうけいだ!{end}", "en": "Damn, time for a little break!{end}"},
+{"id": "C50B29", "jp": "つぎがあるとおもうなよ!{end}", "en": "Don't think there'll be a next{nl}time!{end}"},
+{"id": "C50B36", "jp": "それじゃ、そういう事で…{end}", "en": "Well then, that's that...{end}"},
+{"id": "C50B44", "jp": "こわいよー{end}", "en": "I'm scared!{end}"}
 ]

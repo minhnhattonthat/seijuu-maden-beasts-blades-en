@@ -1,4 +1,4 @@
 [
-{"id": "C11A9C", "jp": "名前をいれてください。{end}", "en": ""},
-{"id": "C11AAA", "jp": "『{icall:2B4F7E}』{nl}でよろしいですか?{nl}{choice:0201} はい{nl} いいえ{end}", "en": ""}
+{"id": "C11A9C", "jp": "名前をいれてください。{end}", "en": "Please enter a name.{end}"},
+{"id": "C11AAA", "jp": "『{icall:2B4F7E}』{nl}でよろしいですか?{nl}{choice:0201} はい{nl} いいえ{end}", "en": "'{icall:2B4F7E}'{nl}Is this OK?{nl}{choice:0201} Yes{nl} No{end}"}
 ]

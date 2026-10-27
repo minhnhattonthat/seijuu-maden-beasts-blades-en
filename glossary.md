@@ -128,7 +128,7 @@ Binding for every translator and reviewer. Agents propose additions in reports; 
 | ギガン | Gigan | 16 | | |
 | ラヴィウス | Ravius | 16 | | |
 | リーロイル | Leeroyle | 16 | | |
-| ヘビトカゲ | snake-lizard | 16 | the race; ヘビトカゲ族の村 Lizardfolk Town | |
+| ヘビトカゲ | lizardfolk | 16 | the race (snake-lizard people); ヘビトカゲ族の村 Lizardfolk Town | |
 | 海賊村 | Pirate Village | 16 | | |
 | ノスク | Nosk | 16 | | |
 | タルティウム | Tartium | 16 | | |
@@ -184,9 +184,15 @@ Binding for every translator and reviewer. Agents propose additions in reports; 
 | 獣皇士 | Beast Sovereign | | Akeania's champion Beast Master | |
 | 外法師 | heretic mage | | 外法 = heretic art; 反魂の外法 = the heretic art of soul-summoning | |
 | 亜族 | demi-folk | | half-blood races (demon or elf blood) | |
-| 魔族 | demons | | | |
+| 魔族 | demon | | demons / Demon Cave | |
 | 天族 | Sky Folk | | winged race | |
 | ケモノの剣 | Beast Sword | | quest item (ケモノのケン) | |
+| コロン | Koron | | beast; キングコロン King Koron | Colon |
+| アークデーモン | Archdemon | | beast and enemy | Diabolos |
+| 女神の果実 | Goddess Fruit | | item めがみのかじつ too | |
+| ズーカン | Zukan | | beast-lore old man (pun on 図鑑) | |
+| ビーストパック | Beast Pack | | | |
+| 光の法 | Law of Light | | 人間は光の法で治める -> Humanity shall obey the Law of Light. | |
 | 冥府 | the Underworld | | | |
 | 現世 | the mortal world | | | |
 | 騎士団 | knights | | X騎士団 -> the X Knights | |

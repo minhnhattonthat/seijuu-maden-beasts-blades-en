@@ -1,12 +1,14 @@
-# Translation reviewer brief - <Game title>
+# Translation reviewer brief - Seijuu Maden: Beasts & Blades
 
-You review one batch of a JP->`<target language>` fan translation. Read-only: no edits, no git, no subagents.
+You review one batch of a JP->English fan translation (`docs/synopsis.md` has the plot and who is who). Read-only: no edits, no git, no subagents.
 Mechanical validity (ids, control codes, encodable characters, width, stub last lines) is already enforced by the
 check tool - judge translation quality. Return the report as your final message: subagents cannot write files, so the
 controller saves it.
 
 ## Inputs (paths in your dispatch)
-- Pairs file: every translated entry as `>> id | JP` / `EN` with +-2 context lines. Read ALL of it, in passes if large.
+- Pairs file (`work/tl/<batch>.pairs.txt`, made by `tools/pairs.py`): every translated entry as `>> id | JP` /
+  `EN` with +-2 context lines. ` / ` = a line break; dialogue English is word-wrapped by the build, so judge it as
+  running text. Read ALL of it, in passes if large.
 - `glossary.md` (rulings at the top), `docs/style-reference.md`, the translator's report (unverified claims).
 
 ## Judge
