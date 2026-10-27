@@ -318,8 +318,8 @@ thou/thee ("thou ... forsooth" in b089, ", verily" in b094: unify in polish).
 | 特訓 | train | | training, trained; ranch: とっくんちゅう Training, とっくんしゅうりょう Trained | |
 | ちょうきょう | Taming | | 調教 in dialogue = tame / taming / tamed (not linted: no one substring); ranch: ちょうきょうちゅう Taming, ちょうきょうしゅうりょう Tamed | |
 | あずかり | Kept | | ranch status | |
-| 守備隊 | garrison | | a town's garrison; the world-map info box label is "Guards:" | |
-| 支持率 | Support | | a town's support rating; "Support:" | |
+| 守備隊 | garrison | | a town's garrison; the world-map info box label is "Guard:" (C0BAF7 slot: 11 chars, colons cost extra) | |
+| 支持率 | support | | a town's support rating; info box label "Favor" (no room for "Support:") | |
 
 Formations (labels split over two lines, so not linted): フォーメーション Formation; チャリオット Chariot, スクウェア Square,
 ドラゴン Dragon, ハーフムーン Half Moon, ナイトフォース Knight Force, アタックフォース Attack Force, ダイヤモンド Diamond,
