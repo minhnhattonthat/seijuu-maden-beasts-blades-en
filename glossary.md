@@ -221,6 +221,759 @@ Binding for every translator and reviewer. Agents propose additions in reports; 
 | りんせつ / かいふく / えんぽう / とくべつ | Melee / Heal / Ranged / Special | 7 | beast skill ranges | |
 | どく | Poison | 7 | | |
 | じゅうぞく | Loyal | 5 | beast/master row label, the bar starts right after it | |
+| 特訓 | train | | training, trained; ranch: とっくんちゅう Training, とっくんしゅうりょう Trained | |
+| ちょうきょう | Taming | | 調教 in dialogue = tame / taming / tamed (not linted: no one substring); ranch: ちょうきょうちゅう Taming, ちょうきょうしゅうりょう Tamed | |
+| あずかり | Kept | | ranch status | |
+| 守備隊 | garrison | | a town's garrison; the world-map info box label is "Guards:" | |
+| 支持率 | Support | | a town's support rating; "Support:" | |
+
+Formations (labels split over two lines, so not linted): フォーメーション Formation; チャリオット Chariot, スクウェア Square,
+ドラゴン Dragon, ハーフムーン Half Moon, ナイトフォース Knight Force, アタックフォース Attack Force, ダイヤモンド Diamond,
+グリフォン Griffon.
+
+## Buildings and town menus
+| JP | EN | max | notes | Avoid |
+|---|---|---|---|---|
+| さかば / かじや / どうぐや / きょうかい | Tavern / Smithy / Items / Church | 8 | town building list | |
+| ビーストいちば / とうぎじょう / やどや | Beast Market / Arena / Inn | 8 | 酒場/鍛冶屋/道具屋/教会/闘技場/宿屋 in dialogue: tavern, smithy, item shop, church, arena, inn | |
+| しゅうかいじょう / ひろば / みんか / しゅじんこうんち / しろ / ごうてい | Hall / Plaza / House / Home / Castle / Mansion | 8 | | |
+| 酒場 / 鍛冶屋 / 道具屋 / 教会 / 宿屋 | tavern / smith / shop / church / inn | | lint terms for dialogue | |
+
+## Data names (generated: items, beasts, enemies, skills)
+The game's own names, binding in dialogue. Regenerate with `python -X utf8 tools/glossary_names.py --write`
+after renaming one in `script/`; hand rows above win over these.
+
+<!-- names:begin (tools/glossary_names.py) -->
+
+### Weapons
+| JP | EN | max | notes | Avoid |
+|---|---|---|---|---|
+| おれたたんけん | Broken Dagger | | | |
+| おれたけん | Broken Sword | | | |
+| おれたおの | Broken Axe | | | |
+| おれたメイス | Broken Mace | | | |
+| おれたつえ | Broken Staff | | | |
+| おれたやり | Broken Spear | | | |
+| おれたフレイル | Broken Flail | | | |
+| おれたまけん | Broken Demon Blade | | | |
+| キッチンナイフ | Kitchen Knife | | | |
+| ブロンズダガー | Bronze Dagger | | | |
+| ダガー | Dagger | | | |
+| はばひろダガー | Broad Dagger | | | |
+| カタール | Katar | | | |
+| ククリ | Kukri | | | |
+| シルバーダガー | Silver Dagger | | | |
+| ハンターナイフ | Hunting Knife | | | |
+| グラディウス | Gladius | | | |
+| ホーリーダガー | Holy Dagger | | | |
+| はでなナイフ | Flashy Knife | | | |
+| プラチナダガー | Platinum Dagger | | | |
+| ボーディー | Bodkin | | | |
+| ダーク | Dirk | | | |
+| ショートソード | Short Sword | | | |
+| ブレイカー | Breaker | | | |
+| あいくち | Aikuchi | | | |
+| トリプルダガー | Triple Dagger | | | |
+| つらぬきナイフ | Piercing Knife | | | |
+| クリス | Kris | | | |
+| ファイアダガー | Fire Dagger | | | |
+| アイスダガー | Ice Dagger | | | |
+| ウインドダガー | Wind Dagger | | | |
+| サンダーダガー | Thunder Dagger | | | |
+| ブロンズのけん | Bronze Sword | | | |
+| おうごんのけん | Golden Sword | | | |
+| ブロードソード | Broadsword | | | |
+| レイピア | Rapier | | | |
+| まぞくのけん | Demon Sword | | | |
+| シミター | Scimitar | | | |
+| みずちなぎ | Wyrmcutter | | | |
+| ロングソード | Longsword | | | |
+| シャムシール | Shamshir | | | |
+| サーベル | Saber | | | |
+| オーガーキラー | Ogre Killer | | | |
+| きせきのけん | Miracle Sword | | | |
+| ルーンソード | Rune Sword | | | |
+| らいこうのけん | Lightning Sword | | | |
+| かぜきりのけん | Windcutter | | | |
+| フリーズソード | Freeze Sword | | | |
+| ナイトセイバー | Knight Saber | | | |
+| ファルシオン | Falchion | | | |
+| ドラゴンのきば | Dragon Fang | | | |
+| きらめきのけん | Gleaming Sword | | | |
+| ブレイズソード | Blaze Sword | | | |
+| フレイソード | Frey Sword | | | |
+| シグルドソード | Sigurd Sword | | | |
+| レーヴァテイン | Laevateinn | | | |
+| グレートソード | Greatsword | | | |
+| ちからのけん | Power Sword | | | |
+| カリバーン | Caliburn | | | |
+| なた | Hatchet | | | |
+| ハンドアックス | Hand Axe | | | |
+| ダブルアックス | Double Axe | | | |
+| フランシスカ | Francisca | | | |
+| しっぷうのおの | Gale Axe | | | |
+| セルティス | Celtis | | | |
+| キラーアックス | Killer Axe | | | |
+| トマホーク | Tomahawk | | | |
+| バトルアックス | Battle Axe | | | |
+| デッドバスター | Dead Buster | | | |
+| きんのおの | Golden Axe | | | |
+| バルティシュ | Bardiche | | | |
+| ミンチメーカー | Mincemaker | | | |
+| デスストーマー | Death Stormer | | | |
+| デスフリーザー | Death Freezer | | | |
+| ヘルクエイカー | Hell Quaker | | | |
+| きんときのおの | Kintoki's Axe | | | |
+| インドラのおの | Indra's Axe | | | |
+| ウッドクラブ | Wood Club | | | |
+| ウッドメイス | Wood Mace | | | |
+| ストーンクラブ | Stone Club | | | |
+| ブラジオン | Bludgeon | | | |
+| ライトメイス | Light Mace | | | |
+| アイアンクラブ | Iron Club | | | |
+| ウォーハンマー | War Hammer | | | |
+| ホーリーメイス | Holy Mace | | | |
+| モール | Maul | | | |
+| アイスクラブ | Ice Club | | | |
+| ヘビーメイス | Heavy Mace | | | |
+| パワーセプター | Power Scepter | | | |
+| トールハンマー | Thor's Hammer | | | |
+| ワンド | Wand | | | |
+| ロッド | Rod | | | |
+| スタッフ | Staff | | | |
+| ファイアロッド | Fire Rod | | | |
+| アイスロッド | Ice Rod | | | |
+| サンダーロッド | Thunder Rod | | | |
+| アイアンケイン | Iron Cane | | | |
+| スタンワンド | Stun Wand | | | |
+| フレイムワンド | Flame Wand | | | |
+| ガイアホーン | Gaia Horn | | | |
+| スノースタッフ | Snow Staff | | | |
+| かなぼう | Kanabo | | | |
+| ウインドロッド | Wind Rod | | | |
+| ホーリーロッド | Holy Rod | | | |
+| たけやり | Bamboo Spear | | | |
+| ショートスピア | Short Spear | | | |
+| ロングスピア | Long Spear | | | |
+| !フォーシャル | Fauchard | | | |
+| !ポールアック | Poleaxe | | | |
+| てつのやり | Iron Spear | | | |
+| きぼうのやり | Spear of Hope | | | |
+| はがねのやり | Steel Spear | | | |
+| ごっついやり | Hefty Spear | | | |
+| パルチザン | Partisan | | | |
+| きらめきのやり | Gleaming Spear | | | |
+| ゲイボルグ | Gae Bolg | | | |
+| トライデント | Trident | | | |
+| みつばのやり | Clover Spear | | | |
+| あざやかなやり | Vivid Spear | | | |
+| グレイブ | Glaive | | | |
+| !ポールハンマ | Pole Hammer | | | |
+| ハルバード | Halberd | | | |
+| ドラゴンスピア | Dragon Spear | | | |
+| ダイヤスピア | Diamond Spear | | | |
+| ホーリースピア | Holy Spear | | | |
+| けもののやり | Beast Spear | | | |
+| ズフタススピア | Zuftas Spear | | | |
+| !ゼライアスス | Zeraias Spear | | | |
+| ライトフレイル | Light Flail | | | |
+| ヘビーフレイル | Heavy Flail | | | |
+| とげのフレイル | Spiked Flail | | | |
+| どうのフレイル | Copper Flail | | | |
+| はがねフレイル | Steel Flail | | | |
+| らいせつこん | Thunder Nunchaku | | | |
+| えんせつこん | Flame Nunchaku | | | |
+| れいせつこん | Frost Nunchaku | | | |
+| きんのフレイル | Gold Flail | | | |
+| パワーフレイル | Power Flail | | | |
+| けものたたき | Beast Beater | | | |
+| きょうしのむち | Teacher's Whip | | | |
+| レザーウイップ | Leather Whip | | | |
+| いばらのむち | Thorn Whip | | | |
+| いかりのむち | Wrath Whip | | | |
+| れっぷうのむち | Storm Whip | | | |
+| くさりのむち | Chain Whip | | | |
+| ほのおのむち | Flame Whip | | | |
+| いかずちのむち | Thunder Whip | | | |
+| あいのむち | Love Whip | | | |
+| へびのむち | Snake Whip | | | |
+| キラーウィップ | Killer Whip | | | |
+| やいばのむち | Blade Whip | | | |
+| たけのゆみ | Bamboo Bow | | | |
+| きのゆみ | Wooden Bow | | | |
+| ショートボウ | Shortbow | | | |
+| ロングボウ | Longbow | | | |
+| ごうせいきゅう | Composite Bow | | | |
+| トルコボウ | Turkish Bow | | | |
+| てつのゆみ | Iron Bow | | | |
+| はがねのゆみ | Steel Bow | | | |
+| しげとうゆみ | Shigeto Bow | | | |
+| アルテミスボウ | Artemis Bow | | | |
+| ひごゆみ | Higo Bow | | | |
+| エルフのゆみ | Elf Bow | | | |
+| わきゅう | Wakyu | | | |
+| マジックボウ | Magic Bow | | | |
+| エンジェルボウ | Angel Bow | | | |
+| シルフボウ | Sylph Bow | | | |
+| アポロンのゆみ | Apollo's Bow | | | |
+| しんぴきゅう | Mystic Bow | | | |
+| クロスボウ | Crossbow | | | |
+| ボウガン | Bowgun | | | |
+| しょかつきゅう | Zhuge Crossbow | | | |
+| アローショット | Arrow Shot | | | |
+| リピーター | Repeater | | | |
+| クレーンクイン | Cranequin | | | |
+| アーバレスト | Arbalest | | | |
+| きのパチンコ | Wood Slingshot | | | |
+| てつのパチンコ | Iron Slingshot | | | |
+| きんのパチンコ | Gold Slingshot | | | |
+| メタルパチンコ | Metal Slingshot | | | |
+| キラーパチンコ | Killer Slingshot | | | |
+| パワーパチンコ | Power Slingshot | | | |
+| デススロアー | Death Thrower | | | |
+
+### Armor
+| JP | EN | max | notes | Avoid |
+|---|---|---|---|---|
+| ずきん | Hood | | | |
+| むぎわらぼうし | Straw Hat | | | |
+| さんかくぼうし | Tricorn | | | |
+| きんのティアラ | Gold Tiara | | | |
+| クロースヘルム | Close Helm | | | |
+| バンダナ | Bandana | | | |
+| しんぷのぼうし | Priest's Hat | | | |
+| ティアラ | Tiara | | | |
+| とりばねぼうし | Plumed Hat | | | |
+| サレット | Sallet | | | |
+| けがわのかぶと | Fur Helm | | | |
+| ひたちがね | Hachigane | | | |
+| きんのわっか | Gold Hoop | | | |
+| にじのおうかん | Rainbow Crown | | | |
+| サークレット | Circlet | | | |
+| にじのティアラ | Rainbow Tiara | | | |
+| てっかめん | Iron Mask | | | |
+| ピロス | Pilos | | | |
+| なべがたかぶと | Pot Helm | | | |
+| ハットヘルム | Hat Helm | | | |
+| オープンヘルム | Open Helm | | | |
+| グリークヘルム | Greek Helm | | | |
+| かぶと | Helmet | | | |
+| かいぞくかぶと | Pirate Helm | | | |
+| なんばんかぶと | Nanban Helm | | | |
+| スケイルヘルム | Scale Helm | | | |
+| チェインヘルム | Chain Helm | | | |
+| おおかぶと | Great Helm | | | |
+| ナイトヘルム | Knight Helm | | | |
+| ドラゴンヘルム | Dragon Helm | | | |
+| エギルヘルム | Aegir Helm | | | |
+| ローブ | Robe | | | |
+| あさのふく | Linen Garb | | | |
+| ジプシーのふく | Gypsy Garb | | | |
+| ぼうかんふく | Winter Garb | | | |
+| アザラシコート | Sealskin Coat | | | |
+| みずぎ | Swimsuit | | | |
+| もめんのふく | Cotton Garb | | | |
+| ぶどうぎ | Martial Arts Gi | | | |
+| きふじんのふく | Lady's Gown | | | |
+| けがわのふく | Fur Garb | | | |
+| けがわのコート | Fur Coat | | | |
+| エルフのふく | Elf Garb | | | |
+| ほうい | Vestments | | | |
+| ウールのふく | Wool Garb | | | |
+| キルト | Quilted Armor | | | |
+| キルボアール | Cuir Bouilli | | | |
+| ぬののよろい | Cloth Armor | | | |
+| ソフトレザー | Soft Leather | | | |
+| ハードレザー | Hard Leather | | | |
+| ウッドアーマー | Wood Armor | | | |
+| にんじゃふく | Ninja Garb | | | |
+| リングメイル | Ring Mail | | | |
+| チェインメイル | Chain Mail | | | |
+| スケイルメイル | Scale Mail | | | |
+| モーモーつなぎ | Moo-Moo Suit | | | |
+| かわのむねあて | Leather Breastplate | | | |
+| ミスリルよろい | Mithril Armor | | | |
+| プレートコート | Plate Coat | | | |
+| おおよろい | Great Armor | | | |
+| ブレストメイル | Breast Mail | | | |
+| てつのむねあて | Iron Breastplate | | | |
+| プレートメイル | Plate Mail | | | |
+| ガウスアーマ | Gauss Armor | | | |
+| はがねのよろい | Steel Armor | | | |
+| マジックメイル | Magic Mail | | | |
+| スーツアーマー | Suit Armor | | | |
+| ドラゴンメイル | Dragon Mail | | | |
+| レザーシールド | Leather Shield | | | |
+| ウッドシールド | Wood Shield | | | |
+| バックラー | Buckler | | | |
+| きんのたて | Gold Shield | | | |
+| むふうのたて | Windless Shield | | | |
+| ほのおのたて | Flame Shield | | | |
+| アイスシールド | Ice Shield | | | |
+| りゅうのうろこ | Dragon Scale | | | |
+| てつのたて | Iron Shield | | | |
+| はがねのたて | Steel Shield | | | |
+| いくさのたて | War Shield | | | |
+| ウインシールド | Wind Shield | | | |
+| かいぞくのたて | Pirate Shield | | | |
+| エッグシールド | Egg Shield | | | |
+| かちどきのたて | Victory Shield | | | |
+| ガイアシールド | Gaia Shield | | | |
+| カイトシールド | Kite Shield | | | |
+| クロスシールド | Cross Shield | | | |
+| タワーシールド | Tower Shield | | | |
+| アテナのたて | Athena's Shield | | | |
+| ガイアリング | Gaia Ring | | | |
+| ぎんのうでわ | Silver Bracelet | | | |
+| ふみんのうでわ | Sleepless Bracelet | | | |
+| ルビーのうでわ | Ruby Bracelet | | | |
+| サーコート | Surcoat | | | |
+| まもりのマント | Ward Cloak | | | |
+| くろマント | Black Cloak | | | |
+| プラチナリング | Platinum Ring | | | |
+| パワーバンド | Power Band | | | |
+| ラッパのリング | Trumpet Ring | | | |
+| むてきのリング | Invincible Ring | | | |
+| さんごのリング | Coral Ring | | | |
+| トパーズリング | Topaz Ring | | | |
+| エルフのリング | Elf Ring | | | |
+| ネコのリング | Cat Ring | | | |
+| ルーンのリング | Rune Ring | | | |
+| まもりのリング | Ward Ring | | | |
+| プラナのまもり | Prana's Ward | | | |
+| エーバリング | Eva Ring | | | |
+| ゴッデスリング | Goddess Ring | | | |
+
+### Items
+| JP | EN | max | notes | Avoid |
+|---|---|---|---|---|
+| きのや | Wood Arrow | | | |
+| てつのや | Iron Arrow | | | |
+| ぎんのや | Silver Arrow | | | |
+| きのえだ | Branch | | | |
+| バーストアロー | Burst Arrow | | | |
+| ポイズンアロー | Poison Arrow | | | |
+| フリーズアロー | Freeze Arrow | | | |
+| サンダーアロー | Thunder Arrow | | | |
+| スリープアロー | Sleep Arrow | | | |
+| キュアアロー | Cure Arrow | | | |
+| ヘルスアロー | Health Arrow | | | |
+| いやしのや | Healing Arrow | | | |
+| アポロンアロー | Apollo Arrow | | | |
+| てつのたま | Iron Ball | | | |
+| なまりのたま | Lead Ball | | | |
+| スプリンター | Splinter | | | |
+| マジックボール | Magic Ball | | | |
+| きのブーメラン | Wood Boomerang | | | |
+| ばくちく | Firecracker | | | |
+| ウルフのきば | Wolf Fang | | | |
+| しゅりけん | Shuriken | | | |
+| ダート | Dart | | | |
+| くない | Kunai | | | |
+| こいし | Pebble | | | |
+| Mトパーズ | M Topaz | | | |
+| Mジルコン | M Zircon | | | |
+| Mジェイド | M Jade | | | |
+| Mルビー | M Ruby | | | |
+| Mアクアマリン | M Aquamarine | | | |
+| てつブーメラン | Iron Boomerang | | | |
+| きずぐすり | Salve | | | |
+| きずぐすり2 | Salve 2 | | | |
+| めんそエーテる | Mentho-Ether | | | |
+| ロイヤルゼリー | Royal Jelly | | | |
+| Sきずぐすり | S Salve | | | |
+| ヒールメダル | Heal Medal | | | |
+| 36きんし | 36 Unused | | | |
+| ソーマ | Soma | | | |
+| ふしぎなつの | Mystic Horn | | | |
+| どくけし | Antidote | | | |
+| きつけぐすり | Smelling Salts | | | |
+| ほしのこな | Stardust | | | |
+| ごうらいおん | Roaring Thunder | | | |
+| ほうおうのはね | Phoenix Feather | | | |
+| ほうおうのめ | Phoenix Eye | | | |
+| マムシドリンク | Viper Drink | | | |
+| めがみのまもり | Goddess's Ward | | | |
+| ときのかがみ | Time Mirror | | | |
+| ひかりのふだ | Light Seal | | | |
+| せいしょうせき | Holy Crystal | | | |
+| ホーリーオーブ | Holy Orb | | | |
+| ひかりのたま | Light Gem | | | |
+| かえんのふだ | Flame Seal | | | |
+| えんしょうせき | Fire Crystal | | | |
+| ファイアオーブ | Fire Orb | | | |
+| かりゅうのたま | Fire Drake Gem | | | |
+| こおりのふだ | Ice Seal | | | |
+| ひょうけつせき | Frost Crystal | | | |
+| アイスブリッド | Ice Bullet | | | |
+| りゅうのたま | Dragon Gem | | | |
+| かぜのふだ | Wind Seal | | | |
+| ふうしょうせき | Wind Crystal | | | |
+| ウインドオーブ | Wind Orb | | | |
+| たつまきのたま | Tornado Gem | | | |
+| つちのふだ | Earth Seal | | | |
+| がんしょうせき | Rock Crystal | | | |
+| アースオーブ | Earth Orb | | | |
+| どりゅうのたま | Earth Drake Gem | | | |
+| らいげきのふだ | Thunder Seal | | | |
+| らいしょうせき | Thunder Crystal | | | |
+| サンダーオーブ | Thunder Orb | | | |
+| いかずちのたま | Thunder Gem | | | |
+| ブレスカード | Bless Card | | | |
+| しあわせのつえ | Staff of Happiness | | | |
+| いくさのラッパ | War Trumpet | | | |
+| 75きんし | 75 Unused | | | |
+| ヘルメスのふえ | Hermes' Flute | | | |
+| 77きんし | 77 Unused | | | |
+| ほろびのふえ | Flute of Ruin | | | |
+| どくのはり | Poison Needle | | | |
+| あくまのかがみ | Devil Mirror | | | |
+| デスニードル | Death Needle | | | |
+| 82きんし | 82 Unused | | | |
+| どくのくも | Poison Cloud | | | |
+| 84きんし | 84 Unused | | | |
+| しにがみのかま | Reaper's Scythe | | | |
+| 86きんし | 86 Unused | | | |
+| 87きんし | 87 Unused | | | |
+| 88きんし | 88 Unused | | | |
+| 89きんし | 89 Unused | | | |
+| 90きんし | 90 Unused | | | |
+| イリュージョン | Illusion | | | |
+| ねむりのすな | Sleep Sand | | | |
+| ともだちのみS | Friend Fruit S | | | |
+| ともだちのみ | Friend Fruit | | | |
+| ともだちのみG | Friend Fruit G | | | |
+
+### Items 2
+| JP | EN | max | notes | Avoid |
+|---|---|---|---|---|
+| おおしんじゅ | Large Pearl | | | |
+| サファイア | Sapphire | | | |
+| ルビー | Ruby | | | |
+| ブラッドダイヤ | Blood Diamond | | | |
+| にじのダイヤ | Rainbow Diamond | | | |
+| しようきんし | Do Not Use | | | |
+| いのちのきのみ | Fruit of Life | | | |
+| すばやそう | Swift Herb | | | |
+| ちからのリンゴ | Power Apple | | | |
+| せんにんのもも | Sage's Peach | | | |
+| シルフのなみだ | Sylph's Tear | | | |
+| ネクタル | Nectar | | | |
+| げんきそう | Vigor Herb | | | |
+| せんたん | Elixir | | | |
+| きんたん | Gold Elixir | | | |
+| いだてんのみ | Dash Fruit | | | |
+| せんしゅ | Sage's Wine | | | |
+| めがみのかじつ | Goddess Fruit | | | |
+| ゲートリング | Gate Ring | | | |
+| みちびきのいと | Guiding Thread | | | |
+| まつくじ | Gold Ticket | | | |
+| たけくじ | Silver Ticket | | | |
+| うめくじ | Bronze Ticket | | | |
+| まつ1とうくじ | Gold 1st Prize | | | |
+| たけ1とうくじ | Silver 1st Prize | | | |
+| たけ2とうくじ | Silver 2nd Prize | | | |
+| たけ3とうくじ | Silver 3rd Prize | | | |
+| うめ1とうくじ | Bronze 1st Prize | | | |
+| うめ2とうくじ | Bronze 2nd Prize | | | |
+| うめ3とうくじ | Bronze 3rd Prize | | | |
+| うめ4とうくじ | Bronze 4th Prize | | | |
+| はずれくじ | Losing Ticket | | | |
+| やみのおふだ | Dark Seal | | | |
+| あかいハンカチ | Red Handkerchief | | | |
+| てがみ | Letter | | | |
+| ノミ | Chisel | | | |
+| しんでんのカギ | Temple Key | | | |
+| なぞのけん | Mystery Sword | | | |
+| なぞのやり | Mystery Spear | | | |
+| なぞのゆみ | Mystery Bow | | | |
+| やくそう | Herb | | | |
+| なぞのせきばん | Mystery Tablet | | | |
+| かみかざり | Hair Ornament | | | |
+| もんしょう | Crest | | | |
+| タリスマン | Talisman | | | |
+| じゅふ | Spell Seal | | | |
+| クリスタルキー | Crystal Key | | | |
+| マスターキー | Master Key | | | |
+| けいかくしょ | Plans | | | |
+| りゅうのいかり | Dragon's Wrath | | | |
+| しにがみのみみ | Reaper's Ear | | | |
+| むくのたま | Pure Gem | | | |
+| プラナのぞう | Prana Statue | | | |
+| あんないじょう | Invitation | | | |
+| わかいのてがみ | Letter of Peace | | | |
+| はるのあしおと | Footsteps of Spring | | | |
+| きょうきのさけ | Wine of Madness | | | |
+| こうきなひかり | Noble Light | | | |
+| やみのしずけさ | Silence of Darkness | | | |
+| いにしえのうた | Ancient Song | | | |
+| あたらしきこえ | New Voice | | | |
+| いぶきのこどう | Pulse of Life | | | |
+| はんせん | Sailing Ship | | | |
+| ひくうてい | Airship | | | |
+
+### Food
+| JP | EN | max | notes | Avoid |
+|---|---|---|---|---|
+| くろパン | Black Bread | | | |
+| じゃがいも | Potato | | | |
+| フルーツケーキ | Fruitcake | | | |
+| ていしょく | Set Meal | | | |
+| にくりょうり | Meat Dish | | | |
+| やまのさち | Mountain Bounty | | | |
+| うみのさち | Sea Bounty | | | |
+| りくだこのにく | Land Octopus Meat | | | |
+| ほしぶどう | Raisins | | | |
+| チーズ | Cheese | | | |
+| かんパン | Hardtack | | | |
+| ひもの | Dried Fish | | | |
+| おむすび | Rice Ball | | | |
+| しおづけにく | Salted Meat | | | |
+| ペミカン | Pemmican | | | |
+| クスクスのみ | Giggle Nut | | | |
+
+### Beasts
+| JP | EN | max | notes | Avoid |
+|---|---|---|---|---|
+| フェニックス | Phoenix | | | |
+| ペガサス | Pegasus | | | |
+| アークエンジェル | Archangel | | | |
+| マイマイ | Snail | | | |
+| まほうのこびと | Magic Dwarf | | | |
+| カーバンクル | Carbuncle | | | |
+| サーペント | Serpent | | | |
+| サラマンダー | Salamander | | | |
+| フェアリー | Fairy | | | |
+| サンダードラゴン | Thunder Dragon | | | |
+| ユラヌス | Uranus | | | |
+| キングコロン | King Koron | | | |
+| ファイアドラゴン | Fire Dragon | | | |
+| バーンドラゴン | Burn Dragon | | | |
+| プチドラゴン | Petit Dragon | | | |
+| シルバードラゴン | Silver Dragon | | | |
+| スタードラゴン | Star Dragon | | | |
+| フロストドラゴン | Frost Dragon | | | |
+| シルフ | Sylph | | | |
+| サイクロプス | Cyclops | | | |
+| ヴァルキリー | Valkyrie | | | |
+| ワルキューレ | Walkure | | | |
+| ノーム | Gnome | | | |
+| リヴィングアーマ | Living Armor | | | |
+| MK46アーマー | MK46 Armor | | | |
+| エンジェル | Angel | | | |
+| オーディン | Odin | | | |
+| タイタン | Titan | | | |
+| サイコろ | Psycho Dice | | | |
+| うろうろツリー | Wandering Tree | | | |
+| メロウ | Merrow | | | |
+| スライム | Slime | | | |
+| けつえきスライム | Blood Slime | | | |
+| くさったスライム | Rotten Slime | | | |
+| じゃしん | Evil God | | | |
+| ワーム | Worm | | | |
+| インプ | Imp | | | |
+| ヒドラ | Hydra | | | |
+| すいしょうヒドラ | Crystal Hydra | | | |
+| りくダコ | Land Octopus | | | |
+| ケムケム | Smokey | | | |
+| ゴーレム | Golem | | | |
+| ゆきのようせい | Snow Fairy | | | |
+| プラチナドラゴン | Platinum Dragon | | | |
+| ふわふわぐも | Fluffy Cloud | | | |
+| ウィースプ | Wisp | | | |
+| ダイアヒドラ | Diamond Hydra | | | |
+| デーモン | Demon | | | |
+| ヘルドラゴン | Hell Dragon | | | |
+| デスドラゴン | Death Dragon | | | |
+| ドラゴネット | Dragonet | | | |
+| ケルベロス | Cerberus | | | |
+| ガーゴイル | Gargoyle | | | |
+| ハルピュイア | Harpy | | | |
+| ヴァンパイア | Vampire | | | |
+| キメラ | Chimera | | | |
+| ナイトメア | Nightmare | | | |
+| スケルトン | Skeleton | | | |
+| メデューサ | Medusa | | | |
+| セイレーン | Siren | | | |
+| ゾンビ | Zombie | | | |
+| マミー | Mummy | | | |
+| ベルゼベブ | Beelzebub | | | |
+| アルラウネ | Alraune | | | |
+| リッチ | Lich | | | |
+| ミノタウロス | Minotaur | | | |
+| オーガー | Ogre | | | |
+| ゴースト | Ghost | | | |
+
+### Enemies
+| JP | EN | max | notes | Avoid |
+|---|---|---|---|---|
+| ごうとう | Robber | | | |
+| アドベンチャラー | Adventurer | | | |
+| ハンター | Hunter | | | |
+| ごうとうのかしら | Robber Boss | | | |
+| ビーストメイジ | Beast Mage | | | |
+| ウイッチ | Witch | | | |
+| やみのせんし | Dark Warrior | | | |
+| やみのきし | Dark Knight | | | |
+| バーバリアン | Barbarian | | | |
+| しょうきんかせぎ | Bounty Hunter | | | |
+| アーチャー | Archer | | | |
+| ビーストナイト | Beast Knight | | | |
+| アマゾネス | Amazon | | | |
+| とうぞくのかしら | Thief Boss | | | |
+| とうぞく | Thief | | | |
+| やみのあきんど | Dark Merchant | | | |
+| ビーストハンター | Beast Hunter | | | |
+| ダークスミス | Dark Smith | | | |
+| ダークプリースト | Dark Priest | | | |
+| やみのモンク | Dark Monk | | | |
+| やみのシスター | Dark Sister | | | |
+| やみのじょさい | Dark Priestess | | | |
+| ヘビトカゲマン | Snake-Lizard Man | | | |
+| アサッシン | Assassin | | | |
+| かいぞくのかしら | Pirate Boss | | | |
+| かいぞく | Pirate | | | |
+| デスパー | Desper | | | |
+| アンフィスバエナ | Amphisbaena | | | |
+| しろながすクジラ | Blue Whale | | | |
+| クラーケン | Kraken | | | |
+| しょくしゅA | Tentacle A | | | |
+| しょくしゅB | Tentacle B | | | |
+| しょくしゅC | Tentacle C | | | |
+| しょくしゅD | Tentacle D | | | |
+| しょくしゅE | Tentacle E | | | |
+| しょくしゅF | Tentacle F | | | |
+| しょくしゅG | Tentacle G | | | |
+| はじまりのくび | Head of Beginning | | | |
+| こんとんのくび | Head of Chaos | | | |
+| はめつのくび | Head of Ruin | | | |
+
+### Skills
+| JP | EN | max | notes | Avoid |
+|---|---|---|---|---|
+| タックル | Tackle | | | |
+| ファイアーブレス | Fire Breath | | | |
+| サンダーブレス | Thunder Breath | | | |
+| スノーブレス | Snow Breath | | | |
+| ソードアタック | Sword Attack | | | |
+| アイスブリット | Ice Bullet | | | |
+| サンダースピア | Thunder Spear | | | |
+| スピアアタック | Spear Attack | | | |
+| フレイル | Flail | | | |
+| りんぷん | Scale Dust | | | |
+| ウインドブレード | Wind Blade | | | |
+| クラブアタック | Club Attack | | | |
+| プレス | Press | | | |
+| なぐる | Punch | | | |
+| ライトニング | Lightning | | | |
+| ひっかく | Scratch | | | |
+| とつげき | Charge | | | |
+| ふぶき | Snowstorm | | | |
+| さばきのひかり | Light of Judgment | | | |
+| エナジードレイン | Energy Drain | | | |
+| かみつき | Bite | | | |
+| どくが | Poison Fang | | | |
+| とりこむ | Engulf | | | |
+| ダークブレス | Dark Breath | | | |
+| しせん | Gaze | | | |
+| ヒーリング | Healing | | | |
+| ダークメイス | Dark Mace | | | |
+| キック | Kick | | | |
+| ダガーアタック | Dagger Attack | | | |
+| コロコロこうげき | Rolling Attack | | | |
+| グングニル | Gungnir | | | |
+| らいげき | Thunderbolt | | | |
+| バースト | Burst | | | |
+| かまいたち | Sickle Wind | | | |
+| きせき | Miracle | | | |
+| ブレスプラス | Bless Plus | | | |
+| いやしのひかり | Healing Light | | | |
+| ミラクルライト | Miracle Light | | | |
+| ちりょう | Treatment | | | |
+| ちゆのひかり | Curing Light | | | |
+| なめる | Lick | | | |
+| キュアポイズン | Cure Poison | | | |
+| ひっぱたく | Slap | | | |
+| しずく | Droplet | | | |
+| ファイアアタック | Fire Attack | | | |
+| アイスブレス | Ice Breath | | | |
+| スノーアタック | Snow Attack | | | |
+| フリーズ | Freeze | | | |
+| アイス | Ice | | | |
+| ブリザード | Blizzard | | | |
+| ソニックブレード | Sonic Blade | | | |
+| じょうか | Purify | | | |
+| スターブリッド | Star Bullet | | | |
+| かえん | Flames | | | |
+| あくむのせっぷん | Nightmare Kiss | | | |
+| バーニングフレア | Burning Flare | | | |
+| らくらい | Lightning Strike | | | |
+| ヘルウインド | Hell Wind | | | |
+| ポイズンクラウド | Poison Cloud | | | |
+| じごくのかえん | Hell Flames | | | |
+| じゃがん | Evil Eye | | | |
+| バーサクチャーム | Berserk Charm | | | |
+| フィア | Fear | | | |
+| スリープソング | Sleep Song | | | |
+| メンタルアタック | Mental Attack | | | |
+| じごくのごうか | Hell Inferno | | | |
+| ソウルスチル | Soul Steal | | | |
+| じょうかのひかり | Purifying Light | | | |
+| プラズマブレス | Plasma Breath | | | |
+| ごうか | Inferno | | | |
+| ヘルフレア | Hell Flare | | | |
+| ブリザードブレス | Blizzard Breath | | | |
+| エレクトリック | Electric | | | |
+| バーストブレス | Burst Breath | | | |
+| フレアブレス | Flare Breath | | | |
+| ハリケーン | Hurricane | | | |
+| メテオストライク | Meteor Strike | | | |
+| かみのいかずち | Divine Lightning | | | |
+| プラズマアタック | Plasma Attack | | | |
+| ヒールライト | Heal Light | | | |
+| デスウインド | Death Wind | | | |
+| ハエ | Flies | | | |
+| ロックアタック | Rock Attack | | | |
+| しのしせん | Death Gaze | | | |
+| フェザーアタック | Feather Attack | | | |
+| はっきょう | Frenzy | | | |
+| どくぎり | Poison Mist | | | |
+| フェナティクアイ | Fanatic Eye | | | |
+| パワーロード | Power Load | | | |
+| いかり | Rage | | | |
+| ふるいたつ | Rouse | | | |
+| ソニックブレス | Sonic Breath | | | |
+| いしつぶて | Stone Throw | | | |
+| キュア | Cure | | | |
+| すみこうげき | Ink Attack | | | |
+| アックス | Axe | | | |
+| フリーズブレス | Freeze Breath | | | |
+| さいせいのほのう | Flame of Rebirth | | | |
+| スリープクラウド | Sleep Cloud | | | |
+| ねむりのしせん | Sleep Gaze | | | |
+| ショック | Shock | | | |
+| ねむりのといき | Sleep Sigh | | | |
+| ねむりのこな | Sleep Powder | | | |
+| でんりゅう | Electric Current | | | |
+| デスソング | Death Song | | | |
+| きょうきのうた | Song of Madness | | | |
+| コロコロダンス | Rolling Dance | | | |
+| スリープアタック | Sleep Attack | | | |
+| カース | Curse | | | |
+| ソウルコフィン | Soul Coffin | | | |
+| りゅうさんのきり | Sulfuric Acid Mist | | | |
+| しょくしゅ | Tentacle | | | |
+| こおりのきば | Ice Fang | | | |
+| かみつく | Bite | | | |
+| ほのおのきば | Fire Fang | | | |
+| ポイズンブレス | Poison Breath | | | |
+| すみ | Ink | | | |
+| ダイン | Dyne | | | |
+| ウインドブレス | Wind Breath | | | |
+| ブリッドブレス | Bullet Breath | | | |
+| おたけび | War Cry | | | |
+
+<!-- names:end -->
 
 ## Decisions from earlier batches
 - <batch> <JP> -> <EN> (reason)
