@@ -25,6 +25,8 @@ def main():
         for off, w, _ in entries:
             for o in range(off, off + extract.slot(rom, t, off, w)):
                 cov[o] = name
+    for o in extract.not_text():  # read by eye: code, or already English / numbers only
+        cov.setdefault(o, "not_text")
     seen, bad = {}, {}
     for f in logs:
         for m in re.finditer(r"str ([0-9A-F]{6})", f.read_text(encoding="utf-8", errors="replace")):

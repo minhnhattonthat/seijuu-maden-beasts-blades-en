@@ -174,3 +174,11 @@ E2AF22	graphics or other binary data (72 B, e.g. 'ゾるぞらぎぬ{var:01}げ{
 E3505A	event-script / map data (112 B, e.g. 'こを1{end}')
 E38B98	event-script / map data (94 B, e.g. 'ら ヤ、{end}')
 E4EC7D	event-script / map data (12 B, e.g. 'ぽラを{end}')
+C0031F	65816 code: C0:02F5 loads #$031F into the print pointer; textlog_check saw it (decodes as 'でぐち')
+C0B85B	already English: world-map POINT/FOOD/USE numbers (font codes unchanged in en.tbl)
+C0C28B	number + G (gold), no text
+C0C2E4	『』 + number, no text
+C0C2FE	number + G (gold), no text
+C0F8D2	dashes (empty shop slot), no text
+C0F8DB	dashes (empty shop slot), no text
+C11DB3	already English: save slot '  NO DATA'
