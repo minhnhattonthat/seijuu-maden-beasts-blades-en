@@ -45,6 +45,15 @@ org $C32CA4
 org $C557A3
 	jsl bname
 
+; member names ([$BF] -> a RAM member record's name, copied raw from a C6 field, so it may be a {call} stub):
+; status/formation name cells C254A9 (REP #$30 / LDY #0) and the battle name box C5329A (LDY #0 / LDA [$BF],y)
+org $C254AA
+	jsl mname
+	nop
+org $C5329A
+	jsl bbox
+	nop
+
 org $E80000
 compose:			; in: [$32] at an English code. out: $36DD buffer filled, $32 past 1-2 codes, M8 X16
 	phb
@@ -227,6 +236,36 @@ bname:				; battle weapon/item list C557A3 (name bytes -> tiles): follow a {call
 	pla
 	pla
 	jml $C557B1
+
+mname:				; C254AA: the replaced REP #$30 / LDY #0, after following a stub. X (cell count) kept
+	rep #$30
+	jsr bf_follow
+	ldy #$0000
+	rtl
+
+bbox:				; C5329A: the replaced LDY #0 / LDA [$BF],y, after following a stub. M8 X16, X kept
+	rep #$20
+	jsr bf_follow
+	sep #$20
+	ldy #$0000
+	lda [$BF],y
+	rtl
+
+bf_follow:			; [$BF] at 0F FF lo hi bank: point $BF-$C1 at the called string. M16 X16, X kept
+	lda [$BF]
+	cmp #$FF0F
+	bne .ret
+	phx
+	ldy #$0002
+	lda [$BF],y
+	tax
+	ldy #$0003
+	lda [$BF],y		; hi, bank
+	sta $C0
+	stx $BF
+	plx
+.ret:
+	rts
 	warnpc $E81000
 
 org $E81000

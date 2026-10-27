@@ -12,6 +12,14 @@ text starts at `E84000` (`build.py` `ASM_SPACE`). Disassemble every hook after a
 | `C3275D` (`bulk_half`) | | same with `JSR ($1343,x); JMP $2587` | bulk engine (scrolls, choice lists) |
 | `C32CA4` | line width for centred lines | `JML measure` (`E8`) | follows `{call}` stubs; an English pair counts as one full-width cell |
 | `C557A3` | battle weapon/item list: `LDA [$C2],y; BEQ $57B1` (name bytes -> tiles, code - $10) | `JSL bname` (`E8`) | follows a `0F FF lo hi bank` stub (C6 names relocated), keeps X (tilemap index), sets C for the caller's `SBC #$10` |
+| `C254AA` | member name cells (`C254A9`, status/formation/exchange NAME:, `[$BF]` -> RAM member name, X cells): `REP #$30; LDY #0` | `JSL mname; NOP` (`E8`) | a name copied from a stubbed C6 field is `0F FF lo hi bank` in RAM: `bf_follow` points `$BF-$C1` at the called string, keeps X |
+| `C5329A` | dungeon-battle name box: `LDY #0; LDA [$BF],y` (bytes -> tiles until 00) | `JSL bbox; NOP` (`E8`) | same, M8 X16, returns the first byte for the caller's `SEC; SBC #$10` |
+
+Member-name readers found by watching reads of the hero's RAM name (`$6052`) in `status_hero`, `status_formation`,
+`world_status`, `status_items`, `status_beast`, the exchange screen, `battle_t10/_t13/_fort` (+ victory), `world_map`,
+`world_cmd`, `field_menu`: only these two (`C32AEA` there is a 16-bit read of the level at `$6051`). Not watched: grid
+field battles, army info outside these scenes. `[$BF]` is a general pointer (150+ readers), so a static sweep can't
+tell name drawers apart: a new screen with a garbled member name is a third drawer to hook.
 
 Font: `fonts/en6.txt` -> `build/en6.bin` (`tools/font.py`), 16 bytes per code 10-7F, 5 px glyphs + the game's 1 px
 shadow. A lone English glyph before a control code or kanji gets a blank right half (6 px gap).

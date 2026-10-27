@@ -13,3 +13,4 @@ decision replaces one, mark the old one "replaced by D<n>" instead of deleting i
 | D5 | 2026-10-27 | Graphics text left in Japanese | none (default), list | Translate all of it (titles, menus, banners, cards); keep the original Japanese logo only if it has no official English version. The title logo already reads "Beasts & Blades" with small 聖獣魔伝 kanji. |
 | D6 | 2026-10-27 | Specs and plans | need approval, pre-approved | Pre-approved: keep going through checkpoints; report at the end. Never `gh release create`, never change repo visibility. |
 | D7 | 2026-10-27 | Existing saves / states | provided, none | None provided; build the debug tool. |
+| D8 | 2026-10-27 | Member names copied raw into RAM (soldiers 6, others 8 chars) | engine work: member-name printers follow `{call}` stubs; fit the fields | Engine work: hook the member-name drawers to follow stubs (`hooks.md` `mname`/`bbox`). |

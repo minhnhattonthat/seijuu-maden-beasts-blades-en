@@ -220,7 +220,6 @@ def repack(orig, text, gfx, strict=True, asm=False):
             w.write(o, new.to_bytes(2, "little"), "status_code")
     seq = [(n, lo & 0x3FFFFF, hi & 0x3FFFFF) for n, lo, hi in extract.RUNS if n in extract.SEQ]
     fields, short, free = extract.field_offsets(), [], []
-    ram_names = extract.field_offsets(extract.RAM_NAMES)
     base = unpack_text(orig)
     for off, (wd, s) in sorted(text.items()):
         if any(lo <= off < hi for _, lo, hi in seq) or base[off][1] == s:  # untouched: keep the original bytes
@@ -228,10 +227,11 @@ def repack(orig, text, gfx, strict=True, asm=False):
         b = extract.encode(t, s, wd, off)
         n = extract.slot(orig, t, off, wd)
         if len(b) > n:
-            if n < 6 or off in extract.MENU_SET or off in ram_names:
+            if n < 6 or off in extract.MENU_SET:
                 short.append(off)
                 continue
-            # the 8x8 menu printer (C32912) has {call} too (its code 0F, C32A1D), so a name field takes a stub
+            # the 8x8 menu printer (C32912) has {call} too (its code 0F, C32A1D), so a name field takes a stub;
+            # member names copied to RAM records are drawn by hooked code (text.asm mname/bbox)
             b = stub(w.put(t.encode(s if s.endswith("{end}") else s + "{end}"), f"reloc_{0xC00000 | off:06X}"))
             if off in fields:
                 b += bytes(n - 6)

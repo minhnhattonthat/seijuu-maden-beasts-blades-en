@@ -102,9 +102,6 @@ FIELDS = [
     ("enemies", 0xC6760C, 31, 31),          # human enemy classes
     ("enemies", 0xC679CF, 33, 17),          # monster bosses
 ]
-# copied raw into a RAM member record's name (+5; C33559.. C33BA8, C12823..): printers there don't follow a {call}
-# stub, so these names must fit their field (docs/re/windows.md)
-RAM_NAMES = {"generals", "soldiers", "beasts", "people", "enemies"}
 
 
 def table():
@@ -193,10 +190,9 @@ def units(rom, t=None):
     return out
 
 
-def field_offsets(names=None):
-    """Offsets of every FIELDS slot (fixed-width records: no {call}, must fit), or only those of the named tables."""
-    return {(lo & 0x3FFFFF) + stride * i for k, lo, stride, n in FIELDS if names is None or k in names
-            for i in range(n)}
+def field_offsets():
+    """Offsets of every FIELDS slot (fixed-width records: no {call}, must fit)."""
+    return {(lo & 0x3FFFFF) + stride * i for _, lo, stride, n in FIELDS for i in range(n)}
 
 
 def encode(t, s, w, off=None):

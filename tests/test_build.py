@@ -61,15 +61,10 @@ def test_relocation_and_packed_runs():
     assert romdiff.check(ORIG, rom, set(), w.log)[0] == []
 
 
-def test_ram_names_never_stub():
-    sol = 0x063F7E  # soldier 0: copied into a RAM member record, so a stub would print as glyphs
-    wd = TEXT[sol][0]
-    w = build.repack(ORIG, {**TEXT, sol: (wd, "ABCDEF")}, GFX, asm=True)
-    en = build.Table.load(ROOT / "tbl" / "en.tbl")
-    assert w.rom[sol:sol + 7] == en.encode("ABCDEF") + b"\0"  # 6 = the field, its 00 terminator kept
-    try:
-        build.repack(ORIG, {**TEXT, sol: (wd, "Yoshinobu")}, GFX, asm=True)
-    except SystemExit as e:
-        assert "063F7E" in str(e) or "C63F7E" in str(e)
-    else:
-        raise AssertionError("overlong RAM name was stubbed")
+def test_member_name_stub():
+    sol = 0x063F7E  # soldier 0: a 6-byte field copied (7 bytes) into a RAM member record; text.asm mname/bbox follow it
+    w = build.repack(ORIG, {**TEXT, sol: (TEXT[sol][0], "Yoshinobu")}, GFX, asm=True)
+    rom = bytes(w.rom)
+    assert rom[sol:sol + 2] == b"\x0f\xff" and rom[sol + 6] == 0  # stub fills the field, the 00 after it stays
+    dest = int.from_bytes(rom[sol + 2:sol + 5], "little") & 0x3FFFFF
+    assert build.Table.load(ROOT / "tbl" / "en.tbl").decode(rom, dest)[0] == "Yoshinobu{end}"
