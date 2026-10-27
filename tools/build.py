@@ -327,6 +327,7 @@ STATUS_CODE = [
     (0xC26B96, 0xABB0, 0xABB6),
     (0xC26C3E, 0xA7A6, 0xA79E),  # どく (C26BC0) over the whole HP value from col 15, not the max HP alone
     (0xC2A471, 0x0D, 0x12),  # selected equip row's highlight (C25485 from col 8): 18 cells, through the name's col 25
+    (0xC0E056, 0x11, 0x10),  # beast-list right column (C0DFD7) col 16: "Beast Pack" (C0E109) inside the row highlight
 ]
 
 

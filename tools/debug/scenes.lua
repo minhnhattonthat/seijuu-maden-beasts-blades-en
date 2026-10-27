@@ -2,6 +2,10 @@
 -- Fields (all optional; see warp.lua): boot_only, boot, scn, map, x, y, dir, ev, script, vars, gold, ram,
 -- after, mash, settle, check, frames (budget for warp.py). Scenario numbers: docs/re/events.md (scenario table).
 -- check: RAM that must hold at the end. $505A = scenario, $505B = map.
+-- a beast member record ($2F bytes): unit 1's beast as op 38 01 06 builds it (JP-coded name)
+local BEAST = { 0x03, 0x00, 0x00, 0x0A, 0x01, 0xEE, 0xD7, 0xB4, 0xB6, 0x00, 0x00, 0x00, 0x00, 0x00, 0x07, 0x7F,
+                0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x0C, 0x00, 0x22, 0x22, 0x08, 0x05, 0x09, 0x01, 0x02, 0x10,
+                0x07, 0x15, 0x15, 0x2E, 0x63, 0x57, 0x00, 0x13, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0xFF }
 SCENES = {
   -- boot path (route only)
   intro = { boot_only = true, boot = "1400 -", settle = 30, frames = 1500 },
@@ -23,6 +27,12 @@ SCENES = {
   shop_68 = { scn = 1, map = 0, ev = 40, after = "500 -;6 a;200 -", frames = 8000 },
   shop_6a = { scn = 1, map = 0, ev = 20, after = "500 -;6 a;200 -", frames = 8000 },
   shop_6c = { scn = 1, map = 0, ev = 14, after = "500 -;6 a;200 -", frames = 8000 },
+  -- beast shop with 5 beasts in the hero's unit (status_beast's record in slots 1-5): list drawer C0DFD7 prints
+  -- "Beast Pack" (C0E109) once $A180 >= 5
+  shop_6c_pack = { scn = 1, map = 0, ev = 14, bytes = { [0x7E607C] = BEAST, [0x7E60AB] = BEAST,
+                     [0x7E60DA] = BEAST, [0x7E6109] = BEAST, [0x7E6138] = BEAST },
+                   after = "500 -;6 down;30 -;6 a;300 -;6 a;300 -;6 down;30 -;6 down;30 -;6 down;30 -;6 down;30 -;6 down;60 -",
+                   frames = 8900 },
   shop_6e = { scn = 1, map = 0, ev = 15, after = "500 -;6 a;200 -", frames = 8000 },
   shop_70 = { scn = 6, map = 0, ev = 66, after = "500 -;6 a;200 -", frames = 8000 },
   shop_72 = { scn = 1, map = 0, ev = 17, after = "500 -;6 a;200 -", frames = 8000 },
