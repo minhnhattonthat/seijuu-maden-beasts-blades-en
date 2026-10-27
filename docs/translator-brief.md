@@ -9,7 +9,9 @@ the next. Do all translation yourself; do not dispatch subagents.
 ## Read first
 1. `docs/style-reference.md` - layout rules, character voices and approved example pairs. Match this voice.
 2. `build/terms_<batch>.txt` - binding glossary rows for this batch (full table in `glossary.md` if you need more:
-   read its Rulings and Style rules once).
+   read its Rulings and Style rules once). Item, weapon, beast, enemy and skill names in dialogue use the game's
+   own English from its "Data names" section: hiragana-only names aren't in the terms file, so grep `glossary.md`
+   for any item-like word (`grep -n "| きのや |" glossary.md`).
 3. `docs/synopsis.md` - plot, who is who and the late reveals. Don't give a reveal away early.
 
 ## Input: `work/tl/<batch>.tsv`

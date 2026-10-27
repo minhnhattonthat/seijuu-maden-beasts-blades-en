@@ -93,7 +93,7 @@
 {"id": "C15693", "jp": "{clear}調教をすればビーストは{c0B}いうことをききやすくなるぞ!{c0B}{wait}{clear}調教するかい?{c0B}{end}", "en": "{clear}Taming makes a beast{c0B}{nl}listen to you much better!{c0B}{nl}{wait}{clear}Want it tamed?{c0B}{nl}{end}"},
 {"id": "C156BE", "jp": "{clear}どのビーストを調教するんだい?{c0B}{end}", "en": "{clear}Which beast needs taming?{c0B}{nl}{end}"},
 {"id": "C156D2", "jp": "{clear}悪いがそのビーストは調教できないな。{wait}{end}", "en": "{clear}Sorry, no taming that one.{wait}{end}"},
-{"id": "C156EA", "jp": "ちょっと時間はかかるが、うまく{c0B}調教してやるぜ!{c0B}{wait}{clear}{end}", "en": "It'll take a while, but I'll{c0B}{nl}finish its taming right!{c0B}{nl}{wait}{clear}{end}"},
+{"id": "C156EA", "jp": "ちょっと時間はかかるが、うまく{c0B}調教してやるぜ!{c0B}{wait}{clear}{end}", "en": "It'll take a while, but I'll{c0B}{nl}tame it up right!{c0B}{nl}{wait}{clear}{end}"},
 {"id": "C1570A", "jp": "{clear}どのビーストを預かればいいんだい?{c0B}{end}", "en": "{clear}Which beast should I look after?{c0B}{nl}{end}"},
 {"id": "C1571F", "jp": "{clear}悪いがそのビーストは預かれないな。{wait}{end}", "en": "{clear}Sorry, I can't keep that beast.{wait}{end}"},
 {"id": "C15735", "jp": "大事に預かるぜ!{c0B}{c0B}{wait}{clear}{end}", "en": "I'll take good care of it!{c0B}{nl}{c0B}{nl}{wait}{clear}{end}"},
