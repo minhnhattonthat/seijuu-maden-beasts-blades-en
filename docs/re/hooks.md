@@ -16,6 +16,14 @@ text starts at `E84000` (`build.py` `ASM_SPACE`). Disassemble every hook after a
 | `C5329A` | dungeon-battle name box: `LDY #0; LDA [$BF],y` (bytes -> tiles until 00) | `JSL bbox; NOP` (`E8`) | same, M8 X16, returns the first byte for the caller's `SEC; SBC #$10` |
 | `C31B69`, `C31D1E` | auto-wrap after a cell (`C31B58` full-width / `C31D13`: column `$4770` past `$4768` and `LDA [$32]; AND #$FF; BEQ` -> `JSR $1E2B` new line) | `JSL wrapchk; BEQ; NOP` (`E8`) | no auto-wrap when the next code (past `{delay}`/`{sfx}`) is `00`, `{c0B}`, `{c0C}` or `{nl}`: a line that fills the row exactly (35 or 36 English chars = 18 cells) plus its `{nl}` left a blank line (2026-10-28; asar 1.91 encoded `beq $C31D28` wrong, so the targets are labels) |
 
+| `C26140` (bag list entry), `C2B3F9..B57E` / `C2A654..A7A4` (cursor, use/discard/valuables and equip-page bag), `C2B76B` / `C2ABD8` (row highlight) | two columns of 12 cells: entry `$4BA4` = base + (slot odd ? $18) + slot/2 * $80; cursor ±2 rows, ±1 columns | one column: row = slot, count/LV col 28 (`C2620C`/`C262AB`/`C26457`), highlight 24 cells, down/up ±1, left/right off, ▽ bound `B990`; `JSR $B798` at `C26167` blanks the row and zeroes its lower half (`text.asm`) | item names up to 19 chars (D4). Buffer 7F:AE10, $80 per entry: 2 tile rows, HDMA squeezes each to 12 px but the lower row's top shows, so stale tiles there must go. 32 rows reach 7F:BE10: the exchange screen's second list moved 7F:B6D0 -> BED0 (`C2612D`, `C2D150`, `C2D7C3/C8`, `C2D5EB`) |
+
+Bag-list layout (`C26140`, `C260BB` list 1 = unit `E12B`, `C2610F` list 2 = unit `E12D`, exchange screen only):
+cursor `E11F` index, `E121` row, `E123` row in the 5-row window, `E125` (list 2 `E127`) scroll = buffer address
+of the top row; `C2B7C6` DMAs 10 tile rows from it to VRAM `5888`. **Not done:** exchange-screen cursor (`C2D114`..,
+highlight `C2D593`) is still two-column logic over the one-column drawer; equip-page bag (`C2A5B0`) patched but not
+seen in-game (no warp).
+
 Member-name readers found by watching reads of the hero's RAM name (`$6052`) in `status_hero`, `status_formation`,
 `world_status`, `status_items`, `status_beast`, the exchange screen, `battle_t10/_t13/_fort` (+ victory), `world_map`,
 `world_cmd`, `field_menu`: only these two (`C32AEA` there is a 16-bit read of the level at `$6051`). Not watched: grid

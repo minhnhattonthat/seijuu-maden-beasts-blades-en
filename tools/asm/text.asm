@@ -71,6 +71,94 @@ org $C5329A
 	jsl bbox
 	nop
 
+; item list (status アイテム: use/discard/valuables; drawer C26140, buffer 7F:AE10, entry rows $80 apart): one column
+; instead of two 12-cell columns, so a name gets cols 9-27 (19 chars) and the count/LV moves to col 28
+org $C26144
+	db $80			; BCC -> BRA: no right-column offset (+$18)
+org $C26152
+	nop			; LSR: row = slot, not slot/2
+org $C26167
+	jsr $B798		; was LDA #$0000: blank the whole row first (names shorter than the old one)
+org $C2620C
+	db $28			; weapon LV: col 16 -> 28
+org $C262AB
+	db $28			; armor's blank count field
+org $C26457
+	db $28			; food/item count
+org $C26436
+	db $17			; empty slot: blank 24 cells
+; highlight C2B76B: row = index (the odd-index path is dead, the row blank lives there), 24 cells
+org $C2B776
+	nop #3			; LSR / BCS odd
+org $C2B798			; 29 bytes up to the join at B7B5
+	phy
+	lda #$0017
+	jsr $6CE0		; A+1 blank cells from $4BA4 (cols 8-31)
+	lda $4BA4		; and zero the row's lower half (+$40, squeezed out by HDMA but its top shows):
+	tax			; other screens leave tiles there, unseen while the list had 16 rows
+	ldy #$0018
+	lda #$0000
+-	sta $7F0040,x
+	inx
+	inx
+	dey
+	bne -
+	ply
+	rts
+warnpc $C2B7B5
+org $C2B7BD
+	db $17
+; cursor (C2B3F9..): down/up move one row, left/right do nothing
+org $C2B3FD
+	db $1B			; down while index < 27
+org $C2B40F
+	nop #3			; second INC $E11F
+org $C2B452
+	db $01			; up while index >= 1
+org $C2B465
+	nop			; second DEC A
+org $C2B482
+	db $20			; scroll-up guard (row < 12): 28 rows now
+org $C2B4A8
+	db $80			; left: BEQ -> BRA (no move)
+org $C2B50B
+	db $80			; right: BEQ -> BRA
+; the same for the equip page's bag list (C2A5B0, dispatcher index 9): twin cursor code and highlight C2ABD8
+org $C2A658
+	db $1B
+org $C2A66A
+	nop #3
+org $C2A6AB
+	db $01
+org $C2A6BE
+	nop
+org $C2A6DE
+	db $20
+org $C2A701
+	db $80
+org $C2A75D
+	db $80
+org $C2ABE4
+	nop #3
+org $C2AC2B
+	db $17
+org $C2B175
+	dw $B990		; ▽ arrow: last scroll top is row 23 (AE10 + 23 * $80), was row 9
+org $C2B831
+	dw $B990
+; the second list (C2610F, other unit on the exchange screen) sat at 7F:B6D0, inside list 1's 32 rows now: 7F:BED0
+org $C2612D
+	dw $BED0
+org $C2D150
+	dw $BEC0		; its scroll start (E127)
+org $C2D7C3
+	dw $BED0		; its ▲ / ▽ bounds
+org $C2D7C8
+	dw $CA50
+org $C2D5EB
+	dw $10C0		; its highlight: list 1 position + $8C0 -> + $10C0
+; TODO exchange item cursor (C2D114.., highlight C2D593 LSR/width) is still two-column: docs/status.md
+
 org $E80000
 compose:			; in: [$32] at an English code. out: $36DD buffer filled, $32 past 1-2 codes, M8 X16
 	phb
