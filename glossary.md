@@ -271,6 +271,11 @@ Binding for every translator and reviewer. Agents propose additions in reports; 
 | 天界 / 下界 | the heavens / the world below | | | |
 | 忘れられた村 | Forgotten Village | | | |
 | 光の魔術師 | sorcerer of Light | | | |
+| トマソン | Thomason | 8 | hired swordsman | |
+| 疾風の剣士 | Swordsman of the Gale | | | |
+| 市長補佐 | Deputy Mayor | | | |
+| クマ殺し | Bear-Slayer | | クマ殺しのカリスト Callisto the Bear-Slayer | |
+| けむけむ | Smokey | | | |
 | パラピー | Parapi | | パラピーちゃん Parapi-chan, a pet beast | |
 | 光の司祭 | Priest of Light | | Mona's title (Mona, Priest of Light); 光の司祭長 is Lang | |
 
