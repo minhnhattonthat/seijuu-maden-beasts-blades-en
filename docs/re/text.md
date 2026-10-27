@@ -58,7 +58,7 @@ Argument bytes follow the code. "verified" = handler read; "corpus" = decoded st
 4. **Common event table** `CE0128` (247 16-bit entries into bank CE, right after the scenario table): event scripts not in any scenario header (recruit/hire lines per character). Walked like scenario events.
 5. **Menu-script VM** (building menus): interpreter `C0C4E7`, pointer 24-bit at DP `$72-$74`, op byte -> handler table `C0BF8F` (`FF` ends; `00 lo hi` goto). Menu ops `60`-`76` of the event VM set `$72` to a C1 script (`60` -> `C14094`). Its message op is also `0A ff lo hi` (bank C1). Scripts `C14094`-`C14D72`, their text `C14D73`-`C15DA4`. Opcode lengths not mapped (not needed: the text is one contiguous list).
 6. **Pointer tables** (16-bit, own bank): ending scrolls `C17044` (5), ranks `C60E44`/`C60ECA`, armor types `C630C3`, monster retreat lines `C50ABE` (11), battle messages `C57CD8` (21; the shouts at `C57DCB`-`C57E02` are packed with no `00` between them, so a string ends at the next pointer), battle idle lines `C57E03` (7).
-7. **Fixed-width name fields** in C6 records (`00`-padded; record stride differs per table): weapons `C60F50` (19 B), armor `C61CE5` (18), food `C62489` (12), items `C6253D` (18), items2 `C62BFD` (15), skills `C6368D` (13), beasts `C6686C` (37), named people `C674AE` (29), enemy classes `C6760C` (31), monster bosses `C679CF` (33). Width = longest name in the table for now; the menu code that reads them sets the real width (phase 5).
+7. **Fixed-width name fields** in C6 records (`00`-padded; record stride differs per table): weapons `C60F50` (19 B), armor `C61CE5` (18), food `C6247D` (12; くろパン, was missed as `C62489` until the item screen showed it), items `C6253D` (18), items2 `C62BFD` (15), skills `C6368D` (13), generals `C63E52` (25, 12 names, 9-byte field), soldiers `C63F7E` (26, 403 names, 7-byte field; both katakana only, missed until textscan learned katakana-only names), beasts `C6686C` (37), named people `C674AE` (29), enemy classes `C6760C` (31), monster bosses `C679CF` (33). Width = longest name in the table for now; the menu code that reads them sets the real width (phase 5).
 
 8. **Split lo/hi immediates:** `LDA #lo / STA $32 / LDA #hi / STA $33` (battle results `C34B9D`-`C34C5F`, bank C3).
 9. **8x8 printer `{call}` wrappers in code banks:** `LDA #$A0D5 / STA $4F / JSL $C32912` where `C2A0D5` = `0F FF DB A0 C2 00` (calls `C2A0DB`); same at `C2A52A`.
@@ -70,6 +70,9 @@ Coverage blind spot (found 2026-10-27): `extract.gaps` (the coverage test) skips
 codes and regions of fewer than 3 strings, so short code-adjacent lists slipped through (battle results, copier
 warning `C15FA6`, `C03AEE`, the C2 wrappers). Swept by hand: uncovered textscan hits with a real word (2 kanji, kanji
 + 2 hiragana, or 4 katakana) are now all units or noise (bank CA and font sheets).
+Second blind spot (2026-10-27): `textscan.textlike` wanted particles, so katakana-only names never counted. It now
+accepts an all-katakana run; the sweep found the generals/soldiers tables (`C63E52`, `C63F7E`), the formation names
+`C2C8EB` (`party_menu`) and 20 noise regions (`not_text.tsv`).
 
 ## Text ranges (survey, `tools/textscan.py`)
 

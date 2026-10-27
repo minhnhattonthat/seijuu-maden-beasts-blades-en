@@ -182,3 +182,24 @@ C0C2FE	number + G (gold), no text
 C0F8D2	dashes (empty shop slot), no text
 C0F8DB	dashes (empty shop slot), no text
 C11DB3	already English: save slot '  NO DATA'
+# katakana-only hits (textscan reads all-katakana runs as names since 2026-10-27), read by eye: noise
+C0D7A3	code bytes (katakana-only hit)
+C11545	code bytes (katakana-only hit)
+C18179	code bytes (katakana-only hit)
+C23905	code bytes (katakana-only hit)
+CA1111	graphics data, repeated ゾヲゾ
+CAA495	graphics data (katakana-only hit)
+CAF265	graphics data (katakana-only hit)
+D56465	data bytes (katakana-only hit)
+D5660D	data bytes (katakana-only hit)
+D6B155	data bytes, repeated pattern
+D74A7B	data bytes (katakana-only hit)
+D88904	table data, xxグ+00 pattern
+D88E16	table data, xxグ+00 pattern
+D89457	table data, xxグ+wait pattern
+D91A61	data bytes, repeated pattern
+D93BCF	data bytes, repeated pattern
+D96861	table data, ゾxザ pattern
+D9842C	data bytes, repeated pattern
+DA0457	data bytes (katakana-only hit)
+DBC26C	data bytes (katakana-only hit)

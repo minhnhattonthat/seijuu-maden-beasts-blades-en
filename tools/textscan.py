@@ -20,6 +20,7 @@ KANA = re.compile(r"[ぁ-んァ-ヴー]")
 
 
 HIRA = re.compile(r"[ぁ-ん]")
+KATA = re.compile(r"[ァ-ヴー]+")
 COMMON = re.compile(r"[のはをにがでとたしてるいう。、…!?]")
 
 
@@ -29,6 +30,8 @@ def textlike(s):
     body = re.sub(r"\{[^}]*\}", "", s).strip()
     if len(body) < 3:
         return False
+    if KATA.fullmatch(body):  # name fields (ローレンツ): no particles to count
+        return True
     # real lines are mostly kana with particles; random bytes spread over ~2700 kanji codes
     return len(KANA.findall(body)) >= len(body) * 0.5 and len(COMMON.findall(body)) >= max(1, len(body) // 6)
 

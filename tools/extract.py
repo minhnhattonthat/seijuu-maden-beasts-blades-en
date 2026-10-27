@@ -47,6 +47,7 @@ RUNS = [
     ("battle_result", 0xC34B9D, 0xC34C60),  # dungeon-battle victory/level-up/defeat (split lo/hi immediates)
     ("party_menu", 0xC26940, 0xC2695C),     # status screen: ---, やせい, formation ranges (C26D31)
     ("party_menu", 0xC26BA0, 0xC26BCA),     # status screen: human labels drawn back over them, どく, -----
+    ("party_menu", 0xC2C8EB, 0xC2C996),     # formation names + blank line ({call} list C2C8B5)
     ("camp_menu", 0xC38E0A, 0xC38E1F),
     ("locations", 0xC60C00, 0xC60E44),      # location list (index = scenario for the first ones)
     ("ranks", 0xC60E5A, 0xC60ECA),          # 第N聖獣王 (pointer table C60E44)
@@ -90,10 +91,12 @@ PTRS = [
 FIELDS = [
     ("weapons", 0xC60F50, 19, 183),
     ("armor", 0xC61CE5, 18, 108),
-    ("food", 0xC62489, 12, 15),
+    ("food", 0xC6247D, 12, 16),
     ("items", 0xC6253D, 18, 96),
     ("items2", 0xC62BFD, 15, 69),
     ("skills", 0xC6368D, 13, 153),
+    ("generals", 0xC63E52, 25, 12),         # named officers (ラビウス ローレンツ...), katakana only
+    ("soldiers", 0xC63F7E, 26, 403),        # unit member names, 7-byte name field, katakana only
     ("beasts", 0xC6686C, 37, 85),
     ("people", 0xC674AE, 29, 12),           # named characters (ガイアス...), アークマスター
     ("enemies", 0xC6760C, 31, 31),          # human enemy classes

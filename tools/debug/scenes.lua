@@ -43,6 +43,13 @@ SCENES = {
                      0x07, 0x15, 0x15, 0x2E, 0x63, 0x57, 0x00, 0x13, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0xFF } },
                    after = "240 -;6 a;40 -;6 down;20 -;6 down;20 -;6 down;20 -;6 a;400 -", settle = 0,
                    frames = 8200 },
+  -- status screen with items: the hero's unit's inventory at $62B0 (unit 0 + $296), 3-byte entries kind/id/count,
+  -- FF ends (a bought dagger is 00 09 01); then the アイテム command (the dark command word is the cursor)
+  status_items = { scn = 35, map = 2, x = 0x80, y = 0x68, bytes = { [0x7E62B0] = {
+                     0x00, 0x09, 0x01, 0x01, 0x00, 0x01, 0x02, 0x00, 0x02, 0x03, 0x00, 0x03, 0x04, 0x00, 0x01, 0xFF } },
+                   after = "240 -;6 a;40 -;6 down;20 -;6 down;20 -;6 down;20 -;6 a;400 -;6 down;40 -;6 a;200 -;6 a;200 -",
+                   settle = 0,
+                   frames = 8200 },
   -- op 5E battle as scenario 2 (bandit fort) event 0 starts it
   battle_fort = { scn_start = 2, script = { 0x5E, 0x00, 0xFF, 0x00, 0x00, 0x6A, 0xFF }, after = "600 -;6 a;120 -;6 a;120 -",
                   frames = 8600 },
