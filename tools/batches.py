@@ -133,7 +133,8 @@ def limit_of(name, jp):
 
 
 def has_jp(s):
-    return bool(re.search(r"[぀-ヿ一-鿿]", CODE.sub("", s)))
+    # punctuation-only lines (…… 「!?」 、) count too: their JP codes draw garbage in the English font
+    return bool(re.search(r"[…、。「」『』぀-ヿ一-鿿！-～]", CODE.sub("", s)))
 
 
 def load_script():
