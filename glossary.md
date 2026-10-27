@@ -223,7 +223,37 @@ Binding for every translator and reviewer. Agents propose additions in reports; 
 | シスター | Sister | | 修道女X -> Sister X (Sister Saria); 修道女 alone -> nun (not linted) | |
 | ポチ | Spot | | a soldier's griffon | |
 | エルフの秘宝 / エルフの王冠 | Elven Treasure / Elven Crown | | quest items (data names keep "Elf X") | |
-| 魔道の杖 | Staff of Sorcery | | | |
+| 魔道の杖 / 魔導の杖 | Staff of Sorcery / Staff of Sorcery | | | |
+| 時の凍る平原 | Plain of Frozen Time | | | |
+| スノーフェスティバル | Snow Festival | | | |
+| 詩人 | Poet | | speaker label (Odell); 吟遊詩人 is the bard | |
+| グリーンビースト | Green Beast | | activist group | |
+| カッパ | kappa | | common noun; signs signed "-- The Kappa" | |
+| 力の王冠 | Crown of Power | | Titan superweapon | |
+| ドラグーン | Dragoon | | Pal's clan | |
+| ブーケ | Bouquet | | Pal's beast | |
+| ルホウキ | Ruhoki | 8 | Winged Folk leader | |
+| 闇の司祭 | Priest of Darkness | | Eris | |
+| 闇の教え / 光の教え | Teachings of Darkness / Teachings of Light | | | |
+| ベーオウルフ / ドラゴンバスター | Beowulf / Dragon Buster | | | |
+| ガラッシュ | Galash | 8 | 剣聖ガラッシュ Galash, the Sword Saint | |
+| フレイ | Frey | 8 | gender unknown so far | |
+| ブヒュテンヒルト | Buchtenhild | | Frey's beast | |
+| あやしい商人 | Shady Merchant | | | |
+| ラバルス6世 / ラバルス7世 | Rabals VI / Rabals VII | | | |
+| スクラップ / ジャン | Scrap / Jean | 8 | Landenbaum | |
+| カーハ・ラー | Kaha Ra | | card player, Akeania | |
+| 近衛隊 | Royal Guard | | | |
+| ワイズマン | Wiseman | | ロバート・ワイズマン Robert Wiseman, Blue Whale expert | |
+| ムツジロウ | Mutsujiro | | ムツさん Mutsu-san, beast breeder | |
+| ひなぎくの戦士 | Daisy Warrior | | | |
+| トロン / ウンヌ / ステラ | Tron / Unnu / Stella | 8 | | |
+
+Notes (not linted): オカマ -> "drama queen" (Wertheim's campy voice, never a slur; the mayor in E3559B is "drag queen");
+ゼジルお父さん/とうちゃん -> Papa Zejil / Daddy Zejil (Father X is the priest form); 詩人 Poet (Odell) vs
+吟遊詩人 Bard (may be two different bards); ドラグーン Dragoon(s), 竜騎士 dragon knights; 海賊 Pirate, 魔女 Witch,
+聖獣 Holy Beast, マーメイド Mermaid as speaker labels; 地下世界 = 地底世界 underground world.
+
 | 魂返しの秘法 | secret rite of soul-returning | | the Light-side name for 反魂の外法 | |
 | 地底世界 | underground world | | | |
 | ババ / おババ | Granny / Granny | | the Old Woman's name for herself | |
