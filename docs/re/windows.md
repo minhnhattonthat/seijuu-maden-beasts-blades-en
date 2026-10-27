@@ -13,7 +13,10 @@ English text: 6 px per character (fonts/en6.txt, two per 12 px cell) in the 12 p
 | Yes/no record `C0C30D` (`script/menus.json`) | **4 chars per row** (box grows rightwards from x~184; at 5 the right border is off screen) | `--qa 'C0C30D=1234{nl}No'`, warp `shop_6e` | measured (`work/qa/yn1.png`) |
 | Town building name box (`town_lists` strings, e.g. `CE3419` さかば) | **8 chars** (fixed box, the rest is cut) | `--qa CE3419=1234567890123456`, warp `town_enter` | measured (`work/qa/townname1.png`) |
 | World-map info box `C0BAF7` | its 114-byte slot (no free space in bank C0 to grow) | build error when larger | known limit |
-| Battle messages, names in status/equip/battle/item screens | not yet: no warp reaches a battle message or an item screen | | guess |
+| Battle messages (`battle` C57CD8 table, printer C57C00) and battle results (`battle_result` C34B9D..) | **35 chars per line, 3 lines** (same box as dialogue: wraps after char 36, 4th line scrolls) | `--qa C34BD0=` / `C57D3C=` ruler, `battle_t10` state + `tools/lua/battle_end.lua` (BATTLE_END=1 victory, 2 defeat) | measured (`work/qa/bruler`, `blose`) |
+| Battle weapon/item list (C6 names via C557A3, hooked to follow stubs) | **8 chars** (the `×--` count is drawn over col 9+; longer names wrap into the next row) | `--qa C6253D=1234567890ABCDEF`, `battle_t10` state, `down a` | measured (`work/qa/batk_r`) |
+| Equip screen names (status menu → 装備) | **7 chars** clean (cell 8 is covered by the screen's own tilemap, the rest runs on to the edge); the labels around them are LZ tilemaps (`docs/re/graphics.md` G12): fix together | `--qa C611B0=... C61D3F=...`, `status_menu` state, `down down a a` | measured (`work/qa/equip_r`), needs layout work |
+| Shouts (C57DCB..), battle idle lines, item screen | not reached yet | | guess |
 
 Glyph torture: `--qa 'E7792E=abcdefghijklmnopqrstuvwxyz  ABCDEFGHIJ{nl}KLMNOPQRSTUVWXYZ 0123456789 !?.,;:...'`:
 every printable glyph renders; 「 and 」 are drawn at the cell edges (Japanese style), so `「」` shows a gap.

@@ -1,0 +1,8 @@
+[
+{"id": "C34B9D", "jp": "{sfx:15}{num:A0BE507E}ポイントの経験値{nl}{num:A0C2507E}カロリーの食料{nl}{num:A0C0507E}Gを手にいれた。{wait}{end}", "en": ""},
+{"id": "C34BD0", "jp": "{clear}{sfx:11}{icall:2B4F7E}は{nl}レベルが上がった!{nl}{delay:5A}{wait}{end}", "en": ""},
+{"id": "C34BE9", "jp": "{sfx:0C}戦闘中です{delay:14}・{delay:14}・{delay:14}・{delay:14}・{delay:14}・{delay:14}・{delay:14}・{delay:14}・{delay:14}・{delay:14}{end}", "en": ""},
+{"id": "C34C11", "jp": "{clear}{sfx:12}{icall:2B4F7E}がたおれた!{nl}{delay:5A}{wait}{end}", "en": ""},
+{"id": "C34C24", "jp": "{clear}聖獣王の勝利です。{nl}{num:A0BE507E}ポイントの経験値を{nl}手にいれた!{wait}{end}", "en": ""},
+{"id": "C34C4F", "jp": "聖獣王の敗北です。{nl}{wait}{end}", "en": ""}
+]

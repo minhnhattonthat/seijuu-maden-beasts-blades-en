@@ -41,6 +41,10 @@ bulk_half:
 org $C32CA4
 	jml measure
 
+; battle weapon/item list (C557A3: LDA [$C2],y / BEQ): C6 name fields are {call} stubs now
+org $C557A3
+	jsl bname
+
 org $E80000
 compose:			; in: [$32] at an English code. out: $36DD buffer filled, $32 past 1-2 codes, M8 X16
 	phb
@@ -193,6 +197,36 @@ measure:			; replaces C32CA4: width of the line at [$32] in 8 px cells -> $4B8E
 	sta $32
 	plp
 	rtl
+
+bname:				; battle weapon/item list C557A3 (name bytes -> tiles): follow a {call} stub. M8 X16
+	lda [$C2],y
+	beq .end
+	cmp #$0F
+	bne .ret
+	iny			; 0F FF lo hi bank: draw the called string instead
+	iny
+	phx			; X = the caller's tilemap index
+	rep #$20
+	lda [$C2],y
+	tax
+	iny
+	iny
+	sep #$20
+	lda [$C2],y
+	sta $C4
+	stx $C2
+	plx
+	ldy #$0000
+	lda [$C2],y
+	beq .end
+.ret:
+	sec			; the caller's SBC #$10 (the CMP above may have cleared it)
+	rtl
+.end:
+	pla			; drop the JSL return: take the caller's BEQ to the end of the name
+	pla
+	pla
+	jml $C557B1
 	warnpc $E81000
 
 org $E81000

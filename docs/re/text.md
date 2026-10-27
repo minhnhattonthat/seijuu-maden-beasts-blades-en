@@ -60,7 +60,16 @@ Argument bytes follow the code. "verified" = handler read; "corpus" = decoded st
 6. **Pointer tables** (16-bit, own bank): ending scrolls `C17044` (5), ranks `C60E44`/`C60ECA`, armor types `C630C3`, monster retreat lines `C50ABE` (11), battle messages `C57CD8` (21; the shouts at `C57DCB`-`C57E02` are packed with no `00` between them, so a string ends at the next pointer), battle idle lines `C57E03` (7).
 7. **Fixed-width name fields** in C6 records (`00`-padded; record stride differs per table): weapons `C60F50` (19 B), armor `C61CE5` (18), food `C62489` (12), items `C6253D` (18), items2 `C62BFD` (15), skills `C6368D` (13), beasts `C6686C` (37), named people `C674AE` (29), enemy classes `C6760C` (31), monster bosses `C679CF` (33). Width = longest name in the table for now; the menu code that reads them sets the real width (phase 5).
 
-All of these are units in `tools/extract.py` (`RUNS`, `PTRS`, `FIELDS`, `EVENT_TABLES`) -> `script/*.json`.
+8. **Split lo/hi immediates:** `LDA #lo / STA $32 / LDA #hi / STA $33` (battle results `C34B9D`-`C34C5F`, bank C3).
+9. **8x8 printer `{call}` wrappers in code banks:** `LDA #$A0D5 / STA $4F / JSL $C32912` where `C2A0D5` = `0F FF DB A0 C2 00` (calls `C2A0DB`); same at `C2A52A`.
+10. **Tilemaps in LZ blocks** (8x8 font tiles, tile = code - $10): status/equip labels `CD51CD`, `CD5812` (`docs/re/graphics.md` G12); name grid `C7EAC9`. Not units yet.
+
+All of these are units in `tools/extract.py` (`RUNS`, `PTRS`, `FIELDS`, `STRINGS`, `EVENT_TABLES`) -> `script/*.json`, except 10.
+
+Coverage blind spot (found 2026-10-27): `extract.gaps` (the coverage test) skips hits with `{num`/`{var`/`{choice}`
+codes and regions of fewer than 3 strings, so short code-adjacent lists slipped through (battle results, copier
+warning `C15FA6`, `C03AEE`, the C2 wrappers). Swept by hand: uncovered textscan hits with a real word (2 kanji, kanji
++ 2 hiragana, or 4 katakana) are now all units or noise (bank CA and font sheets).
 
 ## Text ranges (survey, `tools/textscan.py`)
 

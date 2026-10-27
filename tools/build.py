@@ -302,7 +302,9 @@ def build(orig, mark=False, qa=()):
     if mark:
         skip = {o for n, es in extract.units(orig).items() if n in NO_MARKER for o, *_ in es}
         t = Table.load(ROOT / "tbl" / "jp.tbl")
-        text = {o: (w, s if o in skip else marker(t, o, w, s)) for o, (w, s) in text.items()}
+        # blank lines stay blank: a SEQ run's spacer lines would otherwise all become stubs and overflow it
+        text = {o: (w, s if o in skip or not s.replace("{end}", "").strip() else marker(t, o, w, s))
+                for o, (w, s) in text.items()}
     else:
         en = extract.load_en()  # script/*.json translations over the original units
     over = {int(k, 16) & 0x3FFFFF: v for k, v in (q.split("=", 1) for q in qa)}

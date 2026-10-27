@@ -37,12 +37,14 @@ RUNS = [
     ("name_entry", 0xC11A9C, 0xC11AC8),
     ("item_menu", 0xC14031, 0xC14094),
     ("shop", 0xC14D73, 0xC15DA5),           # building menus: menu-script VM (C0C4E7, op table C0BF8F)
+    ("copy_warning", 0xC15FA6, 0xC15FF1),   # copier warning screen, centred lines (LDA #$5FA6 at C15F58)
     ("prologue", 0xC1621D, 0xC1659F),       # creation myth scroll (C16096)
     ("intro", 0xC167F7, 0xC169F0),          # bell scene scroll
     ("endings", 0xC1704E, 0xC17C03),        # ending scrolls, pointer table C17044
     ("credits", 0xC17C03, 0xC17FC9),
     ("name_grid", 0xC184C0, 0xC18585),      # name-entry kana grid ([FE] = layout codes)
     ("party_menu", 0xC25320, 0xC253FD),     # 17-byte space-padded prompts
+    ("battle_result", 0xC34B9D, 0xC34C60),  # dungeon-battle victory/level-up/defeat (split lo/hi immediates)
     ("party_menu", 0xC26944, 0xC2695C),     # やせい, formation ranges
     ("camp_menu", 0xC38E0A, 0xC38E1F),
     ("locations", 0xC60C00, 0xC60E44),      # location list (index = scenario for the first ones)
@@ -56,7 +58,7 @@ RUNS = [
     ("buildings", 0xCE3419, 0xCE3467),      # town-menu building names
 ]
 # RUNS whose lines are read in order (no pointer per line): build.py packs them as a list of {call} stubs
-SEQ = {"prologue", "intro", "endings", "credits"}
+SEQ = {"copy_warning", "prologue", "intro", "endings", "credits"}
 # menu windows drawn as BG tiles from the 8x8 font (tools/tilescan.py): record = <w> <h> then w*h words
 # (tile = code - $10, high byte $20; $E7 = blank cell), one row per item. Opened by menu-script op 10 lo hi
 # (C1 scripts C14094-C14C18); build.py moves that pointer when a record grows.
@@ -70,8 +72,10 @@ MENU_TILE = {0x10: BLANK, 0x00: 0x00}  # text code -> tile where not code - $10:
                                        # isn't blank in this font); [00] = tile 0, the number cells of C0BAF7
 # name, single {end}-terminated strings (built-in event scripts in C0: 0A 01 lo hi FF + inline text)
 STRINGS = [
-    ("system", [0xC03A64, 0xC03A71, 0xC03A78, 0xC03AA3, 0xC03ADC, 0xC03B01, 0xC03B11, 0xC03B23, 0xC042F1,
-                0xC044E9]),
+    ("system", [0xC03A64, 0xC03A71, 0xC03A78, 0xC03AA3, 0xC03ADC, 0xC03AEE, 0xC03B01, 0xC03B11, 0xC03B23,
+                0xC042F1, 0xC044E9]),
+    # 8x8 printer (C32912) texts behind a {call} wrapper: C2A0D5 (no beasts), C2A52A (see the other members)
+    ("party_menu", [0xC2A0DB, 0xC2A530]),
 ]
 # name, table, pointer count (pointers into the table's bank), end of the last string if packed
 PTRS = [

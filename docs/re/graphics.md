@@ -18,10 +18,11 @@ Static sweep: every LZ block `tools/lzblocks.py --render work/gfx` finds (docs/r
 | G9 | Battle command menu: 移動 攻撃 アイテム 防御 (outlined 16 px, same style as G6) | not yet matched | ? | seen (warp `battle_t10`) | find source with G6, redraw |
 | G10 | World-map party commands: 移動 キャンプ ステータス; 移動 sub-menu 移動/入る; X menu マップ/セーブ | not yet matched | ? | seen (warp `world_cmd`, explore1 notes) | find source with G6, redraw |
 | G11 | Location title box on entering a map (山賊砦, どうぐや) | text engine or tiles: check in the marker build | ? | seen (warp `battle_fort`) | marker build decides |
+| G12 | Status/equip screen labels as 8x8-font tilemaps (tile = code - $10): ちから じゅうりょう たいりょく こうげき すばやさ ぼうぎょ ちせい きどうりょく ぶきレベル ぼうぐ, アイテム rows | LZ `CD51CD` (hi byte 00), `CD5812` (hi 20, long forms そうびじゅうりょう こうげきりょく ぼうぎょりょく) | tilemap over the 8x8 font | seen garbled in the marker build (`status_menu` + `down down a a`): the font's kana tiles 40-6A are lowercase now | rewrite the maps like `build.name_grid`; lay out with the equip names (7 chars now, `windows.md`) |
 
 Not Japanese (no work): town menu "OK?" bubble and EXIT sign, save screen NO DATA, battle REMAIN/MAXIMUM/HP gauges,
 world-map POINT/FOOD/USE box, staff credits (English names in the text engine, C17C03).
-Not Japanese (no work, earlier list): PUSH START, the English intro verses, PAUSE sprite, battle UI `CD51CD` (STATUS ACTION HEART), status UI `CD498F` (NAME LV EXP HP MALE FEMALE STATUS EQUIP ITEM NEXT SEX).
+Not Japanese (no work, earlier list): PUSH START, the English intro verses, PAUSE sprite, battle UI `CD51CD` (STATUS ACTION HEART; its kana labels are G12), status UI `CD498F` (NAME LV EXP HP MALE FEMALE STATUS EQUIP ITEM NEXT SEX).
 
 ## Fonts (text work, not graphics text)
 

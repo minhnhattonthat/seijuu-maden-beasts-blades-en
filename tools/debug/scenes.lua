@@ -39,6 +39,8 @@ SCENES = {
   battle_fort = { scn_start = 2, script = { 0x5E, 0x00, 0xFF, 0x00, 0x00, 0x6A, 0xFF }, after = "600 -;6 a;120 -;6 a;120 -",
                   frames = 8600 },
   battle_t10 = { scn_start = 3, script = { 0x5E, 0x10, 0xFF, 0x00, 0x10, 0x6A, 0xFF }, after = "900 -", frames = 8600 },
+  -- battle end messages: from battle_t10's state, pass a turn (防御) with tools/lua/battle_end.lua
+  -- (BATTLE_END=1 victory: C34B9D exp/food/gold + level up; 2 defeat: C57D3C, then an ending scroll)
   battle_t13 = { scn_start = 3, script = { 0x5E, 0x13, 0xFF, 0x00, 0x13, 0x6A, 0xFF }, after = "900 -", frames = 8600 },
   -- no game-over screen: a lost battle sends the party back to Melshiva; the Dark side's victory is ending_1/_4
   -- op 14: leave the building to the town menu; op 16: to the world map

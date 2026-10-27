@@ -11,6 +11,7 @@ text starts at `E84000` (`build.py` `ASM_SPACE`). Disassemble every hook after a
 | `C31B74` (`typed_half`, was the half-width loader) | | `JSL compose; JSR $19BE; JSR ($133B,x); JMP $1933` | two English glyphs composed into one 12 px cell, then the game's full-width shift/shadow/draw |
 | `C3275D` (`bulk_half`) | | same with `JSR ($1343,x); JMP $2587` | bulk engine (scrolls, choice lists) |
 | `C32CA4` | line width for centred lines | `JML measure` (`E8`) | follows `{call}` stubs; an English pair counts as one full-width cell |
+| `C557A3` | battle weapon/item list: `LDA [$C2],y; BEQ $57B1` (name bytes -> tiles, code - $10) | `JSL bname` (`E8`) | follows a `0F FF lo hi bank` stub (C6 names relocated), keeps X (tilemap index), sets C for the caller's `SBC #$10` |
 
 Font: `fonts/en6.txt` -> `build/en6.bin` (`tools/font.py`), 16 bytes per code 10-7F, 5 px glyphs + the game's 1 px
 shadow. A lone English glyph before a control code or kanji gets a blank right half (6 px gap).
