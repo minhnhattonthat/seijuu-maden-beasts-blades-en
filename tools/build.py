@@ -328,31 +328,39 @@ STATUS_CODE = [
 ]
 
 
-def status_map(t, raw):
+PARTY_MAP = 0x0D5812  # LZ: party-member view (ステータス -> pick a member), same rows; right values already at col 28,
+# no icon column (names at col 13 drawn by the same shared C26 code as the own view)
+
+
+def status_map(t, raw, party=False):
     """The status tilemap with English labels (STATS, EQUIP), values and icons moved to match STATUS_CODE."""
     w = [raw[i] | raw[i + 1] << 8 for i in range(0, len(raw), 2)]
+    hi = w[36 * 32 + 8] & 0xFF00  # cell attribute: $00 own view, $20 party view
 
     def put(row, col, s):
         for i, c in enumerate(s):
-            w[row * 32 + col + i] = t.encode(c)[0] - 0x10
+            w[row * 32 + col + i] = hi | t.encode(c)[0] - 0x10
 
+    rv = 28 if party else 24
     for row, left, right in STATS:
         r = row * 32
-        colon, lval, rval = w[r + 13], w[r + 14:r + 16], w[r + 24:r + 27]
-        w[r + 8:r + 31] = [0] * 23
+        colon, lval, rval = w[r + 13], w[r + 14:r + 16], w[r + rv:r + rv + 3]
+        w[r + 8:r + 31] = [hi] * 23
         put(row, 16 - len(left), left)
         put(row, 27 - len(right), right)
         w[r + 16], w[r + 27] = colon, colon
         w[r + 17:r + 19], w[r + 28:r + 31] = lval, rval
     for row, label in EQUIP:
         r = row * 32
-        icon, colon, lv = w[r + 13], w[r + 12], w[r + 30]
-        w[r + 8:r + 31] = [0] * 23
+        icon, colon, lv = (hi if party else w[r + 13]), w[r + 12], w[r + 30]
+        w[r + 8:r + 31] = [hi] * 23
         put(row, 8, label)
         w[r + 15] = icon
         if row == 46:
             put(row, 27, "LV")
             w[r + 29], w[r + 30] = colon, lv
+    if party:  # item-slot placeholders (アイテムNN, rows 56+) are always drawn over: blank, so the map fits its slot
+        w[56 * 32:] = [hi if 0x9A <= x & 0xFF <= 0xBA and x >> 8 == 0x20 else x for x in w[56 * 32:]]
     return b"".join(x.to_bytes(2, "little") for x in w)
 
 
@@ -362,6 +370,7 @@ def build(orig, mark=False, qa=()):
     gfx[MENU_FONT] = font.menu_font(gfx[MENU_FONT])
     gfx[NAME_GRID] = name_grid(Table.load(ROOT / "tbl" / "en.tbl"), gfx[NAME_GRID])
     gfx[STATUS_MAP] = status_map(Table.load(ROOT / "tbl" / "en.tbl"), gfx[STATUS_MAP])
+    gfx[PARTY_MAP] = status_map(Table.load(ROOT / "tbl" / "en.tbl"), gfx[PARTY_MAP], party=True)
     if mark:
         skip = {o for n, es in extract.units(orig).items() if n in NO_MARKER for o, *_ in es}
         t = Table.load(ROOT / "tbl" / "jp.tbl")

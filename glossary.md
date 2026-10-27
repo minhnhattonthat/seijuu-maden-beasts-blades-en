@@ -37,6 +37,7 @@ Binding for every translator and reviewer. Agents propose additions in reports; 
 | ぶきレベル | LV | 2 | weapon level, "LV:" | |
 | りんせつ / かいふく / えんぽう / とくべつ | Melee / Heal / Ranged / Special | 7 | beast skill ranges | |
 | どく | Poison | 7 | | |
+| じゅうぞく | Loyal | 5 | beast/master row label, the bar starts right after it | |
 
 ## Decisions from earlier batches
 - <batch> <JP> -> <EN> (reason)

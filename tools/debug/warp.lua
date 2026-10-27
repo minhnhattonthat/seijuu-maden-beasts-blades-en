@@ -64,6 +64,7 @@ local function inject()
   end
   if sc.gold then wr(0x7E600C, sc.gold); wr(0x7E600D, sc.gold >> 8); wr(0x7E600E, sc.gold >> 16) end
   for a, v in pairs(sc.ram or {}) do wr(a, v) end
+  for a, bs in pairs(sc.bytes or {}) do for i = 1, #bs do wr(a + i - 1, bs[i]) end end
   local s = sc.script or { 0x10, 0x00, sc.scn, sc.map, sc.x or 0x80, sc.y or 0x80, sc.dir or 2, 3, 0, 0,
     sc.ev or 0xFF, 0xFF }
   for i = 1, #s do wr(BUF + i - 1, s[i]) end

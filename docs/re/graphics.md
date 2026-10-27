@@ -28,8 +28,15 @@ Not Japanese (no work, earlier list): PUSH START, the English intro verses, PAUS
 
 - Loader `C25914`: `$7EE0FB` = 0 -> `CD51CD`, else `CD5812`; both decompress to `$7F:A000`, 32 x 128 cells,
   cell (row, col) = `$7FA000 + (row*32 + col)*2`. `CD51CD` = own status/equip screen (warp `status_menu`, logged).
-  `CD5812` = `E0FB` 1 (set at `C29B30`) or 3 (`C5DE2D`..): the party-member view (code `C2A4xx-C2B0xx`, long
-  labels, right values at col 28); no warp reaches it yet (needs a second party member).
+  `CD5812` = `E0FB` 1 (set at `C29B30`) or 3 (`C5DE2D`..): long labels, right values at col 28 (code
+  `C2A4xx-C2B0xx`). **Not** the formation screen's ステータス -> member view: that one (warp `status_beast`, then
+  `a`, pick a member) reuses `CD51CD` already in RAM (the formation screen loads it, no LZ on the way). Which screen
+  shows `CD5812` is still unknown; `build.status_map(party=True)` rewrites it the same way (untested on screen).
+- Party RAM: units of `$301` bytes from `$601A` (unit 0 = the hero's), member records `$2F` bytes from unit+`$33`
+  (record +0 kind, +1 unit, +5 name). Op `38 id 06` builds unit `id` and increments `$6010` (unit count).
+  `status_beast` puts unit 1's beast record (JP-coded name) into the hero's second slot `$607C`.
+- BEAST/MASTER row of that screen: template `C29F7C` (8x8 printer, called from `C29F6E`; name, LV and the じゅうぞく
+  bar drawn over it), missed by the coverage check (code bank C2), now a `party_menu` string.
 - `CD51CD` cells: stats rows 36/38/40/42: left label ends col 12, `:` col 13, value cols 14-15; right label ends col
   22, `:` 23, value 24-26. Equip rows 46/48/50/52: label cols 8-11, `:` 12, icon col 13 (tile $1xx), name from col 14
   (7 placeholder cells `1234567`), row 46 ぶきレベル: cols 24-29, value col 30. Rows 56-121: item list placeholders.

@@ -35,6 +35,14 @@ SCENES = {
   status_menu = { scn = 35, map = 2, x = 0x80, y = 0x68,
                   after = "240 -;6 a;40 -;6 down;20 -;6 down;20 -;6 down;20 -;6 a;400 -", settle = 0,
                   frames = 8200 },
+  -- status screen with a beast in the hero's unit: unit 1's beast record (op 38 01 06 builds it at $637D), unit
+  -- byte 00, copied to the hero's second slot (units $301 bytes from $601A, members $2F bytes from unit+$33)
+  status_beast = { scn = 35, map = 2, x = 0x80, y = 0x68, bytes = { [0x7E607C] = {
+                     0x03, 0x00, 0x00, 0x0A, 0x01, 0xEE, 0xD7, 0xB4, 0xB6, 0x00, 0x00, 0x00, 0x00, 0x00, 0x07, 0x7F,
+                     0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x0C, 0x00, 0x22, 0x22, 0x08, 0x05, 0x09, 0x01, 0x02, 0x10,
+                     0x07, 0x15, 0x15, 0x2E, 0x63, 0x57, 0x00, 0x13, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0xFF } },
+                   after = "240 -;6 a;40 -;6 down;20 -;6 down;20 -;6 down;20 -;6 a;400 -", settle = 0,
+                   frames = 8200 },
   -- op 5E battle as scenario 2 (bandit fort) event 0 starts it
   battle_fort = { scn_start = 2, script = { 0x5E, 0x00, 0xFF, 0x00, 0x00, 0x6A, 0xFF }, after = "600 -;6 a;120 -;6 a;120 -",
                   frames = 8600 },

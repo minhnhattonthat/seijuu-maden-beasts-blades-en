@@ -77,6 +77,8 @@ STRINGS = [
                 0xC042F1, 0xC044E9]),
     # 8x8 printer (C32912) texts behind a {call} wrapper: C2A0D5 (no beasts), C2A52A (see the other members)
     ("party_menu", [0xC2A0DB, 0xC2A530]),
+    # status screen BEAST/MASTER row template (called by C29F6E): name, LV and the じゅうぞく bar are drawn over it
+    ("party_menu", [0xC29F7C]),
 ]
 # name, table, pointer count (pointers into the table's bank), end of the last string if packed
 PTRS = [
