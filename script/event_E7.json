@@ -796,7 +796,7 @@
 {"id": "E7F340", "jp": "ここに人を襲って食らう{nl}ミノタウロスがいるという{nl}話を聞いて退治に来たのだが{c0C}迷宮の中を探しているうちに{nl}帰れなくなってしまった…。{end}", "en": "I heard there was a Minotaur here{nl}that attacks and eats people, so I{nl}came to defeat it,{c0C}but while searching the labyrinth,{nl}I couldn't find my way back...{end}"},
 {"id": "E7F390", "jp": "あっ!!{c0C}ちょうどいいところに{nl}来て下さいました。{c0C}私は、ここに住んでいるという{nl}ミノタウロス達に光の法の{nl}素晴らしさを広めようと{c0C}来たのですが、迷宮が余りにも{nl}広すぎたため迷ってしまったのです。{c0C}私をミノタウロスの所まで{nl}連れていってくれませんか。{end}", "en": "Ah!!{c0C}You've come at just the right time.{c0C}I came to spread the wonders of the{nl}Law of Light to the Minotaurs said{nl}to live here,{c0C}but the labyrinth was far too big,{nl}and I got lost.{c0C}Would you take me to where the{nl}Minotaurs are?{end}"},
 {"id": "E7FE6D", "jp": "{choice:0101} 闇のドラゴン、進攻!{end}", "en": "{choice:0101} Dark Dragon Advances!{end}"},
-{"id": "E7FE7F", "jp": "この島に、闇のドラゴンが{nl}向かって来ている。{nl}町で決戦をする{nl}可能性もあるので、住民は、{nl}すみやかに避難してください。{end}", "en": "A dragon of Darkness is heading for{nl}this island. A decisive battle may{nl}take place in town, so residents{nl}should evacuate immediately.{end}"},
+{"id": "E7FE7F", "jp": "この島に、闇のドラゴンが{nl}向かって来ている。{nl}町で決戦をする{nl}可能性もあるので、住民は、{nl}すみやかに避難してください。{end}", "en": "The Dark Dragon is heading for this{nl}island. A decisive battle may take{nl}place in town, so residents should{nl}evacuate immediately.{end}"},
 {"id": "E7FEC9", "jp": "ヘルドラゴン{nl}「何だ、貴様達は?{nl} ここは、よそ者が来てよい場所{nl} ではない!!{nl} 死んでもらうぞ!」{end}", "en": "Hell Dragon{nl}\"What are you lot? This is no place{nl} for outsiders to come!! You will{nl} die here!\"{end}"},
 {"id": "E7FF06", "jp": "持ち物が一杯です{end}", "en": "Your inventory is full.{end}"},
 {"id": "E7FF13", "jp": "何もない{end}", "en": "There's nothing here.{end}"},
