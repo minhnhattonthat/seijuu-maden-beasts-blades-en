@@ -37,12 +37,14 @@ def scenes():
     return out
 
 
-def run(name, frames, rom, states, sheet, lua=()):
-    out = ROOT / "work" / "qa" / "warp" / name
+def run(name, frames, rom, states, sheet, lua=(), jump=None):
+    out = ROOT / "work" / "qa" / "warp" / (f"{name}_{jump}" if jump else name)
     cmd = [sys.executable, "-X", "utf8", str(Path(SKILL) / "scripts" / "emu.py"), str(rom), "--out", str(out),
            "--script", str(SCENES), "--script", str(ROOT / "tools" / "debug" / "warp.lua"),
            *[x for f in lua for x in ("--script", str(Path(f).resolve()))],
            "--var", f"SCENE='{name}'", "--frames", str(frames), "--timeout", "900"]
+    if jump:
+        cmd += ["--var", f"JUMP=0x{jump}"]
     if states:
         cmd += ["--state-out", str(ROOT / "work" / "states" / f"{name}.mss")]
     if sheet:
@@ -65,6 +67,8 @@ def main():
     ap.add_argument("--jobs", type=int, default=3)
     ap.add_argument("--list", action="store_true")
     ap.add_argument("--lua", action="append", default=[], help="extra probe script(s), e.g. tools/lua/textlog.lua")
+    ap.add_argument("--jump", action="append", default=[],
+                    help="script address(es) to run (hex, e.g. E69999 from evdis.py --find 0A); out dir msg_<addr>")
     a = ap.parse_args()
     sc = scenes()
     if a.list or not a.names:
@@ -75,9 +79,11 @@ def main():
     for n in names:
         if n not in sc:
             sys.exit(f"unknown scene {n} (see --list)")
+    jobs = [(n, j) for n in names for j in (a.jump or [None])]
     fails = 0
     with ThreadPoolExecutor(a.jobs) as ex:
-        for name, ok, msg, out in ex.map(lambda n: run(n, sc[n], a.rom, a.states, a.sheet, a.lua), names):
+        for name, ok, msg, out in ex.map(lambda nj: run(nj[0], sc[nj[0]], a.rom, a.states, a.sheet, a.lua, nj[1]),
+                                         jobs):
             fails += not ok
             print(f"{'ok  ' if ok else 'FAIL'} {name:24} {msg}  {out / f'scene_{name}.png'}")
     return 1 if fails else 0

@@ -16,6 +16,8 @@
 local S = assert(SCENES, "load tools/debug/scenes.lua first")
 local name = assert(SCENE, "set --var \"SCENE='name'\"")
 local sc = assert(S[name], "unknown scene " .. tostring(name))
+sc.jump = JUMP or sc.jump  -- --var JUMP=0xE69999: any script address (warp.py --jump)
+sc.scn = SCN or sc.scn
 local M = emu.memType.snesMemory
 local function rd(a) return emu.read(a, M) end
 local function wr(a, v) emu.write(a, v & 0xFF, M) end
@@ -102,7 +104,8 @@ L.on_frame(function(f)
     phase, t0 = "jump", f
   elseif phase == "injected" and ran then
     arrive(f)
-  elseif phase == "jump" and f - t0 > 60 and rd(0x7EA10C) & 0x80 == 0 and rd(0x7E505B) ~= 0xFF then
+  -- 240: scn 58 map 0 starts its own event (E4401C) ~170 frames after the load, which would replace the jump
+  elseif phase == "jump" and f - t0 > 240 and rd(0x7EA10C) & 0x80 == 0 and rd(0x7E505B) ~= 0xFF then
     -- `jump` = run the scenario's script from this address (mid-event, e.g. after a battle it can't win)
     wr(0x7E0069, sc.jump & 0xFF); wr(0x7E006A, (sc.jump >> 8) & 0xFF); wr(0x7E006B, sc.jump >> 16)
     wr(0x7EA10C, rd(0x7EA10C) | 0x80)

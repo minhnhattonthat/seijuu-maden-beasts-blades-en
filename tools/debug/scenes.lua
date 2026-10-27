@@ -94,6 +94,10 @@ SCENES = {
   war_sky = { scn_start = 58, script = { 0xA6, 0xFF }, after = "300 -", frames = 7800 },
   -- war_start's dialogue after the Evil Eye battle (E42BB3, which a mash can't win), run from E42BCC
   war_talk = { scn = 58, map = 0, jump = 0xE42BCC, after = "200 -", settle = 0, frames = 7600 },
+  -- any message op: warp.py msg --jump <op address> (evdis.py --all --find 0A); A every 300 frames, so --sheet
+  -- catches each page
+  msg = { scn = 58, map = 0, jump = 0xE42BCC, after = "200 -;6 a;294 -;6 a;294 -;6 a;294 -;6 a;294 -;6 a;294 -",
+          settle = 0, frames = 9600 },
   -- op A2 n: ending sequence n (BG table C17012, text pointers C17044, 5 entries; scenario 72 uses 0 and 2);
   -- every ending runs on into the staff credits (C17C03)
   ending_0 = { script = { 0xA2, 0x00, 0xFF }, after = "1500 -", frames = 8600 },

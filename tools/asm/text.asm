@@ -41,6 +41,23 @@ bulk_half:
 org $C32CA4
 	jml measure
 
+; the column check after each cell (C31B58 full-width, C31D13: $4770 past $4768 and next byte not 00 -> new
+; line): an English line can fill the row exactly, and the {nl} after it then left a blank line
+org $C31B69
+	jsl wrapchk
+	beq wrap_rts2
+	nop
+	warnpc $C31B70
+org $C31B73
+wrap_rts2:
+org $C31D1E
+	jsl wrapchk
+	beq wrap_rts		; a literal `beq $C31D28` came out as F0 28 (to $1D4C) in asar 1.91
+	nop
+	warnpc $C31D25
+org $C31D28
+wrap_rts:
+
 ; battle weapon/item list (C557A3: LDA [$C2],y / BEQ): C6 name fields are {call} stubs now
 org $C557A3
 	jsl bname
@@ -266,6 +283,38 @@ bf_follow:			; [$BF] at 0F FF lo hi bank: point $BF-$C1 at the called string. M1
 	plx
 .ret:
 	rts
+
+wrapchk:			; C31D1E: auto-wrap after a full line unless the line ends here anyway. M16; out A = 0
+	php			; (no wrap: end, c0B, c0C or nl next, past delays/sfx), else 1; Z from A
+	rep #$30
+	phy
+	ldy #$0000
+.loop:
+	lda [$32],y
+	and #$00FF
+	beq .no
+	cmp #$0003		; {delay:1}
+	beq .skip
+	cmp #$0008		; {sfx:1}
+	beq .skip
+	cmp #$000B
+	bcc .yes
+	cmp #$000E		; 0B 0C 0D
+	bcc .no
+.yes:
+	lda #$0001
+	bra .out
+.skip:
+	iny
+	iny
+	bra .loop
+.no:
+	lda #$0000
+.out:
+	ply
+	plp
+	ora #$0000
+	rtl
 	warnpc $E81000
 
 org $E81000

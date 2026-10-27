@@ -3,16 +3,13 @@
 Work through these in the polish pass and the phase-8 QA tour. Remove a line once it is settled.
 
 ## In-game layout checks
-- CEB3B5..CEB521 deployed-kings list assembled from fragments
-- CED1A1 centred 'Second Banner' line
-- CE1DC3 delays inside a word ("ser{delay}va{delay}nt")
-- CFBA05/CFBA7B/CFBAF1 beast-race odds tables (space-aligned columns); CFCA38-CFCD10 race placings; CFC5A2 long poem
-- E357C2/E35805/E3692C/E36A52, E6B37F/E6B446, E797D6, CFE66A headlines shortened to fit
-- E3BD02.. Ruhoki speech continuing after a choice (quote marks)
-- E48BEC Hannes name inline with the quote (JP had no break)
-- E6AD13 Jimmy's verse + speaker switch with no page break; E3CA10 same pattern
-- E7EBD2/E7EBF0 song: ♪ written as '*' (en.tbl has no note glyph; add one?)
-- C17C79/C17F9C/C17FB9 credits "(ORG)", "(MEDIA WORKS)": the JP had a lone （; check the credit roll
+Checked 2026-10-28 with `warp.py msg --jump <op>` (`work/qa/layout/`): kings list, Second Banner (now one line),
+odds tables, placings, poem, headline bodies, Ruhoki, Hannes, Jimmy's verse (rewrapped), credits (ORG) all ok.
+Still open:
+- CE1DC3 delays inside a word ("ser{delay}va{delay}nt"): no message op found for it (mid-string), not seen
+- the headline lines themselves (`0C 00` ops: E6B37F/E6B446, E797D6, E357C2..): the body shows, the headline
+  caption didn't appear in the `msg` warp (needs its newspaper screen)
+- E7EBD2/E7EBF0 song: ♪ written as '*' (seen in-game, reads ok; en.tbl has no note glyph; add one?)
 
 ## Meaning / story to confirm
 - Erinshe: two people with one name? (E54F70-E550D0 taken by Death vs E55BA6.. who joins)

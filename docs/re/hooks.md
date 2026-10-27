@@ -14,6 +14,7 @@ text starts at `E84000` (`build.py` `ASM_SPACE`). Disassemble every hook after a
 | `C557A3` | battle weapon/item list: `LDA [$C2],y; BEQ $57B1` (name bytes -> tiles, code - $10) | `JSL bname` (`E8`) | follows a `0F FF lo hi bank` stub (C6 names relocated), keeps X (tilemap index), sets C for the caller's `SBC #$10` |
 | `C254AA` | member name cells (`C254A9`, status/formation/exchange NAME:, `[$BF]` -> RAM member name, X cells): `REP #$30; LDY #0` | `JSL mname; NOP` (`E8`) | a name copied from a stubbed C6 field is `0F FF lo hi bank` in RAM: `bf_follow` points `$BF-$C1` at the called string, keeps X |
 | `C5329A` | dungeon-battle name box: `LDY #0; LDA [$BF],y` (bytes -> tiles until 00) | `JSL bbox; NOP` (`E8`) | same, M8 X16, returns the first byte for the caller's `SEC; SBC #$10` |
+| `C31B69`, `C31D1E` | auto-wrap after a cell (`C31B58` full-width / `C31D13`: column `$4770` past `$4768` and `LDA [$32]; AND #$FF; BEQ` -> `JSR $1E2B` new line) | `JSL wrapchk; BEQ; NOP` (`E8`) | no auto-wrap when the next code (past `{delay}`/`{sfx}`) is `00`, `{c0B}`, `{c0C}` or `{nl}`: a line that fills the row exactly (35 or 36 English chars = 18 cells) plus its `{nl}` left a blank line (2026-10-28; asar 1.91 encoded `beq $C31D28` wrong, so the targets are labels) |
 
 Member-name readers found by watching reads of the hero's RAM name (`$6052`) in `status_hero`, `status_formation`,
 `world_status`, `status_items`, `status_beast`, the exchange screen, `battle_t10/_t13/_fort` (+ victory), `world_map`,
