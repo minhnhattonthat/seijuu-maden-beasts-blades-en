@@ -47,7 +47,7 @@ Binding for every translator and reviewer. Agents propose additions in reports; 
 | シャルコー | Charcot | 8 | | |
 | ゾナ | Zona | 8 | | |
 | ボルク | Bork | 8 | | |
-| エカース | Ekers | 8 | | |
+| エカース | Ekers | 8 | female (she) | |
 | ウイルソン | Wilson | 8 | | |
 | パル | Pal | 8 | | |
 | プラナ | Prana | 8 | | |
@@ -203,6 +203,39 @@ Binding for every translator and reviewer. Agents propose additions in reports; 
 | 老婆 | Old Woman | | speaker label | |
 | 市長 | Mayor | | speaker label | |
 | 神父 | Father | | priest | |
+| 第1の王 | First King | | form of address for the 1st Holy Beast King | |
+| 獣の剣 | Beast Sword | | same item as ケモノの剣 | |
+| 第二の旗 | Second Banner | | | |
+| 女神のクリスタル | Goddess Crystal | | | |
+| リファールの塔 | Rifar Tower | | | |
+| ハイネス | Heines | | the mountain; Heines Temple | |
+| クルト | Kurt | 8 | female adventurer from Leeroyle | |
+| 祝福 | bless | | blessing, blessed; also the purple lightning when a king is born | |
+| シオシオ草 | Shioshio Grass | | | |
+| 翼の民 | Winged Folk | | | |
+| 暗がりの野 | Gloomy Fields | | | |
+| ジミー | Jimmy | 8 | | |
+| ルーナスの剣 | Sword of Lunas | | quest sword | |
+| ルーナス騎士団 | Lunas Knights | | | |
+| トーマス | Thomas | | サー・トーマス・フィリップス Sir Thomas Phillips; フィリップス司令 Commander Phillips | |
+| ブリッジス | Bridges | 8 | | |
+| 司祭 | Priest | | speaker label | |
+| シスター | Sister | | 修道女X -> Sister X (Sister Saria); 修道女 alone -> nun (not linted) | |
+| ポチ | Spot | | a soldier's griffon | |
+| エルフの秘宝 / エルフの王冠 | Elven Treasure / Elven Crown | | quest items (data names keep "Elf X") | |
+| 魔道の杖 | Staff of Sorcery | | | |
+| 魂返しの秘法 | secret rite of soul-returning | | the Light-side name for 反魂の外法 | |
+| 地底世界 | underground world | | | |
+| ババ / おババ | Granny / Granny | | the Old Woman's name for herself | |
+| ツナミ | Tsunami | 8 | boss of the thieves | |
+| ブラックバード | Blackbird | | the thieves' gang | |
+| 戦いの女神 | Goddess of Battle | | | Goddess of War |
+| マイマイの騎士 | Snail Knight | | Brian's nickname | |
+| ペルナ | Perna | | ペルナ・パル Perna Pal | |
+| 従属度 | obedience | | beast stat in dialogue (label: Loyal) | |
+| 野聖 | Wild Saint | | pun on 野生; Jade's title Wild Saint Knight | |
+| 闇の司祭長 | High Priest of Darkness | | Barnaios | |
+| 聖王 | Holy King | | prophecy poem | |
 
 ## Items / skills / menu terms
 | JP | EN | max | notes | Avoid |
