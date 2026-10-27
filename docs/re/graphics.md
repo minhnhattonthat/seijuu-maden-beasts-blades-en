@@ -24,6 +24,30 @@ Not Japanese (no work): town menu "OK?" bubble and EXIT sign, save screen NO DAT
 world-map POINT/FOOD/USE box, staff credits (English names in the text engine, C17C03).
 Not Japanese (no work, earlier list): PUSH START, the English intro verses, PAUSE sprite, battle UI `CD51CD` (STATUS ACTION HEART; its kana labels are G12), status UI `CD498F` (NAME LV EXP HP MALE FEMALE STATUS EQUIP ITEM NEXT SEX).
 
+### G12 details (status/equip tilemaps)
+
+- Loader `C25914`: `$7EE0FB` = 0 -> `CD51CD`, else `CD5812`; both decompress to `$7F:A000`, 32 x 128 cells,
+  cell (row, col) = `$7FA000 + (row*32 + col)*2`. `CD51CD` = own status/equip screen (warp `status_menu`, logged).
+  `CD5812` = `E0FB` 1 (set at `C29B30`) or 3 (`C5DE2D`..): the party-member view (code `C2A4xx-C2B0xx`, long
+  labels, right values at col 28); no warp reaches it yet (needs a second party member).
+- `CD51CD` cells: stats rows 36/38/40/42: left label ends col 12, `:` col 13, value cols 14-15; right label ends col
+  22, `:` 23, value 24-26. Equip rows 46/48/50/52: label cols 8-11, `:` 12, icon col 13 (tile $1xx), name from col 14
+  (7 placeholder cells `1234567`), row 46 ぶきレベル: cols 24-29, value col 30. Rows 56-121: item list placeholders.
+- Value/name positions are immediates (`LDA #$cell`, then `STA $4BA4`) in C2 (found by scanning C2 for
+  `A9/A0/A2 lo hi` of every cell; a hit can be a false match, check the disassembly): left values `C26C4F` A91C, `C26C5A`, `C26C65`, `C26C70`; right values
+  `C26B58` A930 (weight), `C26C7D` A9B0, `C26C88`, `C26C93`; icons `C268AA`/`C26962` AB9A, `C269FD` AC1A, `C26A70`
+  AC9A, `C26AE3` AD1A; names `C26995` AB9C, `C26A32` AC1C, `C26AA5` AC9C, `C26B18` AD1C; weapon level `C269DF` ABBC;
+  blank 7 cells (`LDA #7; JSR C26CE0`) at `C268E3`, `C26912` (row 46 col 24 = ABB0, also `C269F1`, `C26B95`).
+  Writers: values `C32B82` (number printer), icons `C263F0`, names `C329C3` (8x8 printer), `C26D31` (code->tile
+  string printer).
+- Beast overrides drawn over the labels by `C26D31` (already text units): `C26940` `---` over the weight value
+  (`C26903`, A930), `C26944` やせい over ちせい (`C26922`, r42 c10), `C26948` りんせつ/かいふく/えんぽう/とくべつ over the
+  equip labels (`C26935`/`C26B7E`/`C2A488`, r46 c8, one line per 2 rows). An override shorter than the label it covers
+  leaves the label's tail: English overrides must be padded to the label width.
+- `CD5812` value cells (party view): `C2AC37`.. clear 3 cells at col 27 (A936, A9B6, AA36, AAB6; also `C2AE4F`..),
+  values at col 28 (`C2AD45` A938, `C2AD94` A9B8, `C2ADD1` AA38, `C2AE0E` AAB8); equip labels at col 8 from `C2AF5A`
+  AC10, `C2AFCF` AC90, `C2B04E` AD10. Not traced at run time.
+
 ## Fonts (text work, not graphics text)
 
 - 12 px dialogue font `CA027C` and 6 px half-width font `CA0000`: raw 1bpp in ROM (docs/re/text.md).
