@@ -1,4 +1,5 @@
 [
+{"id": "C50AB5", "jp": " にげられない!{end}", "en": " Can't escape!{end}"},
 {"id": "C57D02", "jp": "{icall:FA1A00}たちは 魔獣をたおした!!{c0C}経験値 {num:20FD1A00}ポイントと{nl}{num:20FF1A00} ゴールド手に入れた!{end}", "en": "{icall:FA1A00}'s party defeated the{nl}monsters!!{c0C}Gained {num:20FD1A00} experience points and{nl}{num:20FF1A00} gold!{end}"},
 {"id": "C57D3C", "jp": "{icall:FA1A00}たちは 戦いに敗れた!!{end}", "en": "{icall:FA1A00}'s party lost the battle!!{end}"},
 {"id": "C57D50", "jp": "{icall:FA1A00}{icall:011B00}{end}", "en": ""},

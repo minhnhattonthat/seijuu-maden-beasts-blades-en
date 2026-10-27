@@ -77,6 +77,10 @@ MENU_TILE = {0x10: BLANK, 0x00: 0x00}  # text code -> tile where not code - $10:
 STRINGS = [
     ("system", [0xC03A64, 0xC03A71, 0xC03A78, 0xC03AA3, 0xC03ADC, 0xC03AEE, 0xC03B01, 0xC03B11, 0xC03B23,
                 0xC042F1, 0xC044E9]),
+    # code-loaded, found by tools/jp_left_check.py: joined-the-party line (long ptr $32 at C052FF), ビースト パック
+    # (8x8 printer, LDA #$E109 at C0E0FA), battle "can't escape" (LDA #$0AB5 / bank C5 at C50A90)
+    ("system", [0xC0530A, 0xC0E109]),
+    ("battle", [0xC50AB5]),
     # 8x8 printer (C32912) texts behind a {call} wrapper: C2A0D5 (no beasts), C2A52A (see the other members)
     ("party_menu", [0xC2A0DB, 0xC2A530]),
     # status screen BEAST/MASTER row template (called by C29F6E): name, LV and the じゅうぞく bar are drawn over it

@@ -9,5 +9,7 @@
 {"id": "C03B11", "jp": "{icall:2F4F7E}をてにいれた!{end}", "en": "Obtained {icall:2F4F7E}!{end}"},
 {"id": "C03B23", "jp": "持ち物が一杯です。{end}", "en": "Your inventory is full.{end}"},
 {"id": "C042F1", "jp": "{icall:2F4F7E}をてにいれた!{end}", "en": "Obtained {icall:2F4F7E}!{end}"},
-{"id": "C044E9", "jp": "{sfx:09}{num:A09CA17E}Gてにいれた!{end}", "en": "{sfx:09}Obtained {num:A09CA17E}G!{end}"}
+{"id": "C044E9", "jp": "{sfx:09}{num:A09CA17E}Gてにいれた!{end}", "en": "{sfx:09}Obtained {num:A09CA17E}G!{end}"},
+{"id": "C0530A", "jp": "{icall:14A17E}が仲間になりました。{end}", "en": "{icall:14A17E} joined the party.{end}"},
+{"id": "C0E109", "jp": "ビースト パック{end}", "en": "Beast Pack{end}"}
 ]
