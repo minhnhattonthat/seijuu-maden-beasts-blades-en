@@ -85,7 +85,8 @@ def wrap(text, limit, engine):
     out = []
     for page in text.split("{c0C}"):
         segs = []
-        for seg in re.split(r" / |(?<=\{c0B\})", page):  # {c0B} (shop text) is the translator's own line break
+        # {c0B} (shop text) is the translator's own line break; ' /"' (no space) is a forced break too
+        for seg in re.split(r" / ?|(?<=\{c0B\})", page):
             # a quote's (or an indented page's) continuation lines sit one cell in, under the text, as in the JP
             indent = " " if seg[:1] in ('"', " ") else ""
             words = seg.split(" ")
@@ -98,7 +99,7 @@ def wrap(text, limit, engine):
                 else:
                     line = cand
             segs.append(line)
-        out.append("{nl}".join(segs))
+        out.append("{nl}".join(segs).replace("{c0B}{nl}", "{c0B}"))  # {c0B} breaks the line itself
     return "{c0C}".join(out)
 
 

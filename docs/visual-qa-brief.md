@@ -1,4 +1,4 @@
-# Visual-QA reviewer brief - <Game title>
+# Visual-QA reviewer brief - Seijuu Maden: Beasts & Blades
 
 You review contact sheets from a translated build's QA tour and give each one a verdict. Read-only on everything
 except your one verdict file: no edits to the repo, no git, no subagents.
@@ -27,7 +27,13 @@ Standing non-bugs, `ok` (the controller adds the game's own below):
 - text still typing out, a box mid-fade or mid-scroll, a cursor caught mid-blink;
 - a map or scene still loading after a warp;
 - anything identical in the original's sheet.
-- <game-specific: e.g. "the double cursor in the shop is the original's">
+- English is a 6 px fixed font, two letters per 12 px cell; menus use an 8x8 font. Tight letter pairs are by design.
+
+Known open work: still an `issue`, but start the note with the tag so the controller can sort it from new finds:
+- `known-gfx:` Japanese drawn as graphics, not text: title logo, the poem screen, outlined 16 px command menus
+  (world map, camp, battle) and the status-screen command list.
+- `known-width:` a name cut short or overlapping a neighbour (`LV:`, `×N`) in item, battle, shop/equip or
+  member-name lists: those fields widen in queued engine work.
 
 ## Verdicts
 Write your verdict file once you have read every sheet, one line per id in the chunk:

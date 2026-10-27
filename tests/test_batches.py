@@ -29,6 +29,11 @@ def test_quote_indent():
     assert batches.wrap(" indented page", 35, "12") == " indented page"
 
 
+def test_c0b_is_its_own_break():
+    assert batches.wrap("Welcome!{c0B}Win big!{c0B}", 35, "12") == "Welcome!{c0B}Win big!{c0B}"
+    assert batches.wrap('Mom /"Get up!"', 35, "12") == 'Mom{nl}"Get up!"'
+
+
 def test_menu_padding():
     assert batches.to_en("party_menu", "あいう  {end}", "ab") == "ab   {end}"
 
