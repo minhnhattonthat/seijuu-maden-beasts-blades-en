@@ -61,6 +61,9 @@ SCENES = {
                  after = "400 -;6 a;60 -;6 a;80 -;6 a;60 -;6 a;60 -;60 down;20 -;6 a;30 -;60 left;20 -;6 a;30 -;" ..
                          "60 down;20 -;6 a;30 -;6 x;3000 -" },
   world_cmd = { script = { 0x16, 0xFF }, after = "400 -;6 a;60 -;6 a;80 -", frames = 7800 },
+  -- party command ステータス
+  world_status = { script = { 0x16, 0xFF }, after = "400 -;6 a;60 -;6 a;80 -;6 down;20 -;6 down;20 -;6 a;400 -",
+                   frames = 8200 },
   -- the war begins: Heroi desert (58) event 1, the sky effect (op A6), progress var FF -> 2, on to Melshiva
   -- (the event itself needs its cave map and object setup; the effect alone is op A6)
   war_sky = { scn_start = 58, script = { 0xA6, 0xFF }, after = "300 -", frames = 7800 },

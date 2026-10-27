@@ -12,7 +12,7 @@
 {"id": "C253CA", "jp": "どのアイテムをすてますか?   {end}", "en": ""},
 {"id": "C253DB", "jp": "OK? YES:A NO:B  {end}", "en": ""},
 {"id": "C253EC", "jp": "マスターをきめてください    {end}", "en": ""},
-{"id": "C26940", "jp": "---{end}", "en": ""},
+{"id": "C26940", "jp": "---{end}", "en": " --{end}"},
 {"id": "C26944", "jp": "やせい{end}", "en": "Instinct{end}"},
 {"id": "C26948", "jp": "りんせつ{nl}かいふく{nl}えんぽう{nl}とくべつ{end}", "en": "Melee  {nl}Heal   {nl}Ranged {nl}Special{end}"},
 {"id": "C26BA0", "jp": "ちせい{end}", "en": "  Wisdom{end}"},

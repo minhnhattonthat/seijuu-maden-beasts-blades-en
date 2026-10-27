@@ -325,6 +325,7 @@ STATUS_CODE = [
     (0xC2690D, 0xABB0, 0xABB6), (0xC26913, 7, 3), (0xC269F2, 0xABB0, 0xABB6), (0xC269F8, 7, 3),  # LV: col 27
     (0xC26B96, 0xABB0, 0xABB6),
     (0xC26C3E, 0xA7A6, 0xA79E),  # どく (C26BC0) over the whole HP value from col 15, not the max HP alone
+    (0xC2A471, 0x0D, 0x12),  # selected equip row's highlight (C25485 from col 8): 18 cells, through the name's col 25
 ]
 
 

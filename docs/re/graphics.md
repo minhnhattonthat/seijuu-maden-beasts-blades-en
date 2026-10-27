@@ -30,8 +30,16 @@ Not Japanese (no work, earlier list): PUSH START, the English intro verses, PAUS
   cell (row, col) = `$7FA000 + (row*32 + col)*2`. `CD51CD` = own status/equip screen (warp `status_menu`, logged).
   `CD5812` = `E0FB` 1 (set at `C29B30`) or 3 (`C5DE2D`..): long labels, right values at col 28 (code
   `C2A4xx-C2B0xx`). **Not** the formation screen's ステータス -> member view: that one (warp `status_beast`, then
-  `a`, pick a member) reuses `CD51CD` already in RAM (the formation screen loads it, no LZ on the way). Which screen
-  shows `CD5812` is still unknown; `build.status_map(party=True)` rewrites it the same way (untested on screen).
+  `a`, pick a member) reuses `CD51CD` already in RAM (the formation screen loads it, no LZ on the way).
+  `CD5812` is the **army-exchange screen** (two armies meet on the world map: A on another army, `C0A0CB` ->
+  `C0A19D`; 交換/仲間/アイテム) and its equip page. Reach it with `tools/lua/exchange_equip.lua` (header has the
+  route). Checked on screen: same look as the own view. The loader's branch test is `C2590E` (`C25914` is the
+  `E0FB`=0 branch only).
+- C2 dispatcher `JSL C28000` (A = index, `JSR ($8018,x)`): 1 `C293C5` exchange screen (E0FB=1), 3 `C2B209`,
+  4 `C2A302` "whose equipment?", 8 `C2A361` equip page, 9 `C2A5B0`, C/D/E = `C9BA`/`CA56`/`D114` (exchange
+  commands, `E13B`+$0C), F `C28040`. Equip-row highlight: `C2A459` -> `C25485` (palette over Y cells from X;
+  row starts in `C2A47A`), count at `C2A471`, now 18 (`build.STATUS_CODE`). Item-list highlight (11 cells)
+  at `C2AC2F`, not checked.
 - Party RAM: units of `$301` bytes from `$601A` (unit 0 = the hero's), member records `$2F` bytes from unit+`$33`
   (record +0 kind, +1 unit, +5 name). Op `38 id 06` builds unit `id` and increments `$6010` (unit count).
   `status_beast` puts unit 1's beast record (JP-coded name) into the hero's second slot `$607C`.
