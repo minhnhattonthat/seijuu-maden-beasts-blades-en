@@ -59,3 +59,17 @@ def test_relocation_and_packed_runs():
     assert dest >= build.EXP + build.ASM_SPACE and en.decode(rom, dest)[0] == long
     assert "run_prologue" in {n for *_, n in w.log}
     assert romdiff.check(ORIG, rom, set(), w.log)[0] == []
+
+
+def test_ram_names_never_stub():
+    sol = 0x063F7E  # soldier 0: copied into a RAM member record, so a stub would print as glyphs
+    wd = TEXT[sol][0]
+    w = build.repack(ORIG, {**TEXT, sol: (wd, "ABCDEF")}, GFX, asm=True)
+    en = build.Table.load(ROOT / "tbl" / "en.tbl")
+    assert w.rom[sol:sol + 7] == en.encode("ABCDEF") + b"\0"  # 6 = the field, its 00 terminator kept
+    try:
+        build.repack(ORIG, {**TEXT, sol: (wd, "Yoshinobu")}, GFX, asm=True)
+    except SystemExit as e:
+        assert "063F7E" in str(e) or "C63F7E" in str(e)
+    else:
+        raise AssertionError("overlong RAM name was stubbed")

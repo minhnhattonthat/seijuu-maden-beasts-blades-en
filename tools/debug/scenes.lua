@@ -35,6 +35,10 @@ SCENES = {
   status_menu = { scn = 35, map = 2, x = 0x80, y = 0x68,
                   after = "240 -;6 a;40 -;6 down;20 -;6 down;20 -;6 down;20 -;6 a;400 -", settle = 0,
                   frames = 8200 },
+  -- the hero's own status page: no beast in the unit, so its BEAST section is the "no beast" box (C2A09D, C2A0DB)
+  status_hero = { scn = 35, map = 2, x = 0x80, y = 0x68,
+                  after = "240 -;6 a;40 -;6 down;20 -;6 down;20 -;6 down;20 -;6 a;400 -;6 a;80 -;6 a;300 -", settle = 0,
+                  frames = 8600 },
   -- status screen with a beast in the hero's unit: unit 1's beast record (op 38 01 06 builds it at $637D), unit
   -- byte 00, copied to the hero's second slot (units $301 bytes from $601A, members $2F bytes from unit+$33)
   status_beast = { scn = 35, map = 2, x = 0x80, y = 0x68, bytes = { [0x7E607C] = {
