@@ -252,11 +252,33 @@ Binding for every translator and reviewer. Agents propose additions in reports; 
 | 生命の女神 / 大地の女神 | Goddess of Life / Goddess of the Earth | | | |
 | 新しき女神 / 古の女神 | New Goddess / Ancient Goddess | | | |
 | 闇の法 | Law of Darkness | | | |
+| スネイランド | Sneyland | | | |
+| 冥王 | Lord of the Underworld | | 冥府の王 king of the Underworld | |
+| リサ | Lisa | 8 | Tsunami's sister | |
+| 死神ルベク | Death Lubek | | speaker label | |
+| バロックス | Barocks | | ボルク・バロックス Bork Barocks (ending card) | |
+| カースン | Carson | | エカース・カースン Ekers Carson | |
+| カクリ | Kakuri | | ウイルソン・カクリ Wilson Kakuri | |
+| ガラパゴス | Galapagos | | Alba's father | |
+| リゲス / ローヒーシー / ジーグ / ターナリ | Riges / Lohisea / Sieg / Turnery | | ending cards: Riges Lorenz, Napier Lohisea, Sieg Eibesfeldt, Brian Turnery | |
+| ビーク / フェイドリー | Beek / Faidley | | Beek Charcot, Zona Faidley | |
+| ブラックダイアモンド | Black Diamond | | statue holding Prana's soul | |
+| 獣魔 | Beast Fiend | | 獣魔オーディン Odin, the Beast Fiend | |
+| 婿殿 | son-in-law | | | |
+| 占い師 | fortune-teller | | | |
+| 白の森 / 黒の森 / 銀の森 | White Forest / Black Forest / Silver Forest | | | |
+| 竜族 | dragon folk | | | |
+| 天界 / 下界 | the heavens / the world below | | | |
+| 忘れられた村 | Forgotten Village | | | |
+| 光の魔術師 | sorcerer of Light | | | |
+| パラピー | Parapi | | パラピーちゃん Parapi-chan, a pet beast | |
+| 光の司祭 | Priest of Light | | Mona's title (Mona, Priest of Light); 光の司祭長 is Lang | |
 
 Notes (not linted): オカマ -> "drama queen" (Wertheim's campy voice, never a slur; the mayor in E3559B is "drag queen");
 ゼジルお父さん/とうちゃん -> Papa Zejil / Daddy Zejil (Father X is the priest form); 詩人 Poet (Odell) vs
 吟遊詩人 Bard (may be two different bards); ドラグーン Dragoon(s), 竜騎士 dragon knights; 海賊 Pirate, 魔女 Witch,
-聖獣 Holy Beast, マーメイド Mermaid as speaker labels; 地下世界 = 地底世界 underground world.
+聖獣 Holy Beast, マーメイド Mermaid as speaker labels; 地下世界 = 地底世界 underground world; ミコ/みこ priestess; 銀のエルフ/光のエルフ/闇のエルフ silver/light/dark elf (elves); 死神ども reapers; the lesser Deaths' ナリ tic -> archaic
+thou/thee ("thou ... forsooth" in b089, ", verily" in b094: unify in polish).
 
 | 魂返しの秘法 | secret rite of soul-returning | | the Light-side name for 反魂の外法 | |
 | 地底世界 | underground world | | | |
