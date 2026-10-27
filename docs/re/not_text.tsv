@@ -207,3 +207,5 @@ CAD6A7	data bytes (jp_left_check hit)
 D23C04	data bytes (jp_left_check hit)
 D23D32	data bytes (jp_left_check hit)
 D82958	data bytes (jp_left_check hit)
+C2A0D5	{call} wrapper to unit C2A0DB (8x8 printer)
+C2C8B5	{call} list into the formation names C2C8EB
