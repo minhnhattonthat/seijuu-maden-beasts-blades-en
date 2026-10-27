@@ -20,6 +20,7 @@ English text: 6 px per character (fonts/en6.txt, two per 12 px cell) in the 12 p
 | Item screen list (status screen → アイテム → 使う; weapons/armor/food/items/items2 names, two columns) | **7 chars** (the `×N` count, or `LV:n` for a weapon, is drawn from col 8 of the column over the name's tail). Tightest of all C6 name budgets (shop/equip 10, battle 8): engine work (one column, or count moved) before abbreviating, per D4 | `--qa C60FFB=1234567890ABCDEF` (same for C6247D C61CE5 C6253D C62BFD), warp `status_items` (poked inventory) | measured (`work/qa/item/mk_qa.png`) |
 | Item screen prompt (`C25342` and the other 17-byte `party_menu` prompts, top line from col 8) | **16 chars** (the FRONT/REAR legend sprites start at col 24) | `--qa C25342=1234...`, warp `status_items` | measured (`work/qa/item/prompt.png`) |
 | Item type label over the list (`item_types` C6301E..) | **14 chars** (cols 17-30) | `--qa C6301E=1234...`, warp `status_items` | measured (`work/qa/item/mk_qa.png`) |
+| Formation name (`C2C8EB`.. in `party_menu`, `name{nl}{nl}フォーメーション`, right-aligned by leading spaces) | **8 chars per line**, 2 lines (cols 23-30; a 9th char lands on col 31, the screen edge: "Formation" doesn't fit, the screen title already says it) | `--qa "C2C8EB=1234567890ABCDEF{nl}{nl}abcdefghijklmnop"`, warp `status_formation` | measured (`work/qa/item/form_qa.png`) |
 | Shouts (C57DCB..), battle idle lines | not reached yet | | guess |
 
 Glyph torture: `--qa 'E7792E=abcdefghijklmnopqrstuvwxyz  ABCDEFGHIJ{nl}KLMNOPQRSTUVWXYZ 0123456789 !?.,;:...'`:

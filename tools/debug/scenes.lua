@@ -50,6 +50,10 @@ SCENES = {
                    after = "240 -;6 a;40 -;6 down;20 -;6 down;20 -;6 down;20 -;6 a;400 -;6 down;40 -;6 a;200 -;6 a;200 -",
                    settle = 0,
                    frames = 8200 },
+  -- status screen command フォーメーション (formation names C2C8EB)
+  status_formation = { scn = 35, map = 2, x = 0x80, y = 0x68,
+                       after = "240 -;6 a;40 -;6 down;20 -;6 down;20 -;6 down;20 -;6 a;400 -;6 down;40 -;6 down;40 -;" ..
+                               "6 down;40 -;6 a;200 -", settle = 0, frames = 8200 },
   -- op 5E battle as scenario 2 (bandit fort) event 0 starts it
   battle_fort = { scn_start = 2, script = { 0x5E, 0x00, 0xFF, 0x00, 0x00, 0x6A, 0xFF }, after = "600 -;6 a;120 -;6 a;120 -",
                   frames = 8600 },
