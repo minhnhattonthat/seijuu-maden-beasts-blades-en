@@ -244,7 +244,7 @@
 {"id": "CE2E40", "jp": "しらないひとについていっちゃダメ{nl}だって、いわれたの。{end}", "en": "They told me I'm not supposed to go{nl}with strangers.{end}"},
 {"id": "CE2E5C", "jp": "仕事が終わったらね。{end}", "en": "When I'm done with work.{end}"},
 {"id": "CE2E6A", "jp": "残念ながら{delay:1E}{nl}我が剣は、すでに捧げてあります。{end}", "en": "Unfortunately,{delay:1E} my sword is already{nl}pledged.{end}"},
-{"id": "CE2E88", "jp": "どちらかというと{delay:1E}{nl}闇の法の支持者なんだ。{end}", "en": "If anything,{delay:1E} I'm a supporter of the{nl}Dark's Law.{end}"},
+{"id": "CE2E88", "jp": "どちらかというと{delay:1E}{nl}闇の法の支持者なんだ。{end}", "en": "If anything,{delay:1E} I'm a supporter of the{nl}Law of Darkness.{end}"},
 {"id": "CE2EA4", "jp": "突然言われても、承諾できないね。{end}", "en": "I can't agree to that out of{nl}nowhere.{end}"},
 {"id": "CE2EBA", "jp": "戦争ごっこには{nl}つきあってられないよ。{end}", "en": "I can't be bothered with your war{nl}games.{end}"},
 {"id": "CE2ED0", "jp": "ジョーダンは、{nl}ほかのヤツに言ってくれ。{end}", "en": "Tell your jokes to somebody else.{end}"},

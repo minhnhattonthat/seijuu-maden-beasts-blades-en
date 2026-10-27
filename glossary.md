@@ -248,6 +248,10 @@ Binding for every translator and reviewer. Agents propose additions in reports; 
 | ムツジロウ | Mutsujiro | | ムツさん Mutsu-san, beast breeder | |
 | ひなぎくの戦士 | Daisy Warrior | | | |
 | トロン / ウンヌ / ステラ | Tron / Unnu / Stella | 8 | | |
+| 結界 | barrier | | | |
+| 生命の女神 / 大地の女神 | Goddess of Life / Goddess of the Earth | | | |
+| 新しき女神 / 古の女神 | New Goddess / Ancient Goddess | | | |
+| 闇の法 | Law of Darkness | | | |
 
 Notes (not linted): オカマ -> "drama queen" (Wertheim's campy voice, never a slur; the mayor in E3559B is "drag queen");
 ゼジルお父さん/とうちゃん -> Papa Zejil / Daddy Zejil (Father X is the priest form); 詩人 Poet (Odell) vs
