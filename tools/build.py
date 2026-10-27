@@ -107,11 +107,13 @@ def pack_run(w, t, orig, text, name, lo, hi):
 
 
 # 16-bit pointer tables into RUNS strings (own bank; found by a whole-ROM scan for >= 3 words that
-# all hit string starts), and single pointers: menu-script 0A ops C14812/C14819, LDA #$6944 at C26918
+# all hit string starts), and single pointers: menu-script 0A ops C14812/C14819, the status screen's
+# LDA #$69xx/#$6Bxx (C26D31 strings, bank C2)
 RUN_TABLES = [(0xC0BBCB, 8), (0xC0BBDD, 14), (0xC0BBFB, 21), (0xC0E4BB, 5), (0xC252E5, 13), (0xC38DFF, 4),
               (0xC60B3C, 98), (0xC60E44, 11), (0xC60ECA, 11), (0xC63008, 11), (0xC630C3, 4), (0xC63129, 96),
               (0xC634E6, 69)]
-RUN_PTRS = [0xC14814, 0xC1481B, 0xC26919, 0xC0A29A, 0xC0C75C]  # + menu records C0BAF7, C0C30D (extract.MENUS)
+RUN_PTRS = [0xC14814, 0xC1481B, 0xC268FA, 0xC26919, 0xC2692C, 0xC26B62, 0xC26B75, 0xC26B8C, 0xC26BF5, 0xC26C34,
+            0xC0A29A, 0xC0C75C]  # + menu records C0BAF7, C0C30D (extract.MENUS)
 MENU_SCRIPTS = (0x014094, 0x014C19)  # C1 menu scripts: their op 10 lo hi points at an extract.MENUS record
 
 
@@ -211,6 +213,11 @@ def repack(orig, text, gfx, strict=True, asm=False):
         t = SimpleNamespace(decode=t.decode, encode=Table.load(ROOT / "tbl" / "en.tbl").encode)
         for off, b in assemble(orig):
             w.write(off, b, "asm")
+        for a, old, new in STATUS_CODE:
+            o = a & 0x3FFFFF
+            if orig[o] | orig[o + 1] << 8 != old:
+                raise SystemExit(f"status code {a:06X}: expected {old:04X}")
+            w.write(o, new.to_bytes(2, "little"), "status_code")
     seq = [(n, lo & 0x3FFFFF, hi & 0x3FFFFF) for n, lo, hi in extract.RUNS if n in extract.SEQ]
     fields, short, free = extract.field_offsets(), [], []
     base = unpack_text(orig)
@@ -294,11 +301,67 @@ def name_grid(t, raw):
     return b"".join(x.to_bytes(2, "little") for x in w)
 
 
+STATUS_MAP = 0x0D51CD  # LZ: own status/equip screen, 32 x 128 cells, tile = code - $10 (docs/re/graphics.md G12)
+# rows 36-42: label right-aligned to col 15, ':' 16, value 17-18 | label to col 26, ':' 27, value 28-30
+STATS = [(36, "Strength", "Weight"), (38, "Stamina", "Attack"), (40, "Agility", "Defense"), (42, "Wisdom", "Move")]
+# rows 46-52: label cols 8-14, icon 15, name 16-25; row 46 also LV: 27-29, weapon level 30
+EQUIP = [(46, "Weapon"), (48, "Armor 1"), (50, "Armor 2"), (52, "Armor 3")]
+# C2 operands that place the values, names and blanks of that layout: (address, original, new). A cell is
+# $A000 + (row*32 + col)*2; C26CE0 blanks LDA #n + 1 cells.
+STATUS_CODE = [
+    (0xC26C50, 0xA91C, 0xA922), (0xC26C5B, 0xA99C, 0xA9A2), (0xC26C66, 0xAA1C, 0xAA22),  # left values col 17
+    (0xC26C71, 0xAA9C, 0xAAA2),
+    (0xC26B59, 0xA930, 0xA938), (0xC26904, 0xA930, 0xA938), (0xC26C7E, 0xA9B0, 0xA9B8),  # right values col 28
+    (0xC26C89, 0xAA30, 0xAA38), (0xC26C94, 0xAAB0, 0xAAB8),
+    (0xC26923, 0xAA94, 0xAA90), (0xC26B6C, 0xAA94, 0xAA90),  # やせい / ちせい drawn over row 42's label: col 8
+    (0xC268AB, 0xAB9A, 0xABA0),  # beast skill names col 16
+    (0xC26963, 0xAB9A, 0xAB9E), (0xC269FE, 0xAC1A, 0xAC1E), (0xC26A71, 0xAC9A, 0xAC9E),  # icons col 15
+    (0xC26AE4, 0xAD1A, 0xAD1E),
+    (0xC26996, 0xAB9C, 0xABA0), (0xC26A33, 0xAC1C, 0xAC20), (0xC26AA6, 0xAC9C, 0xACA0),  # names col 16
+    (0xC26B19, 0xAD1C, 0xAD20),
+    (0xC26CA0, 7, 9), (0xC268E4, 7, 9),  # name blank 10 cells
+    (0xC269CE, 7, 10), (0xC26A6B, 7, 10), (0xC26ADE, 7, 10), (0xC26B51, 7, 10),  # empty slot: icon + name
+    (0xC269BE, 0x0E, 0x14), (0xC26A5B, 0x0E, 0x14), (0xC26ACE, 0x0E, 0x14), (0xC26B41, 0x0E, 0x14),  # cell after
+    (0xC2690D, 0xABB0, 0xABB6), (0xC26913, 7, 3), (0xC269F2, 0xABB0, 0xABB6), (0xC269F8, 7, 3),  # LV: col 27
+    (0xC26B96, 0xABB0, 0xABB6),
+    (0xC26C3E, 0xA7A6, 0xA79E),  # どく (C26BC0) over the whole HP value from col 15, not the max HP alone
+]
+
+
+def status_map(t, raw):
+    """The status tilemap with English labels (STATS, EQUIP), values and icons moved to match STATUS_CODE."""
+    w = [raw[i] | raw[i + 1] << 8 for i in range(0, len(raw), 2)]
+
+    def put(row, col, s):
+        for i, c in enumerate(s):
+            w[row * 32 + col + i] = t.encode(c)[0] - 0x10
+
+    for row, left, right in STATS:
+        r = row * 32
+        colon, lval, rval = w[r + 13], w[r + 14:r + 16], w[r + 24:r + 27]
+        w[r + 8:r + 31] = [0] * 23
+        put(row, 16 - len(left), left)
+        put(row, 27 - len(right), right)
+        w[r + 16], w[r + 27] = colon, colon
+        w[r + 17:r + 19], w[r + 28:r + 31] = lval, rval
+    for row, label in EQUIP:
+        r = row * 32
+        icon, colon, lv = w[r + 13], w[r + 12], w[r + 30]
+        w[r + 8:r + 31] = [0] * 23
+        put(row, 8, label)
+        w[r + 15] = icon
+        if row == 46:
+            put(row, 27, "LV")
+            w[r + 29], w[r + 30] = colon, lv
+    return b"".join(x.to_bytes(2, "little") for x in w)
+
+
 def build(orig, mark=False, qa=()):
     """qa: ["ID=text", ...] overrides single entries after the script/marker overlay (width tests)."""
     text, gfx = unpack_text(orig), unpack_gfx(orig)
     gfx[MENU_FONT] = font.menu_font(gfx[MENU_FONT])
     gfx[NAME_GRID] = name_grid(Table.load(ROOT / "tbl" / "en.tbl"), gfx[NAME_GRID])
+    gfx[STATUS_MAP] = status_map(Table.load(ROOT / "tbl" / "en.tbl"), gfx[STATUS_MAP])
     if mark:
         skip = {o for n, es in extract.units(orig).items() if n in NO_MARKER for o, *_ in es}
         t = Table.load(ROOT / "tbl" / "jp.tbl")

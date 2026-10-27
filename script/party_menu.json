@@ -12,8 +12,14 @@
 {"id": "C253CA", "jp": "どのアイテムをすてますか?   {end}", "en": ""},
 {"id": "C253DB", "jp": "OK? YES:A NO:B  {end}", "en": ""},
 {"id": "C253EC", "jp": "マスターをきめてください    {end}", "en": ""},
-{"id": "C26944", "jp": "やせい{end}", "en": ""},
-{"id": "C26948", "jp": "りんせつ{nl}かいふく{nl}えんぽう{nl}とくべつ{end}", "en": ""},
+{"id": "C26940", "jp": "---{end}", "en": ""},
+{"id": "C26944", "jp": "やせい{end}", "en": "Instinct{end}"},
+{"id": "C26948", "jp": "りんせつ{nl}かいふく{nl}えんぽう{nl}とくべつ{end}", "en": "Melee  {nl}Heal   {nl}Ranged {nl}Special{end}"},
+{"id": "C26BA0", "jp": "ちせい{end}", "en": "  Wisdom{end}"},
+{"id": "C26BA4", "jp": "ぶきレベル:{end}", "en": "LV:{end}"},
+{"id": "C26BAB", "jp": "ぶ き {nl}ぼうぐ1{nl}ぼうぐ2{nl}ぼうぐ3{nl}{end}", "en": "Weapon {nl}Armor 1{nl}Armor 2{nl}Armor 3{nl}{end}"},
+{"id": "C26BC0", "jp": " どく{end}", "en": "Poison {end}"},
+{"id": "C26BC4", "jp": "-----{end}", "en": ""},
 {"id": "C2A0DB", "jp": "       ビーストはいない        {nl}                       {nl}                       {nl}{end}", "en": ""},
 {"id": "C2A530", "jp": "ほかのマンバーをみる』{end}", "en": ""}
 ]

@@ -45,7 +45,8 @@ RUNS = [
     ("name_grid", 0xC184C0, 0xC18585),      # name-entry kana grid ([FE] = layout codes)
     ("party_menu", 0xC25320, 0xC253FD),     # 17-byte space-padded prompts
     ("battle_result", 0xC34B9D, 0xC34C60),  # dungeon-battle victory/level-up/defeat (split lo/hi immediates)
-    ("party_menu", 0xC26944, 0xC2695C),     # やせい, formation ranges
+    ("party_menu", 0xC26940, 0xC2695C),     # status screen: ---, やせい, formation ranges (C26D31)
+    ("party_menu", 0xC26BA0, 0xC26BCA),     # status screen: human labels drawn back over them, どく, -----
     ("camp_menu", 0xC38E0A, 0xC38E1F),
     ("locations", 0xC60C00, 0xC60E44),      # location list (index = scenario for the first ones)
     ("ranks", 0xC60E5A, 0xC60ECA),          # 第N聖獣王 (pointer table C60E44)

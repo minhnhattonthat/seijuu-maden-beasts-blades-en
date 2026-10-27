@@ -44,6 +44,11 @@ Not Japanese (no work, earlier list): PUSH START, the English intro verses, PAUS
   (`C26903`, A930), `C26944` やせい over ちせい (`C26922`, r42 c10), `C26948` りんせつ/かいふく/えんぽう/とくべつ over the
   equip labels (`C26935`/`C26B7E`/`C2A488`, r46 c8, one line per 2 rows). An override shorter than the label it covers
   leaves the label's tail: English overrides must be padded to the label width.
+- **Done for `CD51CD`** (2026-10-27): `build.status_map` rewrites rows 36-52 (English labels, values/icons moved)
+  and `build.STATUS_CODE` moves the C2 operands to match (each checked against the original word). Missed
+  text found on the way: `C26BA0`-`C26BC9` (human labels drawn back after a beast: ちせい, ぶきレベル:, the equip
+  labels; どく at `A7A6`; `-----`), now a `party_menu` run; their `LDA #lo` operands are in `build.RUN_PTRS`.
+  Measured on the English build: `work/qa/g12/en_final3.png`.
 - `CD5812` value cells (party view): `C2AC37`.. clear 3 cells at col 27 (A936, A9B6, AA36, AAB6; also `C2AE4F`..),
   values at col 28 (`C2AD45` A938, `C2AD94` A9B8, `C2ADD1` AA38, `C2AE0E` AAB8); equip labels at col 8 from `C2AF5A`
   AC10, `C2AFCF` AC90, `C2B04E` AD10. Not traced at run time.

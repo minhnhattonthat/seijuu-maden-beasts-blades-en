@@ -32,6 +32,16 @@ def test_edits_land_and_log():
     assert {n for *_, n in w.log} >= {"text_E77A0A", "lz_CCAB70", "checksum"}
 
 
+def test_status_map():
+    en = build.Table.load(ROOT / "tbl" / "en.tbl")
+    raw = build.status_map(en, GFX[build.STATUS_MAP])
+    cells = [raw[i] | raw[i + 1] << 8 for i in range(0, len(raw), 2)]
+    row = "".join(en.decode(bytes([(x & 0xFF) + 0x10, 0]), 0)[0][:1] for x in cells[36 * 32 + 8:36 * 32 + 28])
+    assert row == "Strength:" + row[9:11] + "  Weight:"
+    assert cells[46 * 32 + 15] == 0x0140  # the weapon icon cell moved to col 15
+    assert len(raw) == len(GFX[build.STATUS_MAP])
+
+
 def test_relocation_and_packed_runs():
     en = build.Table.load(ROOT / "tbl" / "en.tbl")
     long = "Good morning! " * 20 + "{end}"
