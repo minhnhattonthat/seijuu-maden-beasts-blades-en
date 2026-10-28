@@ -61,6 +61,61 @@ wrap_rts:
 ; battle weapon/item list (C557A3: LDA [$C2],y / BEQ): C6 name fields are {call} stubs now
 org $C557A3
 	jsl bname
+; and its window (popup off the command panel at $12B2; text buffer 7F:6400): 11 -> 14 cells, so a name gets
+; 11 chars and the count moves to col 11. On the right half of the screen it also moves 3 cells left (boff)
+org $C52F73
+	db $0E			; width (open)
+org $C52FB0
+	db $0E			; width (close)
+org $C53051
+	db $0E			; width (text copy)
+org $C5305A
+	jsl btext		; text origin LDA $12B2 / CLC / ADC #$0042
+	nop #3
+org $C5597F			; empty list (C557C8 copies raw tiles, en.tbl code - $10; E7 = window blank), 10 + 00
+	db $18,$4E,$E7,$48,$53,$44,$4C,$52,$00	; "No items" (was アイテムをもってない)
+org $C52F60
+	jsl bwin		; frame origin (open)
+	nop
+org $C52F9D
+	jsl bwinc		; frame origin (close)
+	nop
+org $C52F8A
+	jsl bframe		; frame + text drawn into the BG map (C52D68)
+	nop
+; the ▶ cursor is a BG tile on the frame's left column, drawn by the shared menu-cursor routine C52E6A at $12B2:
+; 3 cells left only while the list is open (flag 7F:66A0 = $4C57, set by bframe, cleared by bwinc)
+org $C52E88			; LDX $12B2 / PHB / LDA #$7F / PHA / PLB / REP #$20
+	phb
+	jsl bcur
+	nop #5
+org $C52EAF
+	jsl bcur2		; ADC $0012B2
+org $C52FD2
+	jsl bsave		; save the BG under the window
+	nop #2
+org $C5300F
+	jsl bsave		; restore it
+	nop #2
+; saved BG ($A0 bytes now): 7F:6442 -> 7F:6600 (text rows reach 6454, C53D68 uses 64C4-6505).
+; shortcut: 7F:66xx is untouched in mashed battle/world map/town/home runs (tools/lua/wram_pages.lua), not proven free
+org $C52FEF
+	sta $6600,x
+org $C53029
+	lda $6600,x
+org $C5574F
+	db $1A			; clear 14 cells per row
+org $C55756
+	sta $641C,x		; rows $16 -> $1C apart
+	sta $6438,x
+org $C5578D
+	db $1C			; attribute fill per row
+org $C557B8
+	db $1B			; next row (+carry)
+org $C5307D
+	db $16			; count col 8 -> 11
+org $C5309D
+	db $1C
 
 ; member names ([$BF] -> a RAM member record's name, copied raw from a C6 field, so it may be a {call} stub):
 ; status/formation name cells C254A9 (REP #$30 / LDY #0) and the battle name box C5329A (LDY #0 / LDA [$BF],y)
@@ -330,6 +385,89 @@ measure:			; replaces C32CA4: width of the line at [$32] in 8 px cells -> $4B8E
 	plp
 	rtl
 
+boff:				; battle list window shift in tilemap bytes: 6 (3 cells) on the right half, else 0. M16, keeps X/Y
+	lda $7E12B2
+	and #$003F
+	cmp #$0020
+	lda #$0006
+	bcs +
+	lda #$0000
++:
+	rtl
+
+btext:				; C5305A: A = $12B2 + $42 - shift. M16
+	jsl boff
+	eor #$FFFF
+	sec
+	adc $7E12B2
+	clc
+	adc #$0042
+	rtl
+
+bwin:				; C52F60/C52F9D: LDA $AF / STA $264D (frame column, in cells) minus the shift. M16, DB 7E
+	jsl boff
+	lsr
+	eor #$FFFF
+	sec
+	adc $AF
+	sta $264D
+	rtl
+
+bwinc:				; C52F9D: bwin for the close, and clear the list-open flag
+	lda #$0000
+	sta $7F66A0
+	bra bwin
+
+bcur:				; C52E88 (after PHB): DB = 7F, X = cursor column origin, M16. In M8 X16
+	lda #$7F
+	pha
+	plb
+	rep #$20
+	lda #$0000
+	jsl bcur2
+	tax
+	rtl
+
+bcur2:				; C52EAF: A += $12B2, minus the shift while the list is open. M16 X16, DB 7F, C clear
+	clc
+	adc $7E12B2
+	tax
+	lda $66A0
+	cmp #$4C57
+	bne .r
+	phx
+	jsl boff
+	eor #$FFFF
+	sec
+	adc $01,s
+	plx
+	rtl
+.r:
+	txa
+	rtl
+
+bframe:				; C52F8A: LDA $12B2 / STA $AF (tilemap index) minus the shift; flag the list open. M16, DB 7E
+	lda #$4C57
+	sta $7F66A0
+	jsl boff
+	eor #$FFFF
+	sec
+	adc $12B2
+	sta $AF
+	rtl
+
+bsave:				; C52FD2/C5300F: REP #$10 / TAY / LDA #$001E (A = window origin) minus the shift. M16
+	rep #$10
+	pha
+	jsl boff
+	eor #$FFFF
+	sec
+	adc $01,s
+	tay
+	pla
+	lda #$001E
+	rtl
+
 bname:				; battle weapon/item list C557A3 (name bytes -> tiles): follow a {call} stub. M8 X16
 	lda [$C2],y
 	beq .end
@@ -352,6 +490,10 @@ bname:				; battle weapon/item list C557A3 (name bytes -> tiles): follow a {call
 	lda [$C2],y
 	beq .end
 .ret:
+	cmp #$10		; space: tile 0 is a dark block here, the window blank is tile E7
+	bne +
+	lda #$F7
++:
 	sec			; the caller's SBC #$10 (the CMP above may have cleared it)
 	rtl
 .end:
