@@ -37,8 +37,9 @@ FORMS = {
     # item names: the battle list is the tightest screen (11); shop wraps, equip 18, beast skills 15, bag 19
     "weapons": ("name", 11, "8"), "armor": ("name", 11, "8"), "food": ("name", 11, "8"), "items": ("name", 11, "8"),
     "items2": ("name", 11, "8"), "skills": ("name", 11, "8"),
-    "generals": ("name", 8, "8"), "soldiers": ("name", 8, "8"), "beasts": ("name", 8, "8"),
-    "people": ("name", 8, "8"), "enemies": ("name", 8, "8"),
+    # member names: status NAME and the BEAST/MASTER row 13 (battle name box 17)
+    "generals": ("name", 13, "8"), "soldiers": ("name", 13, "8"), "beasts": ("name", 13, "8"),
+    "people": ("name", 13, "8"), "enemies": ("name", 13, "8"),
     "menus": ("menu", 8, "8"), "buildings": ("menu", 8, "8"), "item_types": ("menu", 14, "8"),
     "locations": ("name", 16, "12"), "ranks": ("name", 20, "12"),
     "party_menu": ("menu", "orig", "8"), "effects": ("menu", "orig", "8"), "effects2": ("menu", "orig", "8"),

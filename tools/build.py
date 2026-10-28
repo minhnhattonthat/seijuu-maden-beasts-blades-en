@@ -337,6 +337,10 @@ STATUS_CODE = [
     (0xC265EB, 0x22, 0x18), (0xC2668D, 0x22, 0x18), (0xC266E4, 0x22, 0x18),
     (0xC265FA, 0x2008, 0x200D), (0xC2669C, 0x2008, 0x200D), (0xC266F3, 0x2008, 0x200D),  # LDX #8 (X8), then JSR
     (0xC254BB, 0xFC00, 0xE000),  # drawer keeps priority/flip, not the "NAME:" graphic's palette 1 (lowercase went dark)
+    # BEAST/MASTER list rows (C29FEA, template C29F7C, cols 8-30): name 8 -> 13 cells, "LV" tiles col 17 -> 22,
+    # LV value col 19 -> 24, loyalty bar stays at cols 27-30 (no room left for the じゅうぞく label)
+    (0xC29F64, 8, 13), (0xC29FB5, 0x12, 0x1C), (0xC29FC8, 0x12, 0x08),
+    (0xC2A1DB, 0x16, 0x20), (0xC2A1FF, 0x16, 0x20),
 ]
 
 
