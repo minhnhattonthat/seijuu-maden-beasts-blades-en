@@ -34,9 +34,9 @@ DLG = ("dlg", 35, "12")
 FORMS = {
     "prologue": ("narration", 40, "12"), "intro": ("narration", 40, "12"), "endings": ("narration", 40, "12"),
     "credits": ("narration", 40, "12"), "copy_warning": ("narration", 40, "12"),
-    # item names: the battle list is the tightest screen (11); shop wraps, equip 18, beast skills 15, bag 19
-    "weapons": ("name", 11, "8"), "armor": ("name", 11, "8"), "food": ("name", 11, "8"), "items": ("name", 11, "8"),
-    "items2": ("name", 11, "8"), "skills": ("name", 11, "8"),
+    # item names, tightest screen: weapon equip row 18, beast-page skills 15, else battle list / bag 19 (shop wraps)
+    "weapons": ("name", 18, "8"), "armor": ("name", 19, "8"), "food": ("name", 19, "8"), "items": ("name", 19, "8"),
+    "items2": ("name", 19, "8"), "skills": ("name", 15, "8"),
     # member names: status NAME and the BEAST/MASTER row 13 (battle name box 17)
     "generals": ("name", 13, "8"), "soldiers": ("name", 13, "8"), "beasts": ("name", 13, "8"),
     "people": ("name", 13, "8"), "enemies": ("name", 13, "8"),
