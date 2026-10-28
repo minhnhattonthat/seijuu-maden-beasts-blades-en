@@ -14,3 +14,4 @@ decision replaces one, mark the old one "replaced by D<n>" instead of deleting i
 | D6 | 2026-10-27 | Specs and plans | need approval, pre-approved | Pre-approved: keep going through checkpoints; report at the end. Never `gh release create`, never change repo visibility. |
 | D7 | 2026-10-27 | Existing saves / states | provided, none | None provided; build the debug tool. |
 | D8 | 2026-10-27 | Member names copied raw into RAM (soldiers 6, others 8 chars) | engine work: member-name printers follow `{call}` stubs; fit the fields | Engine work: hook the member-name drawers to follow stubs (`hooks.md` `mname`/`bbox`). |
+| D9 | 2026-10-29 | Beast-page skill names over 15 (labels Melee/Heal/Ranged/Special take cols 8-14) | drop the labels, shorter labels, shorter skill names, leave cut | Shorter skill names: rename to 15 or fewer, keep the labels (Judgment Light, Lightning Bolt, Divine Thunder, Rebirth Flame, Electric Shock, Sulfuric Mist). |

@@ -832,6 +832,7 @@ after renaming one in `script/`; hand rows above win over these.
 | フェニックス | Phoenix | | | |
 | ペガサス | Pegasus | | | |
 | アークエンジェル | Archangel | | | |
+| グリフォン | Griffin | | | |
 | マイマイ | Snail | | | |
 | まほうのこびと | Magic Dwarf | | | |
 | カーバンクル | Carbuncle | | | |
@@ -963,7 +964,7 @@ after renaming one in `script/`; hand rows above win over these.
 | ひっかく | Scratch | | | |
 | とつげき | Charge | | | |
 | ふぶき | Snowstorm | | | |
-| さばきのひかり | Light of Judgment | | | |
+| さばきのひかり | Judgment Light | | | |
 | エナジードレイン | Energy Drain | | | |
 | かみつき | Bite | | | |
 | どくが | Poison Fang | | | |
@@ -1001,7 +1002,7 @@ after renaming one in `script/`; hand rows above win over these.
 | かえん | Flames | | | |
 | あくむのせっぷん | Nightmare Kiss | | | |
 | バーニングフレア | Burning Flare | | | |
-| らくらい | Lightning Strike | | | |
+| らくらい | Lightning Bolt | | | |
 | ヘルウインド | Hell Wind | | | |
 | ポイズンクラウド | Poison Cloud | | | |
 | じごくのかえん | Hell Flames | | | |
@@ -1022,7 +1023,7 @@ after renaming one in `script/`; hand rows above win over these.
 | フレアブレス | Flare Breath | | | |
 | ハリケーン | Hurricane | | | |
 | メテオストライク | Meteor Strike | | | |
-| かみのいかずち | Divine Lightning | | | |
+| かみのいかずち | Divine Thunder | | | |
 | プラズマアタック | Plasma Attack | | | |
 | ヒールライト | Heal Light | | | |
 | デスウインド | Death Wind | | | |
@@ -1042,20 +1043,20 @@ after renaming one in `script/`; hand rows above win over these.
 | すみこうげき | Ink Attack | | | |
 | アックス | Axe | | | |
 | フリーズブレス | Freeze Breath | | | |
-| さいせいのほのう | Flame of Rebirth | | | |
+| さいせいのほのう | Rebirth Flame | | | |
 | スリープクラウド | Sleep Cloud | | | |
 | ねむりのしせん | Sleep Gaze | | | |
 | ショック | Shock | | | |
 | ねむりのといき | Sleep Sigh | | | |
 | ねむりのこな | Sleep Powder | | | |
-| でんりゅう | Electric Current | | | |
+| でんりゅう | Electric Shock | | | |
 | デスソング | Death Song | | | |
 | きょうきのうた | Song of Madness | | | |
 | コロコロダンス | Rolling Dance | | | |
 | スリープアタック | Sleep Attack | | | |
 | カース | Curse | | | |
 | ソウルコフィン | Soul Coffin | | | |
-| りゅうさんのきり | Sulfuric Acid Mist | | | |
+| りゅうさんのきり | Sulfuric Mist | | | |
 | しょくしゅ | Tentacle | | | |
 | こおりのきば | Ice Fang | | | |
 | かみつく | Bite | | | |
