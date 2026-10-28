@@ -20,9 +20,11 @@ text starts at `E84000` (`build.py` `ASM_SPACE`). Disassemble every hook after a
 
 Bag-list layout (`C26140`, `C260BB` list 1 = unit `E12B`, `C2610F` list 2 = unit `E12D`, exchange screen only):
 cursor `E11F` index, `E121` row, `E123` row in the 5-row window, `E125` (list 2 `E127`) scroll = buffer address
-of the top row; `C2B7C6` DMAs 10 tile rows from it to VRAM `5888`. **Not done:** exchange-screen cursor (`C2D114`..,
-highlight `C2D593`) is still two-column logic over the one-column drawer; equip-page bag (`C2A5B0`) patched but not
-seen in-game (no warp).
+of the top row; `C2B7C6` DMAs 10 tile rows from it to VRAM `5888`. Exchange-screen item trade (`C2D114`, list in
+`E11E`, X = list) has its own twin cursor (`C2D217..D37E`) and highlight (`C2D593`): patched the same way (2026-10-28),
+checked with `tools/lua/exchange_items.lua` (`work/qa/exitems*/`). Equip-page bag (`C2A5B0`) checked from the
+exchange equip page (`exchange_equip.lua` + a poked bag, `work/qa/equipbag*/`). Discard leaves an empty row in
+place; the original does the same.
 
 Member-name readers found by watching reads of the hero's RAM name (`$6052`) in `status_hero`, `status_formation`,
 `world_status`, `status_items`, `status_beast`, the exchange screen, `battle_t10/_t13/_fort` (+ victory), `world_map`,

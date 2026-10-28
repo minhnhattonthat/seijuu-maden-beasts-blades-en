@@ -157,7 +157,25 @@ org $C2D7C8
 	dw $CA50
 org $C2D5EB
 	dw $10C0		; its highlight: list 1 position + $8C0 -> + $10C0
-; TODO exchange item cursor (C2D114.., highlight C2D593 LSR/width) is still two-column: docs/status.md
+; the exchange screen's item trade (C2D114, dispatcher index E): its own cursor (list in $E11E, X = list) and highlight
+org $C2D226
+	db $1B			; down while index < 27
+org $C2D238
+	nop #3			; second INC $E11F,x
+org $C2D27D
+	db $01			; up while index >= 1
+org $C2D28A
+	nop			; second DEC A
+org $C2D2AD
+	db $20			; scroll-up guard
+org $C2D2D7
+	db $80			; left: BEQ -> BRA
+org $C2D337
+	db $80			; right: BEQ -> BRA
+org $C2D59F
+	nop #3			; highlight row = index
+org $C2D5F7
+	db $17			; highlight 24 cells
 
 org $E80000
 compose:			; in: [$32] at an English code. out: $36DD buffer filled, $32 past 1-2 codes, M8 X16
