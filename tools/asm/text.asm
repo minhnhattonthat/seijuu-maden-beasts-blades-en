@@ -125,6 +125,25 @@ org $C254AA
 org $C5329A
 	jsl bbox
 	nop
+; that box (template C5336F, 3 rows x 14 cells into 7F:4C00 + $12B4): 14 -> 23 cells, so a name gets 17 cells
+; (longest: enemy "Head of Beginning") and the HP digits move from col 10 to col 19. Left box stays at col 1;
+; the right one ($12AE set) moves 9 more cells left, col 17 -> 8, to keep its right edge at col 30
+org $C53278
+	lda.l bbox_t,x
+org $C5327F
+	lda.l bbox_t+46,x
+org $C53286
+	lda.l bbox_t+92,x
+org $C53291
+	cpx #$002E
+org $C53256
+	sbc #$001E
+org $C532D6
+	lda #$0066
+org $C52CCA
+	db $17			; its two clears (C50280, 3 rows at $12B4): 14 -> 23 cells
+org $C55B1D
+	db $17
 
 ; item list (status アイテム: use/discard/valuables; drawer C26140, buffer 7F:AE10, entry rows $80 apart): one column
 ; instead of two 12-cell columns, so a name gets cols 9-27 (19 chars) and the count/LV moves to col 28
@@ -529,6 +548,17 @@ bbox:				; C5329A: the replaced LDY #0 / LDA [$BF],y, after following a stub. M8
 	ldy #$0000
 	lda [$BF],y
 	rtl
+
+bbox_t:				; the 23-cell name box: top edge with the HP label, middle row, bottom edge
+	dw $214A,$214B,$214C
+	rep 19 : dw $214D
+	dw $214E
+	dw $20EB
+	rep 21 : dw $20E7
+	dw $20EC
+	dw $20ED
+	rep 21 : dw $20EE
+	dw $20EF
 
 bf_follow:			; [$BF] at 0F FF lo hi bank: point $BF-$C1 at the called string. M16 X16, X kept
 	lda [$BF]
