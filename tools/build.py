@@ -333,6 +333,10 @@ STATUS_CODE = [
     (0xC26C3E, 0xA7A6, 0xA79E),  # どく (C26BC0) over the whole HP value from col 15, not the max HP alone
     (0xC2A471, 0x0D, 0x14),  # selected equip row's highlight (C25485 from col 8): 20 cells, through col 27
     (0xC0E056, 0x11, 0x10),  # beast-list right column (C0DFD7) col 16: "Beast Pack" (C0E109) inside the row highlight
+    # member NAME (C254A9) from col 12 over the "NAME:" label, 13 cells up to the blood-type icon (col 25)
+    (0xC265EB, 0x22, 0x18), (0xC2668D, 0x22, 0x18), (0xC266E4, 0x22, 0x18),
+    (0xC265FA, 0x2008, 0x200D), (0xC2669C, 0x2008, 0x200D), (0xC266F3, 0x2008, 0x200D),  # LDX #8 (X8), then JSR
+    (0xC254BB, 0xFC00, 0xE000),  # drawer keeps priority/flip, not the "NAME:" graphic's palette 1 (lowercase went dark)
 ]
 
 
@@ -349,6 +353,9 @@ def status_map(t, raw, party=False):
         for i, c in enumerate(s):
             w[row * 32 + col + i] = hi | t.encode(c)[0] - 0x10
 
+    nr = (2 if party else 28) * 32  # "NAME:" graphic (tiles $100-$103, cols 13-16): the name is drawn from col 12
+    assert [x & 0x3FF for x in w[nr + 13:nr + 17]] == [0x100, 0x101, 0x102, 0x103]
+    w[nr + 12:nr + 17] = [hi] * 5
     rv = 28 if party else 24
     for row, left, right in STATS:
         r = row * 32
