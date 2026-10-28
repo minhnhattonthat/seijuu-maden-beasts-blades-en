@@ -38,7 +38,7 @@ def test_status_map():
     cells = [raw[i] | raw[i + 1] << 8 for i in range(0, len(raw), 2)]
     row = "".join(en.decode(bytes([(x & 0xFF) + 0x10, 0]), 0)[0][:1] for x in cells[36 * 32 + 8:36 * 32 + 28])
     assert row == "Strength:" + row[9:11] + "  Weight:"
-    assert cells[46 * 32 + 15] == 0x0140  # the weapon icon cell moved to col 15
+    assert cells[46 * 32 + 8] == 0x0140  # the weapon icon cell moved to col 8
     assert len(raw) == len(GFX[build.STATUS_MAP])
     party = build.status_map(en, GFX[build.PARTY_MAP], party=True)
     cells = [party[i] | party[i + 1] << 8 for i in range(0, len(party), 2)]

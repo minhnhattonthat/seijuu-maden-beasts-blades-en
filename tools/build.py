@@ -237,6 +237,8 @@ def repack(orig, text, gfx, strict=True, asm=False):
                 b += bytes(n - 6)
             else:
                 free.append([off + 6, off + n])  # the old string's tail: nothing points into it
+        elif off not in fields and off not in extract.MENU_SET and n - len(b) >= 6:
+            free.append([off + len(b), off + n])  # same for a string that shrank in place
         w.write(off, b, f"text_{0xC00000 | off:06X}")
     if asm:  # the old half-width glyph code text.asm cut off (docs/re/hooks.md): free space in bank C3
         free += [[0x031B84, 0x031C12], [0x03276D, 0x03278C]]
@@ -305,8 +307,9 @@ def name_grid(t, raw):
 STATUS_MAP = 0x0D51CD  # LZ: own status/equip screen, 32 x 128 cells, tile = code - $10 (docs/re/graphics.md G12)
 # rows 36-42: label right-aligned to col 15, ':' 16, value 17-18 | label to col 26, ':' 27, value 28-30
 STATS = [(36, "Strength", "Weight"), (38, "Stamina", "Attack"), (40, "Agility", "Defense"), (42, "Wisdom", "Move")]
-# rows 46-52: label cols 8-14, icon 15, name 16-25; row 46 also LV: 27-29, weapon level 30
-EQUIP = [(46, "Weapon"), (48, "Armor 1"), (50, "Armor 2"), (52, "Armor 3")]
+# rows 46-52: icon col 8, name 9-26 (armor rows: to 30); row 46 also LV: 27-29, weapon level 30. No labels: the
+# icon gives the slot, and full names need the room (D4). The beast page draws its own (Melee..) over cols 8-14
+EQUIP = [46, 48, 50, 52]
 # C2 operands that place the values, names and blanks of that layout: (address, original, new). A cell is
 # $A000 + (row*32 + col)*2; C26CE0 blanks LDA #n + 1 cells.
 STATUS_CODE = [
@@ -315,18 +318,20 @@ STATUS_CODE = [
     (0xC26B59, 0xA930, 0xA938), (0xC26904, 0xA930, 0xA938), (0xC26C7E, 0xA9B0, 0xA9B8),  # right values col 28
     (0xC26C89, 0xAA30, 0xAA38), (0xC26C94, 0xAAB0, 0xAAB8),
     (0xC26923, 0xAA94, 0xAA90), (0xC26B6C, 0xAA94, 0xAA90),  # やせい / ちせい drawn over row 42's label: col 8
-    (0xC268AB, 0xAB9A, 0xABA0),  # beast skill names col 16
-    (0xC26963, 0xAB9A, 0xAB9E), (0xC269FE, 0xAC1A, 0xAC1E), (0xC26A71, 0xAC9A, 0xAC9E),  # icons col 15
-    (0xC26AE4, 0xAD1A, 0xAD1E),
-    (0xC26996, 0xAB9C, 0xABA0), (0xC26A33, 0xAC1C, 0xAC20), (0xC26AA6, 0xAC9C, 0xACA0),  # names col 16
-    (0xC26B19, 0xAD1C, 0xAD20),
-    (0xC26CA0, 7, 9), (0xC268E4, 7, 9),  # name blank 10 cells
-    (0xC269CE, 7, 10), (0xC26A6B, 7, 10), (0xC26ADE, 7, 10), (0xC26B51, 7, 10),  # empty slot: icon + name
-    (0xC269BE, 0x0E, 0x14), (0xC26A5B, 0x0E, 0x14), (0xC26ACE, 0x0E, 0x14), (0xC26B41, 0x0E, 0x14),  # cell after
+    (0xC268AB, 0xAB9A, 0xABA0),  # beast skill names col 16 (blank before each: text.asm eqcount)
+    (0xC26963, 0xAB9A, 0xAB90), (0xC269FE, 0xAC1A, 0xAC10), (0xC26A71, 0xAC9A, 0xAC90),  # icons col 8
+    (0xC26AE4, 0xAD1A, 0xAD10),
+    (0xC26996, 0xAB9C, 0xAB92), (0xC26A33, 0xAC1C, 0xAC12), (0xC26AA6, 0xAC9C, 0xAC92),  # names col 9
+    (0xC26B19, 0xAD1C, 0xAD12),
+    (0xC268E4, 7, 14),  # empty skill: cols 16-30
+    (0xC269CE, 7, 18), (0xC26A6B, 7, 22), (0xC26ADE, 7, 22), (0xC26B51, 7, 22),  # empty slot: icon + name to 26/30
+    # the one-cell blank after a name (JSR $6CE0 -> BIT $6CE0): eqcount blanks the whole field, and on the
+    # weapon row this cell would be the tilemap's "LV"
+    (0xC269C6, 0xE020, 0xE02C), (0xC26A63, 0xE020, 0xE02C), (0xC26AD6, 0xE020, 0xE02C), (0xC26B49, 0xE020, 0xE02C),
     (0xC2690D, 0xABB0, 0xABB6), (0xC26913, 7, 3), (0xC269F2, 0xABB0, 0xABB6), (0xC269F8, 7, 3),  # LV: col 27
     (0xC26B96, 0xABB0, 0xABB6),
     (0xC26C3E, 0xA7A6, 0xA79E),  # どく (C26BC0) over the whole HP value from col 15, not the max HP alone
-    (0xC2A471, 0x0D, 0x12),  # selected equip row's highlight (C25485 from col 8): 18 cells, through the name's col 25
+    (0xC2A471, 0x0D, 0x14),  # selected equip row's highlight (C25485 from col 8): 20 cells, through col 27
     (0xC0E056, 0x11, 0x10),  # beast-list right column (C0DFD7) col 16: "Beast Pack" (C0E109) inside the row highlight
 ]
 
@@ -353,12 +358,11 @@ def status_map(t, raw, party=False):
         put(row, 27 - len(right), right)
         w[r + 16], w[r + 27] = colon, colon
         w[r + 17:r + 19], w[r + 28:r + 31] = lval, rval
-    for row, label in EQUIP:
+    for row in EQUIP:
         r = row * 32
         icon, colon, lv = (hi if party else w[r + 13]), w[r + 12], w[r + 30]
         w[r + 8:r + 31] = [hi] * 23
-        put(row, 8, label)
-        w[r + 15] = icon
+        w[r + 8] = icon
         if row == 46:
             put(row, 27, "LV")
             w[r + 29], w[r + 30] = colon, lv

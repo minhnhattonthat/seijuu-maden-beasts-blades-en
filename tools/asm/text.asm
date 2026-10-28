@@ -232,6 +232,20 @@ org $C2D59F
 org $C2D5F7
 	db $17			; highlight 24 cells
 
+; shop buy list (weapon C0FAE9, armor C0FB29): a name over 10 chars goes on onto the entry's lower tile row
+; (entries are 16 px apart, that row is blank; on the status screen HDMA hides it)
+org $C0FAE9
+	jsl wrapname
+org $C0FB29
+	jsl wrapname
+
+; status equip rows (names col 9, build.STATUS_CODE) and beast skills (col 16): C26C9E blanks the whole field
+; before a name, not a fixed 10 cells. Was LDA #n / JSR $6CE0 / SEP #$20 (C26CE0 restores M8 from P)
+org $C26C9F
+	jsl eqcount
+	jsr $6CE0
+	nop
+
 org $E80000
 compose:			; in: [$32] at an English code. out: $36DD buffer filled, $32 past 1-2 codes, M8 X16
 	phb
@@ -563,6 +577,159 @@ wrapchk:			; C31D1E: auto-wrap after a full line unless the line ends here anywa
 	plp
 	ora #$0000
 	rtl
+
+eqcount:			; C26C9F: cells to blank - 1 for C26CE0 at $4BA4. Out M8
+	rep #$20
+	lda $4BA4
+	cmp #$AE00		; item list (7F:AE10..): 10 as before, it blanks its rows itself
+	bcs .bag
+	and #$FFC0
+	cmp #$AB80		; row 46: the weapon's LV from col 27
+	php
+	lda $4BA4
+	and #$003F
+	lsr a
+	eor #$FFFF
+	sec
+	adc #$001E		; 30 - col: through col 30
+	plp
+	bne .out
+	cmp #$0011
+	bcc .out
+	lda #$0011		; cols 9-26
+	bra .out
+.bag:	lda #$0009
+.out:	sep #$20
+	rtl
+
+wrapname:			; as JSL $C32912 for a name: line 1 up to its last space within 10 chars, the rest one tile row
+	php			; down (empty: blanks it); a line over 10 starts that much further left. Any M/X
+	rep #$30
+	pei ($50)		; $4F-$51 kept: the shop sets the bank once for the whole list
+	pei ($4F)
+-:	lda [$4F]		; follow {call} stubs
+	cmp #$FF0F
+	bne +
+	ldy #$0002
+	lda [$4F],y
+	tax
+	ldy #$0003
+	lda [$4F],y
+	sta $50
+	stx $4F
+	bra -
++:	sep #$20
+	ldy #$FFFF
+-:	iny
+	lda [$4F],y
+	bne -
+	tyx			; X = length
+	cpy #$000B
+	bcc .one
+	ldy #$000A
+-:	lda [$4F],y
+	cmp #$10		; space
+	beq .two
+	dey
+	bne -
+.one:	txy			; one line: cut = length
+.two:	rep #$20
+	phx			; length
+	phy			; cut
+	tya
+	ldy #$0000
+	ldx #$000A
+	jsr wn_put		; line 1: 10 cells
+	inc $4B9F
+	inc $4B9D
+	pla			; cut
+	cmp $01,s
+	beq +			; one line: line 2 blank
+	inc a			; past the space
++:	tay
+	eor #$FFFF
+	sec
+	adc $01,s		; length - offset
+	ldx #$0009
+	jsr wn_put		; line 2: indented, 9 cells
+	dec $4B9D
+	dec $4B9F
+	pla
+	pla
+	sta $4F
+	pla
+	sta $50
+	plp
+	rtl
+
+wn_put:				; draw A chars of [$4F] from offset Y, blank-padded to X cells, at col $4B9D minus the
+	pha			; chars over X. [$4F] kept. M16 X16
+	phx
+	pei ($4F)
+	pei ($50)
+	tya
+	clc
+	adc $4F
+	sta $4F
+	tsc
+	sec
+	sbc #$0018		; 24-byte buffer at S+1: cells at $1D,s, length at $1F,s
+	tcs
+	inc a
+	sta $87
+	sep #$20
+	lda #$7E
+	sta $89
+	ldy #$0000
+-:	tya
+	cmp $1F,s
+	bcs .pad
+	lda [$4F],y
+	sta [$87],y
+	iny
+	bra -
+.pad:	tya
+	cmp $1D,s
+	bcs .end
+	lda #$10
+	sta [$87],y
+	iny
+	bra .pad
+.end:	lda #$00
+	sta [$87],y
+	rep #$20
+	lda $1F,s
+	sec
+	sbc $1D,s
+	bcs +
+	lda #$0000
++:	pha			; shift
+	eor #$FFFF
+	sec
+	adc $4B9D
+	sta $4B9D
+	lda $87
+	sta $4F
+	sep #$20
+	lda #$7E
+	sta $51
+	jsl $C32912
+	rep #$20
+	pla
+	clc
+	adc $4B9D
+	sta $4B9D
+	tsc
+	clc
+	adc #$0018
+	tcs
+	pla
+	sta $50
+	pla
+	sta $4F
+	plx
+	pla
+	rts
 	warnpc $E81000
 
 org $E81000
