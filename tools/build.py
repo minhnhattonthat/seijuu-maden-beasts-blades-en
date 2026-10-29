@@ -23,6 +23,7 @@ import check_rom  # noqa: E402
 import evdis  # noqa: E402
 import extract  # noqa: E402
 import font  # noqa: E402
+import gfxtext  # noqa: E402
 import lz  # noqa: E402
 import lzblocks  # noqa: E402
 import romdiff  # noqa: E402
@@ -204,9 +205,10 @@ def assemble(orig):
     return runs
 
 
-def repack(orig, text, gfx, strict=True, asm=False):
+def repack(orig, text, gfx, strict=True, asm=False, maps=()):
     """strict=False (marker build): a line that can't be placed stays in Japanese, with a warning.
-    asm=True: apply tools/asm/text.asm and encode with tbl/en.tbl (decoding the original stays tbl/jp.tbl)."""
+    asm=True: apply tools/asm/text.asm and encode with tbl/en.tbl (decoding the original stays tbl/jp.tbl).
+    maps: [(offset, bytes)] menu tilemap records to rewrite (gfxtext.menus)."""
     t = Table.load(ROOT / "tbl" / "jp.tbl")
     w = Writer(orig)
     if asm:
@@ -218,7 +220,9 @@ def repack(orig, text, gfx, strict=True, asm=False):
             if orig[o] | orig[o + 1] << 8 != old:
                 raise SystemExit(f"status code {a:06X}: expected {old:04X}")
             w.write(o, new.to_bytes(2, "little"), "status_code")
-    seq = [(n, lo & 0x3FFFFF, hi & 0x3FFFFF) for n, lo, hi in extract.RUNS if n in extract.SEQ]
+    for off, b in maps:
+        w.write(off, b, f"menu_map_{0xC00000 | off:06X}")
+    seq =[(n, lo & 0x3FFFFF, hi & 0x3FFFFF) for n, lo, hi in extract.RUNS if n in extract.SEQ]
     fields, short, free = extract.field_offsets(), [], []
     base = unpack_text(orig)
     for off, (wd, s) in sorted(text.items()):
@@ -389,6 +393,7 @@ def build(orig, mark=False, qa=()):
     gfx[NAME_GRID] = name_grid(Table.load(ROOT / "tbl" / "en.tbl"), gfx[NAME_GRID])
     gfx[STATUS_MAP] = status_map(Table.load(ROOT / "tbl" / "en.tbl"), gfx[STATUS_MAP])
     gfx[PARTY_MAP] = status_map(Table.load(ROOT / "tbl" / "en.tbl"), gfx[PARTY_MAP], party=True)
+    maps = gfxtext.menus(orig, gfx)
     if mark:
         skip = {o for n, es in extract.units(orig).items() if n in NO_MARKER for o, *_ in es}
         t = Table.load(ROOT / "tbl" / "jp.tbl")
@@ -402,7 +407,7 @@ def build(orig, mark=False, qa=()):
         if off not in text:
             raise SystemExit(f"{0xC00000 | off:06X} is not a text unit (re-run tools/extract.py)")
         text[off] = (text[off][0], s)
-    return repack(orig, text, gfx, strict=not mark, asm=True)
+    return repack(orig, text, gfx, strict=not mark, asm=True, maps=maps)
 
 
 def main():

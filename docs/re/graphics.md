@@ -10,13 +10,20 @@ Static sweep: every LZ block `tools/lzblocks.py --render work/gfx` finds (docs/r
 | G2 | Title: ©BPS/ORG/メディアワークス | LZ `C7C10D` (also holds PUSH START and the English intro crawl) | 2bpp | seen | redraw as ©BPS/ORG/MediaWorks |
 | G3 | Intro crawl: Japanese subtitle lines under the English verses | LZ `C7AF0D` (16 px glyphs, 2 tile rows) | 2bpp | seen in block and on boot | redraw in English or drop (the English verse above already says it; decide with the intro) |
 | G4 | Opening cutscene: poem 十と一つの聖獣を... over the room | LZ `CCA415` chr (2560 B -> `$7F0000` -> VRAM `$8000`, BG3) + `CCAB70` (2 KB, map) loaded at `C05438`/`C0544E` | 2bpp BG3 | seen (`orig_poem.mss`, ~f300) | redraw |
-| G5 | Title/file menu labels (16 px) | LZ `CBCEE0`, `CBD21F`, `CBD44D`, `CBD6C7` (loaded `C06139`-`C06165`, title code) | 4bpp | in block only | confirm on the title menu (needs a save), redraw |
-| G6 | Field command menu: 話す 調べる 仲間 ... (outlined 16 px, opened with A) | not yet matched (vramfind); candidates `CD3838`/`CD4381` style | 2bpp? | seen (`orig_home_free.mss` + A) | find source, redraw |
+| G5 | was "title/file menu labels": these are the G10 world-map menu words | LZ `CBCEE0`, `CBD21F`, `CBD44D` (`CBD6C7` is art) | 2bpp | done (G10) | - |
+| G6 | Field command menu: 話す 調べる 仲間 フィールド ステータス (outlined 16 px, opened with A) | LZ `CC0000` (BG3 tiles $100+), records `C03529`/`C0358B` | 2bpp | **done** (`tools/gfxtext.py`): Talk Search Party Field Status, `work/qa/gfxtxt/z_both.png` | - |
 | G7 | Party/battle UI labels: フォーメーション アイテム パーティ 第N聖獣王 引ける 捨てる 使う 貴重品 陣形 前... | LZ `CD3838`, `CD4381` (`C25828`/`C25839`) | 2bpp, 16 px in 2 tile rows | in block only | redraw |
-| G8 | Unknown text-like strips | LZ `D2A94E`, `D2AD77` (`C52B83`/`C52B95`) | 4bpp | in block only | identify on the tour |
+| G8 | `D2A94E` = G9's words + the HP gauge art; `D2AD77` (loaded `C52B95`) holds 6x2-tile strips, partly loaded at BG3 tile $157 (part of 集中's old cells): not identified | LZ `D2AD77` | 2bpp | in block only | identify on the tour |
+| G9 | Battle command menu: 移動 攻撃 アイテム ビースト 集中 退却 防御 アクション 待機 | LZ `D2A94E`, records `C533F6`..`C53898` (11) | 2bpp | **done**: Move Attack Item Beast Focus Retreat Defend Action Wait (seen: first 4) | - |
+| G10 | World-map party commands 移動/行動 キャンプ ステータス ランデブー; 移動 sub-menu 移動/入る; X menu マップ/セーブ; 確認 再設定 待機 中止 再開; 都市 旗オフ/旗オン | LZ `CBCEE0` (records `C0B887`, `C0B949`), `CBD21F` (`C0B97F`, `C0B9E1`), `CBD44D` (`C0BA43`, `C0BA79`, `C0BAAB`) | 2bpp | **done**: Move/Action Camp Status Meet, Move/Enter, Map/Save seen; Confirm.. and Cities/Flags not seen (block assignment of those records inferred from tile use) | find their screens |
 
-| G9 | Battle command menu: 移動 攻撃 アイテム 防御 (outlined 16 px, same style as G6) | not yet matched | ? | seen (warp `battle_t10`) | find source with G6, redraw |
-| G10 | World-map party commands: 移動 キャンプ ステータス; 移動 sub-menu 移動/入る; X menu マップ/セーブ | not yet matched | ? | seen (warp `world_cmd`, explore1 notes) | find source with G6, redraw |
+Menu records (`tools/gfxmaps.py` lists them): entries of 2 rows x 6 BG3 map words, `$20F7` = window blank, `$21nn`
+= tile n of the block loaded at BG3 tile $100. `C30F90` copies a record (long pointer `$4C`) to VRAM; some menus are
+first copied to WRAM (`$7E498C`). The JP shares tiles between words (移動/行動 share 動, 再設定/再開 share 再), so
+`gfxtext.menus` re-lays every entry out (English centred in 48 px, identical tiles shared) and rewrites the records.
+Font `fonts/menu16.txt` (1 px skeletons, fill 1 + outline 3 on the window's 0/2 checker, like the kanji).
+Probes: `tools/lua/winsrc.lua`, `vramval.lua` (who writes a tile number to VRAM). "Meet" for ランデブー: "Rendezvous"
+is 52 px, the row 48; dialogue still says "rendezvous".
 | G11 | Location title box on entering a map (山賊砦, どうぐや) | text engine or tiles: check in the marker build | ? | seen (warp `battle_fort`) | marker build decides |
 | G12 | Status/equip screen labels as 8x8-font tilemaps (tile = code - $10): ちから じゅうりょう たいりょく こうげき すばやさ ぼうぎょ ちせい きどうりょく ぶきレベル ぼうぐ, アイテム rows | LZ `CD51CD` (hi byte 00), `CD5812` (hi 20, long forms そうびじゅうりょう こうげきりょく ぼうぎょりょく) | tilemap over the 8x8 font | seen garbled in the marker build (`status_menu` + `down down a a`): the font's kana tiles 40-6A are lowercase now | rewrite the maps like `build.name_grid`; lay out with the equip names (7 chars now, `windows.md`) |
 
