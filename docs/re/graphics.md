@@ -6,7 +6,7 @@ Static sweep: every LZ block `tools/lzblocks.py --render work/gfx` finds (docs/r
 
 | # | Screen | Source | Format | State | Plan |
 |---|---|---|---|---|---|
-| G1 | Title logo: small 聖獣魔伝 and ビースト&ブレイド over the English "Beasts & Blades" | LZ `C75BE9` (with the logo), loaded `C1011D`/`C15F00` | 4bpp BG | **done** (`gfxtext.title`, D11): katakana (colours C/D, tiles 374-37B + top row of 384-38A) cleared, 聖獣魔伝 kept | - |
+| G1 | Title logo: small 聖獣魔伝 and ビースト&ブレイド over the English "Beasts & Blades" | LZ `C75BE9` (with the logo), loaded `C1011D`/`C15F00` | 4bpp BG | **done** (`gfxtext.title`, D11): katakana (colours C/D, tiles 374-37B + top row of 384-38A) cleared, 聖獣魔伝 -> "Seijuu Maden" (tiles 305-30F over 315-31F) | - |
 | G2 | Title: ©BPS/ORG/メディアワークス | LZ `C7C10D` (also holds PUSH START and the English intro crawl) | 4bpp, line in tiles 40-4F | **done** (`gfxtext.title`): MediaWorks in the 8x8 menu font, ink F, `work/qa/gfxtxt/title_copy.png` | - |
 | G3 | Intro crawl: Japanese subtitle lines under the English verses | LZ `C7AF0D` (16 px glyphs, 2 tile rows) | 2bpp | seen in block and on boot | redraw in English or drop (the English verse above already says it; decide with the intro) |
 | G4 | Opening cutscene: poem 十と一つの聖獣を... over the room | LZ `CCA415` chr (2560 B -> `$7F0000` -> VRAM `$8000`, BG3) + `CCAB70` (2 KB, map) loaded at `C05438`/`C0544E` | 2bpp BG3 | **done** (`gfxtext.poem`): DMA `C05469` sends 160 tiles to VRAM $8000; BG3 tiles A0+ (menu font), E4-F1 (window), 180+ (dialogue font) stay live beside it (Mona's box talks during the poem), so English is one 8 px row per line, ≤160 tiles; lines revealed by HDMA ch6 on $212C | - |

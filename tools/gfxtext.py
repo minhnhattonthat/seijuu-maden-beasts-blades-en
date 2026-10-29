@@ -78,7 +78,7 @@ def glyph8(font8, table, ch):
 
 # G2 title copyright (LZ C7C10D, 4bpp): one 8 px line in tiles 40-4F, ©BPS/ORG/ kept, メディアワークス from x 66 (the / ends at 63).
 TITLE_CHR, TITLE_TILE, TITLE_X, TITLE_INK = 0x07C10D, 0x40, 66, 0xF
-LOGO_CHR = 0x075BE9
+LOGO_CHR, LOGO_TEXT = 0x075BE9, "Seijuu Maden"
 
 
 def title(gfx, font8, table):
@@ -107,6 +107,24 @@ def title(gfx, font8, table):
         for y in range(8 if t < 0x380 else 1):
             px[y] = [0 if v in (0xC, 0xD) else v for v in px[y]]
         raw[t * 32:t * 32 + 32] = tile4(px, 0, 0)
+    # 聖獣魔伝 (D11: romanised) spans tiles 305-30E over 315-31E, x 10-68, same colours: redrawn as LOGO_TEXT
+    ts = range(0x305, 0x310)
+    px = [sum((untile4(raw, t + dy)[y] for t in ts), []) for dy in (0, 16) for y in range(8)]
+    px = [[0 if v in (0xC, 0xD) else v for v in r] for r in px]
+    line = [[] for _ in range(8)]
+    for ch in LOGO_TEXT:
+        for y, r in enumerate(glyph8(font8, table, ch)):
+            line[y] += r + [0]
+    w = len(line[0]) - 1
+    assert w <= 78, f"logo: {LOGO_TEXT!r} is {w} px"
+    x0 = 10  # left-aligned with the kanji; runs on into the empty tile 30F
+    for y in range(8):
+        for x, v in enumerate(line[y][:w]):
+            if v:
+                px[y + 2][x0 + x] = 0xD
+    for dy in (0, 1):
+        for cx, t in enumerate(ts):
+            raw[(t + dy * 16) * 32:(t + dy * 16 + 1) * 32] = tile4(px, cx, dy)
     gfx[LOGO_CHR] = bytes(raw)
 
 
