@@ -532,7 +532,7 @@
 {"id": "E6B394", "jp": "世界各地の都市で、光対闇の{nl}激しい戦いが繰り広げられて{nl}いるもよう。{c0C}ここも巻き込まれる可能性が{nl}有りますのでみなさん動向に{nl}十分注意して下さい{end}", "en": "Fierce battles of Light vs. Dark{nl}appear to be raging in cities all{nl}over the world.{c0C}This town may also be drawn in, so{nl}everyone, please keep a close eye{nl}on developments.{end}"},
 {"id": "E6B3F7", "jp": "{choice:01FF} シロナガス、ラクサスに接近!{end}", "en": "{choice:01FF} Blue Whale nears Raksas!{end}"},
 {"id": "E6B40C", "jp": "ルークを破壊した、{nl}シロナガスクジラは、ラクサスに{nl}迫っている。{c0C}当局では避難を呼びかけています。{end}", "en": "The Blue Whale that destroyed Rook{nl}is closing in on Raksas.{c0C}The authorities are calling for{nl}evacuation.{end}"},
-{"id": "E6B446", "jp": "{choice:01FF} 剣が盗まれる!? 謎の被害が続出!!{end}", "en": "{choice:01FF} Swords stolen!? Thefts spreading!!{end}"},
+{"id": "E6B446", "jp": "{choice:01FF} 剣が盗まれる!? 謎の被害が続出!!{end}", "en": "{choice:01FF} Swords stolen!? Thefts spreading!{end}"},
 {"id": "E6B464", "jp": "各地で、剣が盗まれるという{nl}謎の被害が、多発しています。{nl}犯人や動機は、不明です。{c0C}当局の調べではこれからも{nl}多発する恐れが有るとの{nl}見解ですので、名剣、名刀を{nl}持っている人は注意して下さい。{end}", "en": "Mysterious thefts of swords are{nl}occurring frequently in many{nl}places. The culprit and motive are{nl}unknown.{c0C}The authorities believe more thefts{nl}are likely, so anyone who owns a{nl}fine sword or blade, please be{nl}careful.{end}"},
 {"id": "E6B4E6", "jp": "{choice:01FF} 雷に注意!{end}", "en": "{choice:01FF} Beware of lightning!{end}"},
 {"id": "E6B4F3", "jp": "最近、世界各地で落ちている{nl}紫色の雷が、ここメローにも、{nl}落ちました。{nl}みなさん、注意して下さい。{end}", "en": "The purple lightning that has been{nl}striking all over the world lately{nl}has struck here in Mellow too.{nl}Everyone, please be careful.{end}"},

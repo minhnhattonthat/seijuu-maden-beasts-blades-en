@@ -58,6 +58,7 @@ RUNS = [
     ("effects", 0xC631E9, 0xC634E6),        # item/skill effect lines, 15-byte slots
     ("effects2", 0xC63570, 0xC6368D),
     ("buildings", 0xCE3419, 0xCE3467),      # town-menu building names
+    ("buildings", 0xC0031F, 0xC00323),      # the town menu's EXIT tile name (LDA #$031F at C002F4)
 ]
 # RUNS whose lines are read in order (no pointer per line): build.py packs them as a list of {call} stubs
 SEQ = {"copy_warning", "prologue", "intro", "endings", "credits"}  # locations: pointer table C60B3C (RUN_TABLES)

@@ -11,6 +11,9 @@ SCENES = {
   intro = { boot_only = true, boot = "1400 -", settle = 30, frames = 1500 },
   title = { boot_only = true, boot = "1500 -;8 start;120 -", settle = 30, frames = 1700 },
   name_entry = { boot_only = true, boot = "1500 -;8 start;120 -;8 start;300 -", settle = 30, frames = 2000 },
+  -- A until the name is full: the name's yes/no confirm (C11AAA)
+  name_confirm = { boot_only = true, settle = 30, frames = 2500,
+                   boot = "1500 -;8 start;120 -;8 start;300 -" .. string.rep(";6 a;24 -", 10) .. ";100 -" },
   prologue = { boot_only = true, mash = 30, settle = 1500, frames = 3600 },
   -- new game as the game does it: opening cutscene in the castle (scenario 35 event 0)
   opening = { scn_start = 35, mash = 0, after = "600 -", check = { [0x7E505A] = 35 }, frames = 7600 },
@@ -93,6 +96,8 @@ SCENES = {
   town_menu = { script = { 0x14, 0xFF }, after = "400 -", frames = 7600 },
   world_map = { script = { 0x16, 0xFF }, after = "400 -", frames = 7600 },
   town_enter = { script = { 0x14, 0xFF }, after = "400 -;6 right;40 -;6 a;150 -", frames = 7800 },
+  -- cursor on the town menu's EXIT tile: its name box
+  town_exit = { script = { 0x14, 0xFF }, after = "400 -;6 left;60 -", frames = 7700 },
   -- world map: X = map / save; A on the party = its commands
   world_save = { script = { 0x16, 0xFF }, after = "400 -;6 x;60 -;6 down;20 -;6 a;120 -", frames = 7800 },
   world_walk = { script = { 0x16, 0xFF }, frames = 12000,

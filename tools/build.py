@@ -114,7 +114,7 @@ RUN_TABLES = [(0xC0BBCB, 8), (0xC0BBDD, 14), (0xC0BBFB, 21), (0xC0E4BB, 5), (0xC
               (0xC60B3C, 98), (0xC60E44, 11), (0xC60ECA, 11), (0xC63008, 11), (0xC630C3, 4), (0xC63129, 96),
               (0xC634E6, 69)]
 RUN_PTRS = [0xC14814, 0xC1481B, 0xC268FA, 0xC26919, 0xC2692C, 0xC26B62, 0xC26B75, 0xC26B8C, 0xC26BF5, 0xC26C34,
-            0xC0A29A, 0xC0C75C]  # + menu records C0BAF7, C0C30D (extract.MENUS)
+            0xC0A29A, 0xC0C75C, 0xC002F5]  # + menu records C0BAF7, C0C30D (extract.MENUS)
 MENU_SCRIPTS = (0x014094, 0x014C19)  # C1 menu scripts: their op 10 lo hi points at an extract.MENUS record
 
 
@@ -283,6 +283,13 @@ def marker(t, off, w, s):
     return "".join(out)
 
 
+def choice_indent(s):
+    """Options of a {choice} list get two leading spaces: the ▶ cursor redraws the row's first 8 px tile, and one
+    6 px space put an English glyph's left columns there (JP's full-width glyphs have a blank margin)."""
+    m = re.search(r"\{choice:[0-9A-Fa-f]+\}", s)
+    return s if not m else s[:m.end()] + re.sub(r"(^|\{nl\}) (?! )", r"\1  ", s[m.end():])
+
+
 NAME_GRID = 0x07EAC9  # LZ: name-entry grid tilemap, 20 tiles x 39 rows (tile = code - $10, $20xx; E7 = blank).
 # The picked cell's tile is the stored letter (C1156C reads it from the map in RAM), so the map is the alphabet.
 # Pages of 8 lines (every other tilemap row): hiragana, katakana, then 0-9 A-Z and END (kept, ー -> -).
@@ -405,7 +412,7 @@ def build(orig, mark=False, qa=()):
         text = {o: (w, s if o in skip or not s.replace("{end}", "").strip() else marker(t, o, w, s))
                 for o, (w, s) in text.items()}
     else:
-        en = extract.load_en()  # script/*.json translations over the original units
+        en = {o: choice_indent(s) for o, s in extract.load_en().items()}  # script/*.json over the original units
     over = {int(k, 16) & 0x3FFFFF: v for k, v in (q.split("=", 1) for q in qa)}
     for off, s in (({} if mark else en) | over).items():
         if off not in text:

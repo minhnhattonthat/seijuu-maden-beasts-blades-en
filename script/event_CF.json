@@ -283,7 +283,7 @@
 {"id": "CF5536", "jp": "恐ろしく強い奴だった…。{nl}奴は、ガイアスと名乗って{nl}いたぞ。そうだ…ちょうどあなたと{nl}反対の冷たい目をした{nl}人間だった。{end}", "en": "He was frightfully strong... He{nl}called himself Gaius. Yes... he was{nl}a human with cold eyes, just the{nl}opposite of yours.{end}"},
 {"id": "CF557F", "jp": "{choice:01FF} エルフの秘宝盗まれる!?{end}", "en": "{choice:01FF} Elven Treasure Stolen?!{end}"},
 {"id": "CF5593", "jp": " 何かよくないことが{nl} 起きるのではないかと{nl} 不安が沸き起こっている。{end}", "en": "Anxiety is rising that something{nl}bad may be about to happen.{end}"},
-{"id": "CF55BE", "jp": "{choice:01FF} アリアンナ姫、全快!!{end}", "en": "{choice:01FF} Princess Arianna Fully Recovered!!{end}"},
+{"id": "CF55BE", "jp": "{choice:01FF} アリアンナ姫、全快!!{end}", "en": "{choice:01FF} Princess Arianna Fully Recovered!{end}"},
 {"id": "CF55D1", "jp": " アリアンナ姫は、しばらく{nl} 床に伏せっておられたが、{nl} 無事に全快した模様。{nl} 姫の笑顔がまた見れます。{end}", "en": "Princess Arianna, who had been{nl}confined to her bed for some time,{nl}appears to have made a full{nl}recovery. We can see the princess's{nl}smile once more.{end}"},
 {"id": "CF5614", "jp": "{choice:01FF} アリアンナ姫、病気か!?{end}", "en": "{choice:01FF} Princess Arianna Ill?!{end}"},
 {"id": "CF5628", "jp": "王位継承者の{nl}アリアンナ姫が、ここ数日{nl}姿を見せていない。{nl}重病説が流れているが、{nl}真実は謎である。{end}", "en": "Princess Arianna, heir to the{nl}throne, has not been seen for{nl}several days. Rumors of a grave{nl}illness are spreading, but the{nl}truth remains a mystery.{end}"},

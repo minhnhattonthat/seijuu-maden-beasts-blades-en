@@ -58,6 +58,21 @@ org $C31D1E
 org $C31D28
 wrap_rts:
 
+; world-map tile info box (A on a castle/army: rank + place, C09CF9) and its army list twin (C09F69): 12 -> 16
+; cells (rank titles reach 21 chars = 126 px). VWF tiles 4 entries x 16 x 2 = BG3 $180-$1FF (empty on the world
+; map); text buffer 7E:498C rows $20 apart, entries $40 (C320DC clears $200 bytes); window stays at col 8
+org $C09D08
+	db $10			; window width
+org $C09D0D
+	dw $0010		; bulk-engine wrap width ($476C)
+org $C09D8F
+	dw $0040		; entry stride
+org $C09F6A
+	db $10
+org $C09F6F
+	dw $0010
+org $C09FD7
+	dw $0040
 ; battle weapon/item list (C557A3: LDA [$C2],y / BEQ): C6 name fields are {call} stubs now
 org $C557A3
 	jsl bname

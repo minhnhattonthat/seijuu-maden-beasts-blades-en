@@ -12,5 +12,6 @@
 {"id": "CE3452", "jp": "みんか{end}", "en": "House{end}"},
 {"id": "CE3456", "jp": "しゅじんこうんち{end}", "en": "Home{end}"},
 {"id": "CE345F", "jp": "しろ{end}", "en": "Castle{end}"},
-{"id": "CE3462", "jp": "ごうてい{end}", "en": "Mansion{end}"}
+{"id": "CE3462", "jp": "ごうてい{end}", "en": "Mansion{end}"},
+{"id": "C0031F", "jp": "でぐち{end}", "en": "Exit{end}"}
 ]

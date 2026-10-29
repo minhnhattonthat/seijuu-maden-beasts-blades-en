@@ -32,6 +32,15 @@ def test_edits_land_and_log():
     assert {n for *_, n in w.log} >= {"text_E77A0A", "lz_CCAB70", "checksum"}
 
 
+def test_choice_indent():
+    assert build.choice_indent("Go outside?{choice:0201} Yes{nl} No{end}") == "Go outside?{choice:0201}  Yes{nl}  No{end}"
+    assert build.choice_indent("A{nl} B{end}") == "A{nl} B{end}"
+    # two spaces + 34 chars wraps and loses the last one (docs/re/windows.md choice lists)
+    for off, s in build.extract.load_en().items():
+        opts = build.choice_indent(s).partition("{choice:")[2].partition("}")[2].replace("{end}", "")
+        assert all(len(o) <= 35 for o in opts.split("{nl}")), f"{0xC00000 | off:06X}"
+
+
 def test_status_map():
     en = build.Table.load(ROOT / "tbl" / "en.tbl")
     raw = build.status_map(en, GFX[build.STATUS_MAP])
