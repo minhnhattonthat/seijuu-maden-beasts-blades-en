@@ -2,7 +2,15 @@
 
 Updated at the end of every session. Keep it to what the next session needs; history is in git.
 
-- **Phase:** 6 (translate) in progress. Phase 5 done.
+- **Phase:** 9 (release) done: v1.0 zip built and verified, **not published** (owner's call: `gh release create`
+  is theirs).
+- **Release v1.0 (2026-10-29):** QA pass 3 fixes committed (cdfeb2a); full EN tour re-run (44 scenes ok, 603 printed
+  pointers, 0 outside units); visual-QA pass 4 on the 34 changed sheets: all ok (`verdicts/p4_chunk_*.tsv`); gate 110/110
+  ok; `jp_left_check.py` 0 hits; `tools/release.py --version 1.0 --no-tour` ok: `release/1.0/Seijuu_Maden_EN_v1.0.zip`
+  (BPS + README.txt), patch re-applied byte-identical, patched SHA-1 fad4f3fcff75c6f31bb954dacfecf8fdf232c12f.
+  Post-release polish (optional): shop_sell "Healing Arrow" touches the next entry's gem icon (0 px gap); open
+  in-game checks below (action entry, G9/G10 unseen variants, G7 Trade/Assign, world-map arrival message), story
+  questions in `docs/tl-followups.md`.
 - **Phase 6 (2026-10-27):** `tools/batches.py` split/check/merge/fit (`tests/test_batches.py`): batches `work/tl/bNNN.tsv` (gitignored; merged English lives in `script/*.json`), per-file form/limit table `FORMS` (dlg 35/line word-wrapped by merge with quote indent, narration 40, names 8/10, menus 8 or the JP's own width), glossary lint (katakana/kanji whole-run), code multiset. `glossary.md` seeded (characters, places, story terms; my romanisations, no web source exists), `docs/synopsis.md` (from prologue/intro/endings + term pass), `docs/style-reference.md`, `docs/translator-brief.md`. Pilot b001-b003 (prologue, intro, ice-cave/Rundstedt scene) merged, checked in-game (`--qa E7792E=` box: name line + quote + indent ok). Untranslated JP shows garbled in the EN build (kana codes hold lowercase): expected until translated. **Wave 1 done:** b004-b039 (every non-event file) translated and merged, except b020 (buildings) and C0BAF7 (world-map info box), both held back (below). Build ok (3121 writes), smoke ok, shop/world map/status shots ok (`work/qa/wave1z.png`, `work/qa/warp/status_items/final.png`).
   - Check rules changed: over-limit **names/menus are `LONG` warnings, not errors** (D4: full names; 455 LONG lines now, list with `batches.py check b004 ...`); `{c0B}` (shop text) counts as a line break.
   - `locations` is now a SEQ run (`extract.SEQ`, packed as stubs): nothing points at a location name, and 21 short slots couldn't hold English. **Not checked in-game yet:** world-map arrival message `{icall:1D947E}に着きました` should show the English name.
