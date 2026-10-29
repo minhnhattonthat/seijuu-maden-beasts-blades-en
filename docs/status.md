@@ -3,7 +3,8 @@
 Updated at the end of every session. Keep it to what the next session needs; history is in git.
 
 - **Phase:** 9 (release) done: v1.0 zip built and verified, **not published** (owner's call: `gh release create`
-  is theirs).
+  is theirs). Re-verified 2026-10-30 at 25198ef: build == zip patch output (a2b16059...), `check.py` ok. No phase
+  left; only the optional polish/in-game checks below.
 - **Release v1.0 (2026-10-29):** QA pass 3 fixes committed (b963049); full EN tour re-run (44 scenes ok, 603 printed
   pointers, 0 outside units); visual-QA pass 4 on the 34 changed sheets: all ok (`verdicts/p4_chunk_*.tsv`); gate 110/110
   ok; `jp_left_check.py` 0 hits; `tools/release.py --version 1.0 --no-tour` ok: `release/1.0/Seijuu_Maden_EN_v1.0.zip`
