@@ -30,10 +30,14 @@ Standing non-bugs, `ok` (the controller adds the game's own below):
 - English is a 6 px fixed font, two letters per 12 px cell; menus use an 8x8 font. Tight letter pairs are by design.
 
 Known open work: still an `issue`, but start the note with the tag so the controller can sort it from new finds:
-- `known-gfx:` Japanese drawn as graphics, not text: title logo, the poem screen, outlined 16 px command menus
-  (world map, camp, battle) and the status-screen command list with its 第1聖獣王 header.
-- Shop buy lists wrap a long name onto the entry's blank lower row ("Bronze / Dagger"): by design, `ok`.
-- `shop_6c_pack`: its beasts show ペガサス, poked test data with Japanese name bytes: `ok`.
+- `known-gfx:` the graphics phase is done (title logo, poem, outlined command menus, status command list, item-screen
+  commands are English now). Only these are left: the tiny 2-line メンバー/アイテム labels, 預かり所, GOOD-BYE /
+  BEAST-CHANGE art. Any other Japanese is a new issue.
+- Shop buy lists wrap a long name onto the entry's blank lower row ("Bronze / Dagger"): by design, `ok`. Same in the
+  Sell / Upgrade lists (LV:/count on the lower row) and the beast Sell list ("Platinum / Dragon", tight between
+  entries). The item/church/food buy list is one column of full names with a tall window and a 2-line effect box.
+- `shop_6c_pack`, `shop_6c_en`, `status_beast`: beasts showing ペガサス are poked test data with Japanese name
+  bytes: `ok`. So are the hero name "AA" and the warp's gold/inventory.
 - `known-width:` only the 4 beast names of 14-15 letters (Thunder Dragon, Platinum Dragon..) and 3 enemy names
   cut at 13 on status/formation screens. Every other list was widened (2026-10-29): any other cut or overlap
   (`LV:`, `×N`, a frame) is a new issue.

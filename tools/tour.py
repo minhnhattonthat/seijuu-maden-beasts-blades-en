@@ -53,10 +53,14 @@ def main():
     if subprocess.run(PY + [str(ROOT / "tools" / "textlog_check.py")], cwd=ROOT).returncode:
         fails = 1
     manifest = ROOT / "work" / "qa" / "manifest.tsv"
-    if a.scenes == ["all"]:
-        manifest.unlink(missing_ok=True)  # a full tour replaces the sheet set (ids of sheets that no longer exist)
+    # init re-hashes the kept ids, so a sheet whose pixels changed loses its old verdict (never unlink the manifest:
+    # that resets every "changed" time and old-build verdicts would pass the gate)
     subprocess.run(PY + [str(Path(SKILL) / "scripts" / "qa_gate.py"), "init", str(manifest), str(TOUR),
                          "--glob", "*.png"], cwd=ROOT, check=True)
+    if a.scenes == ["all"]:  # a full tour replaces the sheet set: drop ids whose sheet is gone
+        rows = manifest.read_text(encoding="utf-8").splitlines()
+        manifest.write_text("".join(r + "\n" for r in rows if "\t" not in r or Path(r.split("\t")[1]).exists()),
+                            encoding="utf-8")
     return 1 if fails else 0
 
 

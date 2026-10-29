@@ -45,14 +45,13 @@ Updated at the end of every session. Keep it to what the next session needs; his
 - **Release prep (2026-10-29, user: "do all til done"; never publish):** done: `tools/release.py` (build, check, smoke,
   tour, gate, BPS + re-apply, zip in `release/<v>/`), `tools/tour.py` (warp all -> `work/qa/tour/`, sheets from the
   arrival, textlog check, manifest re-init), `docs/release-readme.txt`, repo README filled, text-side no-JP test,
-  tl-followups triaged. Tour ran (49 ok; `status_items` FAIL = its proof check, fix or drop before release).
-  Playtests p2 (world/towns) and p3 (battle) back; p1 (new game) running. **Open from them:**
-  (1) item/church shop buy grid (`C0C7E2`.., 3 cols x 9 cells, `$4B9D` +9 wrap `$1C`, names printed `C0C82B`)
-  cuts names at 7 and the effect line (`C0C9BD`, 15 cells) overruns the price box: needs engine work (warp
-  `church_buy`); (2) town-menu label "Beast Market" > 8 cells with a garbage tile; (3) C0BE0F food prompt 2 lines
-  -> Yes/No on its own page (make it one line); (4) "Defeated  Gaius !" (C57D5B, name padded in RAM);
-  (5) G10 "Confirm" opens the route view (maybe "Check"); menu-record ▶ touches first letter (cosmetic).
-  Battle hangs on the warp's ghost unit = synthetic. Then: visual-QA pass 3 on `work/qa/tour`, release dry run.
+  tl-followups triaged. Playtests p2 (world/towns), p3 (battle) back; p1 (new game) left no report. Their findings,
+  all fixed (commit 88e0ef6): buy list (op 09: church/item/food) one column of full names + effect box 2x16
+  (`build.effect_box`); sell/upgrade lists and beast sell list wrap names to the lower row (`hooks.md`); "Beasts"
+  label; food/auto-battle prompts one page; "Defeated X!" spacing (the name call adds the blank); G10 Confirm ->
+  Check; `status_items` tour budget. Left cosmetic: menu-record ▶ touches the first letter; beast sell list's
+  second name line sits tight between entries; `C0DA64` beast list hooked but its screen not found. Battle hangs
+  on the warp's ghost unit = synthetic. Next: visual-QA pass 3 on `work/qa/tour`, `tools/release.py` dry run.
 - **Graphics phase:** every G row done. Open in-game checks: action entry on screen, G9/G10 unseen variants, G7 Trade/Assign screens, world-map arrival message.
 - **Done (phase 1):** encoding + table (`tbl/jp.tbl`), text engines, control codes, LZSS codec, bank map and expansion plan (4 MB, banks E8-FF), graphics-text survey. All in `docs/re/` (index: `docs/re/README.md`).
 - **Done (phase 2):** `tools/debug/warp.py` + `warp.lua` + `scenes.lua`: cold boot -> any scene by name (`--list`; `all --states` regenerates `work/states/<scene>.mss`; proof shots `work/qa/warp/<scene>/scene_<scene>.png`). How: boot through name entry and prologue, swap the new-game scenario at `C08344`, then inject a one-op event script into WRAM `$7EEF00` (op `10` = change scenario+map+run event, `14` town menu, `16` world map, `5E` battle, `A2` ending, menu ops `60`-`78`), confirmed by a hook on the VM dispatch. Scenes: intro, title, name entry, prologue, opening, poem, home, field/party/status menus, 12 shop/inn menu ops, rest, town menu + building entry, world map + commands + save screen + a walk, three dungeon-battle types, war sky effect + dialogue, endings 0-4, credits. Event VM fully mapped: every opcode length (`tools/evdis.py`, walks all 98 scenarios; `tests/test_events.py`), scenarios, story vars (`docs/re/events.md`). Graphics survey extended (G9-G11 in `docs/re/graphics.md`).

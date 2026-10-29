@@ -177,6 +177,7 @@ E4EC7D	event-script / map data (12 B, e.g. 'ぽラを{end}')
 C0B85B	already English: world-map POINT/FOOD/USE numbers (font codes unchanged in en.tbl)
 C0C28B	number + G (gold), no text
 C0C2E4	『』 + number, no text
+C0C2EC	number only (sell list count, table C0C2DA), no text
 C0C2FE	number + G (gold), no text
 C0F8D2	dashes (empty shop slot), no text
 C0F8DB	dashes (empty shop slot), no text
