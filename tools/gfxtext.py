@@ -44,7 +44,11 @@ PLAIN = {
     0x0D3838: [  # status-screen tile set (BG1 at VRAM 0): command list, exchange and party words
         (0xA0, 6, "Dismiss"), (0xA6, 4, "Trade"), (0xAA, 4, "Party"), (0xC0, 6, "Formation"), (0xC6, 6, "Status"),
         (0xCC, 4, "Equip"), (0xE0, 6, "Items"), (0xE6, 4, "Party"), (0xEA, 4, "Assign")],
+    0x0D4381: [(0x01, 4, "Drop"), (0x06, 4, "Use"), (0x20, 6, "Key Items")],  # item screen commands (VRAM $100+)
 }
+# Bottom halves drawn alone: the item screen's header puts CD3838 E0-E5 ("Items" top) over CD4381 0A-0F, whose
+# row 7 is the header's rule line (kept where the ink isn't).
+HALF = {0x0D4381: [(0x0A, 6, "Items")]}
 
 
 def glyphs():
@@ -96,6 +100,15 @@ def plain(gfx):
                 for cx in range(w):
                     o = (t + cy * 16 + cx) * 32
                     raw[o:o + 32] = tile4(px, cx, cy)
+        for t, w, s in HALF.get(off, []):
+            px = draw(s, g, w * 8, plain=True)[8:]
+            for cx in range(w):
+                o = (t + cx) * 32
+                rule = [(raw[o + 14 + p % 2 + p // 2 * 16] >> (7 - x) & 1) << p for x in range(8) for p in range(4)]
+                rule = [sum(rule[x * 4:x * 4 + 4]) for x in range(8)]  # row 7 colour per pixel
+                px[7][cx * 8:cx * 8 + 8] = [v or r for v, r in zip(px[7][cx * 8:cx * 8 + 8], rule)]
+            for cx in range(w):
+                raw[(t + cx) * 32:(t + cx) * 32 + 32] = tile4(px, cx, 0)
         gfx[off] = bytes(raw)
 
 

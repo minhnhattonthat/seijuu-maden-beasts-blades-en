@@ -42,9 +42,14 @@ def test_plain_words_fit_and_stay_in_place():
     gfxtext.plain(gfx)
     for off, words in gfxtext.PLAIN.items():
         mine = {t + cy * 16 + cx for t, w, _ in words for cy in (0, 1) for cx in range(w)}
+        mine |= {t + cx for t, w, _ in gfxtext.HALF.get(off, []) for cx in range(w)}
         for i in range(len(old[off]) // 32):
             if i not in mine:
                 assert gfx[off][i * 32:i * 32 + 32] == old[off][i * 32:i * 32 + 32], f"{off:06X} tile {i:02X}"
+    for off, halves in gfxtext.HALF.items():  # the header's rule line (row 7, non-zero) survives the redraw
+        for t, w, _ in halves:
+            for i in range(t, t + w):
+                assert any(gfx[off][i * 32 + 14 + k * 16:i * 32 + 16 + k * 16] != b"\0\0" for k in (0, 1)), f"tile {i:02X}"
 
 
 def test_untouched_tiles_stay():
