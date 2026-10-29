@@ -258,6 +258,17 @@ org $C0FAE9
 org $C0FB29
 	jsl wrapname
 
+; beast buy list (C0E845, two columns of 14 in a 28-cell buffer): a name over 13 wraps onto the entry's blank
+; lower row, LV: moves there too (X+9). Was JSL $C32912, LDA $4B9D / CLC / ADC #9 / STA $4B9D, LDA $4B9D / CLC / ADC #5
+org $C0E88E
+	jsl beastname
+org $C0E892
+	jsl beastlv
+	nop #6
+org $C0E8B3
+	jsl beastnx
+	nop #3
+
 ; status equip rows (names col 9, build.STATUS_CODE) and beast skills (col 16): C26C9E blanks the whole field
 ; before a name, not a fixed 10 cells. Was LDA #n / JSR $6CE0 / SEP #$20 (C26CE0 restores M8 from P)
 org $C26C9F
@@ -632,9 +643,16 @@ eqcount:			; C26C9F: cells to blank - 1 for C26CE0 at $4BA4. Out M8
 .out:	sep #$20
 	rtl
 
-wrapname:			; as JSL $C32912 for a name: line 1 up to its last space within 10 chars, the rest one tile row
-	php			; down (empty: blanks it); a line over 10 starts that much further left. Any M/X
+wrapname:			; as JSL $C32912 for a name: line 1 up to its last space within W=10 chars, the rest one tile
+	php			; row down (empty: blanks it); a line over W starts that much further left. Any M/X
 	rep #$30
+	lda #$000A
+	bra wn_go
+beastname:			; C0E88E, beast buy list: the same with W=13
+	php
+	rep #$30
+	lda #$000D
+wn_go:	pha			; W
 	pei ($50)		; $4F-$51 kept: the shop sets the bank once for the whole list
 	pei ($4F)
 -:	lda [$4F]		; follow {call} stubs
@@ -654,9 +672,14 @@ wrapname:			; as JSL $C32912 for a name: line 1 up to its last space within 10 c
 	lda [$4F],y
 	bne -
 	tyx			; X = length
-	cpy #$000B
+	tya
+	cmp $05,s		; W
+	beq .one
 	bcc .one
-	ldy #$000A
+	rep #$20
+	lda $05,s
+	tay
+	sep #$20
 -:	lda [$4F],y
 	cmp #$10		; space
 	beq .two
@@ -666,10 +689,11 @@ wrapname:			; as JSL $C32912 for a name: line 1 up to its last space within 10 c
 .two:	rep #$20
 	phx			; length
 	phy			; cut
+	lda $09,s		; W
+	tax
 	tya
 	ldy #$0000
-	ldx #$000A
-	jsr wn_put		; line 1: 10 cells
+	jsr wn_put		; line 1: W cells
 	inc $4B9F
 	inc $4B9D
 	pla			; cut
@@ -680,8 +704,12 @@ wrapname:			; as JSL $C32912 for a name: line 1 up to its last space within 10 c
 	eor #$FFFF
 	sec
 	adc $01,s		; length - offset
-	ldx #$0009
-	jsr wn_put		; line 2: indented, 9 cells
+	pha
+	lda $09,s		; W
+	dec a
+	tax
+	pla
+	jsr wn_put		; line 2: indented, W-1 cells
 	dec $4B9D
 	dec $4B9F
 	pla
@@ -689,6 +717,7 @@ wrapname:			; as JSL $C32912 for a name: line 1 up to its last space within 10 c
 	sta $4F
 	pla
 	sta $50
+	pla			; W
 	plp
 	rtl
 
@@ -760,6 +789,21 @@ wn_put:				; draw A chars of [$4F] from offset Y, blank-padded to X cells, at co
 	plx
 	pla
 	rts
+
+beastlv:			; C0E892, after a beast's name: LV: goes on the entry's blank lower row, X+9. M16
+	lda $4B9D
+	clc
+	adc #$0009
+	sta $4B9D
+	inc $4B9F
+	rtl
+
+beastnx:			; C0E8B3, after LV: back to the name row; out A = next column X (stride 14). M16
+	dec $4B9F
+	lda $4B9D
+	clc
+	adc #$0005
+	rtl
 	warnpc $E81000
 
 org $E81000

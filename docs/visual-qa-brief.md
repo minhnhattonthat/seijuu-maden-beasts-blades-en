@@ -31,9 +31,13 @@ Standing non-bugs, `ok` (the controller adds the game's own below):
 
 Known open work: still an `issue`, but start the note with the tag so the controller can sort it from new finds:
 - `known-gfx:` Japanese drawn as graphics, not text: title logo, the poem screen, outlined 16 px command menus
-  (world map, camp, battle) and the status-screen command list.
-- `known-width:` a name cut short or overlapping a neighbour (`LV:`, `×N`) in item, battle, shop/equip or
-  member-name lists: those fields widen in queued engine work.
+  (world map, camp, battle) and the status-screen command list with its 第1聖獣王 header.
+- Shop buy lists wrap a long name onto the entry's blank lower row ("Bronze / Dagger"): by design, `ok`.
+- `shop_6c_pack`: its beasts show ペガサス, poked test data with Japanese name bytes: `ok`.
+- `known-width:` only the 4 beast names of 14-15 letters (Thunder Dragon, Platinum Dragon..) and 3 enemy names
+  cut at 13 on status/formation screens. Every other list was widened (2026-10-29): any other cut or overlap
+  (`LV:`, `×N`, a frame) is a new issue.
+- Each scene also has `final` (its last frame at full size): read menu spelling there, the sheets are half size.
 
 ## Verdicts
 Write your verdict file once you have read every sheet, one line per id in the chunk:
