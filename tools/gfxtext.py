@@ -58,6 +58,63 @@ DIGITS = {0x0D3838: [(0x21, 8, [0x21, 0x23, 0x25, 0x27, 0x29, 0x2B, 0x2D, 0x2F, 
                      (0x20, 3, [0x20, 0x22, 0x24, 0x26, 0x28, 0x2A, 0x2C, 0x2E, 0x40, 0x42, 0x44])]}
 
 
+# G4 opening poem (LZ CCA415 tiles, 2bpp BG3, DMA'd as 160 tiles: A0+ is the menu font, E4+ the window, 180+ the
+# dialogue font, all live beside it; CCAB70 its 32x32 map). Line n sits in map rows 2+2n/3+2n (an HDMA on $212C
+# reveals it by scanline); English is one 8 px row per line (the 8x8 menu font, ink 3 white, shadow 1 dark), in the lower row.
+POEM_CHR, POEM_MAP, POEM_TILES = 0x0CA415, 0x0CAB70, 0xA0
+POEM = ["When eleven holy beasts gather,", "the path of Light is shown;", "when eleven demon beasts gather,",
+        "the path of Darkness is shown.", "That is the promised hour:", "the Holy King descends to earth.",
+        "That is the hour of judgment.", "Beware the hour of great change."]
+
+
+def poem(gfx, font8, table):
+    """Draw POEM into the poem's tile block and map (gfx edited in place). font8: the built 8x8 menu font."""
+    def glyph(ch):  # columns of colour-3 ink, trimmed; a space is 2 blank columns
+        t = (table.encode(ch)[0] - 0x10) * 16
+        rows = [[(font8[t + y * 2] >> (7 - x) & 1) | (font8[t + y * 2 + 1] >> (7 - x) & 1) << 1 for x in range(8)]
+                for y in range(8)]
+        cols = [x for x in range(8) if any(r[x] == 3 for r in rows)]
+        return [[3 if r[x] == 3 else 0 for x in range(cols[0], cols[-1] + 1)] for r in rows] if cols else [[0, 0]] * 8
+
+    old = gfx[POEM_MAP]
+    m = [old[i] | old[i + 1] << 8 for i in range(0, len(old), 2)]
+    attr = next(x for x in m if x & 0x3FF) & 0xFC00
+    tiles, chr_ = {bytes(16): 0}, bytearray(POEM_TILES * 16)
+    for n, s in enumerate(POEM):
+        line = [[] for _ in range(8)]
+        for ch in s:
+            g = glyph(ch)
+            for y in range(8):
+                line[y] += g[y] + [0]
+        w = len(line[0]) - 1
+        nt = (w + 8) // 8  # the shadow takes one column past the ink
+        assert nt <= 32, f"poem line {n}: {w} px"
+        px = [[0] * (nt * 8 + 1) for _ in range(9)]
+        for y in range(7):  # the game's glyphs use rows 1-7: move up one, shadow right and below
+            for x in range(w):
+                if line[y + 1][x]:
+                    px[y][x] = 3
+        for y in range(8):
+            for x in range(w):
+                if px[y][x] == 3:
+                    for dx, dy in ((1, 0), (0, 1), (1, 1)):
+                        if px[y + dy][x + dx] == 0:
+                            px[y + dy][x + dx] = 1
+        c0 = (32 - nt) // 2
+        for r in (2 + 2 * n, 3 + 2 * n):
+            m[r * 32:r * 32 + 32] = [attr] * 32
+        for cx in range(nt):
+            t = tile(px, cx, 0)
+            if t not in tiles:
+                assert len(tiles) < POEM_TILES, "poem: more than 160 tiles"
+                chr_[len(tiles) * 16:len(tiles) * 16 + 16] = t
+                tiles[t] = len(tiles)
+            m[(3 + 2 * n) * 32 + c0 + cx] = attr | tiles[t]
+    gfx[POEM_CHR] = bytes(chr_)
+    gfx[POEM_MAP] = b"".join(x.to_bytes(2, "little") for x in m)
+    return len(tiles)
+
+
 def glyphs():
     """{char: (top row, [row strings])}"""
     out = {}

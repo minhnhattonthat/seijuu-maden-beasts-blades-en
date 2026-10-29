@@ -61,3 +61,16 @@ def test_untouched_tiles_stay():
     for off, ts in ((0x12A94E, range(0x46, 0x50)), (0x0BCEE0, [0x0C, 0x0D, 0x1C, 0x1D])):  # gauge; unused 確認
         for t in ts:
             assert gfx[off][t * 16:t * 16 + 16] == old[off][t * 16:t * 16 + 16], f"{off:06X} tile {t:02X}"
+
+
+def test_poem_fits_and_keeps_its_rows():
+    """The poem stays in its 160 DMA'd tiles and block size; map words change only in the poem rows (2-17)."""
+    gfx = build.unpack_gfx(ORIG)
+    old = gfx[gfxtext.POEM_MAP]
+    font8 = build.font.menu_font(gfx[build.MENU_FONT])
+    assert gfxtext.poem(gfx, font8, build.Table.load(ROOT / "tbl" / "en.tbl")) <= gfxtext.POEM_TILES
+    assert len(gfx[gfxtext.POEM_CHR]) == gfxtext.POEM_TILES * 16
+    new = gfx[gfxtext.POEM_MAP]
+    assert len(new) == len(old)
+    assert new[:2 * 32 * 2] == old[:2 * 32 * 2] and new[18 * 32 * 2:] == old[18 * 32 * 2:]
+    assert (new[3 * 64 + 32] | new[3 * 64 + 33] << 8) & 0x3FF  # line 0 has text mid-row
