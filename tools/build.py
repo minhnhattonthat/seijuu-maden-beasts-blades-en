@@ -14,7 +14,6 @@ import argparse
 import re
 import subprocess
 import sys
-import textwrap
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -294,11 +293,15 @@ EFFECTS = [(lo & 0x3FFFFF, hi & 0x3FFFFF) for n, lo, hi in extract.RUNS if n in 
 
 def effect_box(s):
     """Item effect line (buy-list effect box, text.asm: 16 cells x 2 rows, 8x8 printer straight to VRAM): word-wrap
-    to two lines of 16, each blank-padded so it covers the previous item's line."""
-    lines = textwrap.wrap(s.removesuffix("{end}"), 16, break_long_words=False)
-    if len(lines) > 2 or max(map(len, lines), default=0) > 16:
+    to two lines of 16, balanced (no lone last word), each blank-padded so it covers the previous item's line."""
+    t = s.removesuffix("{end}")
+    w = t.split(" ")
+    splits = [(" ".join(w[:i]), " ".join(w[i:])) for i in range(1, len(w))]
+    fits = [p for p in splits if max(map(len, p)) <= 16]
+    if len(t) > 16 and not fits:
         raise SystemExit(f"effect line over 2 x 16 cells: {s!r}")
-    return "{nl}".join(x.ljust(16) for x in (lines + ["", ""])[:2]) + "{end}"
+    lines = (t, "") if len(t) <= 16 else min(fits, key=lambda p: max(map(len, p)))
+    return "{nl}".join(x.ljust(16) for x in lines) + "{end}"
 
 
 NAME_GRID = 0x07EAC9  # LZ: name-entry grid tilemap, 20 tiles x 39 rows (tile = code - $10, $20xx; E7 = blank).

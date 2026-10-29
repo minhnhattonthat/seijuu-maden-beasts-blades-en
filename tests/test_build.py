@@ -42,7 +42,8 @@ def test_choice_indent():
 
 
 def test_effect_box():
-    assert build.effect_box("Heal one ally's HP{end}") == "Heal one ally's {nl}HP              {end}"
+    assert build.effect_box("Heal one ally's HP{end}") == "Heal one        {nl}ally's HP       {end}"
+    assert build.effect_box("Fire LV1 effect{end}") == "Fire LV1 effect {nl}                {end}"
     for off, s in build.extract.load_en().items():  # every effect line fits 2 x 16 (raises otherwise)
         if any(lo <= off < hi for lo, hi in build.EFFECTS):
             build.effect_box(s)

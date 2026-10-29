@@ -46,7 +46,9 @@ def main():
         dst = TOUR / name
         shutil.rmtree(dst, ignore_errors=True)
         dst.mkdir(parents=True)
-        lo = 0 if arrived < BOOT_END else arrived - 300
+        jump = re.search(r"^f(\d+) jump ", log.read_text(encoding="utf-8", errors="replace"), re.M)
+        # a mid-event jump (msg, war_talk) plays its pages during `after`, before the arrival: sheet from the jump
+        lo = 0 if arrived < BOOT_END else int(jump[1]) if jump else arrived - 300
         subprocess.run(PY + [str(Path(SKILL) / "scripts" / "sheet.py"), str(src), "--from", str(lo),
                              "--out", str(dst / "sheet.png")], cwd=ROOT, check=True, capture_output=True)
         shutil.copy(src / "final.png", dst / "final.png")

@@ -306,14 +306,17 @@ org $C0FB29
 ; item/church buy list (C0C7AD; up to 9 entries, was 3 columns of 8 cells, 2 rows apart): one column of 26 cells,
 ; one row apart, so full names fit. Window 28x5 -> 28x9; the price box (C8B4), the effect box (C8F6) and its other
 ; variant (C8D8) move 4 rows down; the effect box is 16x2 at col 1 (effect lines are two {nl} lines of 16)
-org $C0C87E
-	db $09			; grid window height
+org $C0C87D
+	db $1A,$09		; grid window 26x9 (28 wide reached x 232-247, which the room's HDMA window mask cuts at
+				; lines 88-95: a black notch in the bottom-right corner)
+org $C0C7EC
+	db $1A			; text buffer width $4BA1, = window width
 org $C0C844
 	dw $001C		; column step: always the next row (CMP #$1C)
 org $C0C851
 	nop #3			; second INC $4B9F
 org $C0C02B			; highlight table (buffer byte offset, cells) per entry
-	dw 2,26, 58,26, 114,26, 170,26, 226,26, 282,26, 338,26, 394,26, 450,26	; row*56+2 (asar math is left to right)
+	dw 2,24, 54,24, 106,24, 158,24, 210,24, 262,24, 314,24, 366,24, 418,24	; row*52+2 (asar math is left to right)
 org $C0CA17
 	db $01			; up: index-1 (was -3)
 org $C0CA28
@@ -415,9 +418,28 @@ compose:			; in: [$32] at an English code. out: $36DD buffer filled, $32 past 1-
 	asl
 	pha			; first glyph's offset
 	inc $32
-	lda [$32]
+.peek:	lda [$32]
 	and #$00FF
-	cmp #$0010
+	bne .chk
+	lda $47A4		; 00 ends a called string (a name): return here and pair with the caller's next letter, else
+	and #$00FF		; an odd name's last letter takes the 6 px path and the next pair starts a cell late
+	beq .single		; ("Ogre Killer , is it?"). Pops as C318EE / C3258D do
+	tax
+	dex
+	sep #$20
+	lda $4774,x
+	sta $34
+	rep #$20
+	dex
+	dex
+	lda $4774,x
+	sta $32
+	sep #$20
+	txa
+	sta $47A4
+	rep #$20
+	bra .peek
+.chk:	cmp #$0010
 	bcc .single
 	cmp #$0080
 	bcs .single
