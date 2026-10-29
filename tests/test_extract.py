@@ -1,4 +1,5 @@
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -44,3 +45,14 @@ def test_script_files_match_rom():
         for r in json.loads(f.read_text(encoding="utf-8")):
             got[int(r["id"], 16) & 0x3FFFFF] = r["jp"]
     assert got == want
+
+
+def test_no_japanese_left_in_script():
+    """Every unit with Japanese has English, and no English holds Japanese (name_grid: layout only, unused)."""
+    jp = re.compile(r"[぀-ヿ一-鿿]")
+    bad = []
+    for f in (ROOT / "script").glob("*.json"):
+        for r in json.loads(f.read_text(encoding="utf-8")):
+            if f.stem != "name_grid" and (jp.search(r.get("en", "")) or not r.get("en") and jp.search(r["jp"])):
+                bad.append(r["id"])
+    assert bad == []

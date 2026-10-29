@@ -1,4 +1,17 @@
-# Playtester brief - <Game title>
+# Playtester brief - Seijuu Maden: Beasts & Blades (SNES)
+
+## This game (read first)
+- Strategy RPG. A confirms / advances text, B cancels. Cold boot reaches the title at ~1450 frames; Start, then
+  name entry (A on letters; A until the name is full brings "Is this OK? Yes/No").
+- Field (towns, castles): walk with the d-pad, A talks/examines; a field command menu (Talk/Search/Party/Field/
+  Status) opens with a button: find it (try X, Y, Start).
+- Town menu (a 3x3 board of buildings): d-pad moves between buildings, A enters, B asks "Go outside?".
+- World map: a hand cursor; A on your army opens its commands (Move/Action, Camp, Status, Meet); A on a castle
+  shows its owner and name; X opens Map/Save.
+- Dungeon battles: per-unit command menu (Move, Attack, Item, Beast, Focus, Retreat, Defend, Action, Wait).
+- Known and fine: a few beast/enemy names cut at 13 letters on status screens; the army header reads "№ N King".
+- States made by the debug warp (`work/states/*.mss`) jump straight into a scene: the party and story flags there
+  are synthetic, so odd story context (who is in the party) is not a bug.
 
 You play a translated build turn by turn and report what a player would trip over. Play only: no edits to the
 repo, no git, no subagents. The moment you find an issue, append its checklist line (format under Report) to

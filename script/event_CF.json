@@ -100,7 +100,7 @@
 {"id": "CF1F8E", "jp": "早く、用を果たすがよい。{end}", "en": "Be quick and see to your business.{end}"},
 {"id": "CF1F9E", "jp": "…………{end}", "en": "........{end}"},
 {"id": "CF1FA3", "jp": "オレらは、仲間にできねぇぞ!{delay:3C}{nl}残念だったな。{c0C}店の親父が帰ってきたら、{nl}素直に買うことだな!{c0C}フハハハハハハー!{end}", "en": "You can't make us your allies!{delay:3C} Too{nl}bad.{c0C}When the shop's old man comes back,{nl}just buy us like a good customer!{c0C}Fwahahahahaha!{end}"},
-{"id": "CF1FE9", "jp": "『仲間』コマンドを使ってみな!{end}", "en": "Try using the 'Ally' command!{end}"},
+{"id": "CF1FE9", "jp": "『仲間』コマンドを使ってみな!{end}", "en": "Try using the 'Party' command!{end}"},
 {"id": "CF1FFC", "jp": "何?、水晶を探してるじゃと?{c0C}うーん…たしか、タルティウムに{nl}水晶のコレクターが{nl}おったハズじゃ。{c0C}一度そこへ行ってみたら{nl}どうじゃな?{end}", "en": "What? Lookin' for a crystal, ye{nl}say?{c0C}Hmm... I believe there's a crystal{nl}collector over in Tartium.{c0C}Why not go there and have a look?{end}"},
 {"id": "CF204A", "jp": "あのエライ占い師は{nl}どこへ行ったのかのう…。{end}", "en": "Where'd that great fortune-teller{nl}go, I wonder...{end}"},
 {"id": "CF2064", "jp": "今、この町にエライ占い師が{nl}来とるんじゃ。よく当たるって{nl}評判じゃぞい。{c0C}ただし、とても高いそうじゃが…。{end}", "en": "There's a great fortune-teller in{nl}town right now. They say she's spot{nl}on.{c0C}Mind ye, I hear she's mighty{nl}pricey...{end}"},
