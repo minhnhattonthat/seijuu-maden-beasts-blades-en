@@ -24,14 +24,17 @@ def test_menu_entries_show_their_english():
                 o = (a & 0x3FFFFF) + e * 24
                 orig = [ORIG[o + i * 2] | ORIG[o + i * 2 + 1] << 8 for i in range(12)]
                 new = [writes[o][i * 2] | writes[o][i * 2 + 1] << 8 for i in range(12)]
-                px = gfxtext.draw(words[gfxtext.key(orig)], g)
+                s = words[gfxtext.key(orig)]
+                n += 1
+                if s in gfxtext.PINNED.get(off, {}):  # filled by the action-word DMA (test_action_words_...)
+                    continue
+                px = gfxtext.draw(s, g)
                 for i, x in enumerate(new):
                     cy, cx = divmod(i, 6)
                     want = gfxtext.tile(px, cx, cy)
                     got = gfx[off][(x & 0xFF) * 16:(x & 0xFF) * 16 + 16] if x != gfxtext.BLANK else want
                     assert x == gfxtext.BLANK or x & 0xFF00 == 0x2100, f"{a:06X}: {x:04X}"
                     assert got == want, f"{a:06X} entry {e} cell {i}"
-                n += 1
     assert n == 86
 
 
@@ -74,3 +77,20 @@ def test_poem_fits_and_keeps_its_rows():
     assert len(new) == len(old)
     assert new[:2 * 32 * 2] == old[:2 * 32 * 2] and new[18 * 32 * 2:] == old[18 * 32 * 2:]
     assert (new[3 * 64 + 32] | new[3 * 64 + 33] << 8) & 0x3FF  # line 0 has text mid-row
+
+
+def test_action_words_keep_each_units_word():
+    """The rewritten table sends every unit to the 12 tiles holding its own word's English; Focus stays pinned."""
+    gfx = build.unpack_gfx(ORIG)
+    size = len(gfx[gfxtext.ACT_LZ])
+    [(at, table)] = gfxtext.actions(ORIG, gfx)
+    assert len(gfx[gfxtext.ACT_LZ]) == size
+    g, raw = gfxtext.glyphs(), gfx[gfxtext.ACT_LZ]
+    for old, new in zip(ORIG[at:at + 22], table):
+        s = gfxtext.ACTIONS[old]
+        if s:
+            px = gfxtext.draw(s, g)
+            assert raw[new * 16:(new + 12) * 16] == b"".join(gfxtext.tile(px, cx, cy) for cy in (0, 1) for cx in range(6))
+    writes = dict(gfxtext.menus(ORIG, gfx))
+    focus = [w for w in writes.values() if w[:2] == bytes([0x56, 0x21])]
+    assert focus and all(w == b"".join((0x2100 | 0x56 + k).to_bytes(2, "little") for k in range(12)) for w in focus)

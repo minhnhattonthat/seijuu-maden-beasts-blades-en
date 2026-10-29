@@ -128,6 +128,14 @@ def title(gfx, font8, table):
     gfx[LOGO_CHR] = bytes(raw)
 
 
+INTRO_SUBS = 0x07AF0D  # G3: the intro crawl's Japanese subtitles (2bpp, nothing else in the block); D12: dropped
+
+
+def intro(gfx):
+    """Blank the intro subtitles: the English verse above each one already says it."""
+    gfx[INTRO_SUBS] = bytes(len(gfx[INTRO_SUBS]))
+
+
 def poem(gfx, font8, table):
     """Draw POEM into the poem's tile block and map (gfx edited in place). font8: the built 8x8 menu font."""
     def glyph(ch):
@@ -260,6 +268,43 @@ def key(ws):
     return " ".join("--" if x == BLANK else f"{x & 0xFF:02X}" for x in ws[:6])
 
 
+# Entries pinned to the tiles they had: on a unit's turn C55DA0 DMAs its action word (ACTIONS) over 集中's cells
+# (12 tiles to BG3 $156 = block tiles 56-5B over 5C-61), so that slot keeps them and no other word may use them. They lie past the block's 86 tiles: only that DMA fills them.
+PINNED = {0x12A94E: {"Focus": 0x56}}
+
+# G8: per-unit battle action words (LZ D2AD77, unpacked to $7F31AB; 2bpp, one word = 6 top tiles then 6 bottom),
+# picked by the byte table ACT_TABLE (22 = 11 units x 2 forms) -> first tile. {original first tile: English};
+# None keeps the art (???). Re-packed in this order: SHARED words overlap the next by one blank tile, so 18 words
+# still fit the block's 214 tiles.
+ACT_LZ, ACT_TABLE = 0x12AD77, 0x055E05
+ACTIONS = {0x00: "Pray", 0xA6: "Rush", 0x46: "Snap", 0x0B: "Focus", 0x16: "Meditate", 0x22: "Endure",
+           0x2E: "Insight", 0x3A: "Charge", 0x52: "Gale Cut", 0x5E: "Oracle", 0x6A: "Holy Wind", 0x76: "Gust Blade",
+           0x82: "Bolt Cut", 0x8E: "Glare", 0x9A: "Fire Arrow", 0xB2: None, 0xBE: "Assault", 0xCA: "Cry"}
+SHARED = 2  # the first two words end on a blank tile that starts the next
+
+
+def actions(rom, gfx):
+    """Redraw the action words (gfx edited in place); returns the table write [(offset, bytes)]."""
+    g, old = glyphs(), gfx[ACT_LZ]
+    blank = tile([[2 if (x + y) % 2 else 0 for x in range(8)] for y in range(8)], 0, 0)
+    raw, new, at = bytearray(len(old)), {}, 0
+    for i, (o, s) in enumerate(ACTIONS.items()):
+        if s is None:
+            ts = [old[(o + k) * 16:(o + k + 1) * 16] for k in range(12)]
+        else:
+            px = draw(s, g)
+            ts = [tile(px, cx, cy) for cy in (0, 1) for cx in range(6)]
+        if i and i <= SHARED:
+            assert ts[0] == blank and raw[at * 16:at * 16 + 16] == blank, f"action {s!r}: shared tile not blank"
+        new[o] = at
+        for k, t in enumerate(ts):
+            raw[(at + k) * 16:(at + k + 1) * 16] = t
+        at += 11 if i < SHARED else 12
+    assert at * 16 <= len(old), f"action words: {at} tiles, block has {len(old) // 16}"
+    gfx[ACT_LZ] = bytes(raw)
+    return [(ACT_TABLE, bytes(new[b] for b in rom[ACT_TABLE:ACT_TABLE + 22]))]
+
+
 def menus(rom, gfx):
     """Redraw each menu block in gfx (decompressed, edited in place); returns the record writes [(offset, bytes)]."""
     g, writes = glyphs(), []
@@ -276,16 +321,22 @@ def menus(rom, gfx):
                 if key(ws) not in words:
                     raise SystemExit(f"gfxtext: {a:06X} entry {e} ({key(ws)}) has no English")
                 ents.append((o + e * 24, ws))
-        used = sorted({x & 0xFF for _, ws in ents for x in ws if x != BLANK and x & 0xFF < n})
-        spare = [i for i in range(n) if i not in used and raw[i * 16:i * 16 + 16] in (blank, bytes(16))]
+        pins = PINNED.get(off, {})
+        fixed = {p + k for p in pins.values() for k in range(12)}
+        used = sorted({x & 0xFF for _, ws in ents for x in ws if x != BLANK and x & 0xFF < n} - fixed)
+        spare = [i for i in range(n) if i not in used and i not in fixed and raw[i * 16:i * 16 + 16] in (blank, bytes(16))]
         pool = used + spare  # the block's empty tiles only once the words' own tiles run out
         free, made = iter(pool), {}
         for o, ws in ents:
-            px, hi = draw(words[key(ws)], g), next(x for x in ws if x != BLANK) & 0xFC00
+            s = words[key(ws)]
+            px, hi = draw(s, g), next(x for x in ws if x != BLANK) & 0xFC00
             out = []
             for cy in (0, 1):
                 for cx in range(6):
                     t = tile(px, cx, cy)
+                    if s in pins:  # every cell, blank or not: the DMA'd word may ink any of them
+                        out.append(hi | 0x100 | pins[s] + cy * 6 + cx)
+                        continue
                     if t == blank:
                         out.append(BLANK)
                         continue
