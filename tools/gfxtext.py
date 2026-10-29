@@ -43,12 +43,19 @@ MENUS = {
 PLAIN = {
     0x0D3838: [  # status-screen tile set (BG1 at VRAM 0): command list, exchange and party words
         (0xA0, 6, "Dismiss"), (0xA6, 4, "Trade"), (0xAA, 4, "Party"), (0xC0, 6, "Formation"), (0xC6, 6, "Status"),
-        (0xCC, 4, "Equip"), (0xE0, 6, "Items"), (0xE6, 4, "Party"), (0xEA, 4, "Assign")],
+        (0xCC, 4, "Equip"), (0xE0, 6, "Items"), (0xE6, 4, "Party"), (0xEA, 4, "Assign"),
+        # 第N聖獣王 header: 46, the digit pair, 47-49. shortcut: "Holy Beast King No. N" won't fit 48 px (D4 flag)
+        (0x46, 1, "№"), (0x47, 3, "King")],
     0x0D4381: [(0x01, 4, "Drop"), (0x06, 4, "Use"), (0x20, 6, "Key Items")],  # item screen commands (VRAM $100+)
 }
 # Bottom halves drawn alone: the item screen's header puts CD3838 E0-E5 ("Items" top) over CD4381 0A-0F, whose
 # row 7 is the header's rule line (kept where the ink isn't).
 HALF = {0x0D4381: [(0x0A, 6, "Items")]}
+# 第N聖獣王: each army-number pair (1-11) carries 第's tail at the left of its left tile and 聖's head in its right
+# tile; beside the narrow "1" (tiles 20/21, bottoms 30/31) they stand alone. (ref tile, columns, tiles): those
+# pixels are cleared from every pair, top and bottom.
+DIGITS = {0x0D3838: [(0x21, 8, [0x21, 0x23, 0x25, 0x27, 0x29, 0x2B, 0x2D, 0x2F, 0x41, 0x43, 0x45]),
+                     (0x20, 3, [0x20, 0x22, 0x24, 0x26, 0x28, 0x2A, 0x2C, 0x2E, 0x40, 0x42, 0x44])]}
 
 
 def glyphs():
@@ -89,11 +96,25 @@ def tile4(px, cx, cy):
     return bytes(b for y in range(8) for b in (pl[0][y], pl[1][y])) + bytes(b for y in range(8) for b in (pl[2][y], pl[3][y]))
 
 
+def untile4(raw, t):
+    """8x8 colour indices of 4bpp tile t."""
+    b = raw[t * 32:t * 32 + 32]
+    return [[sum((b[y * 2 + p % 2 + p // 2 * 16] >> (7 - x) & 1) << p for p in range(4)) for x in range(8)]
+            for y in range(8)]
+
+
 def plain(gfx):
     """Draw the PLAIN words into their blocks (in place)."""
     g = glyphs()
     for off, words in PLAIN.items():
         raw = bytearray(gfx[off])
+        for ref, cols, ts in DIGITS.get(off, []):
+            for dy in (0, 16):
+                piece = [r[:cols] + [0] * (8 - cols) for r in untile4(raw, ref + dy)]
+                for t in ts:
+                    px = untile4(raw, t + dy)
+                    px = [[0 if p and p == q else q for p, q in zip(pr, qr)] for pr, qr in zip(piece, px)]
+                    raw[(t + dy) * 32:(t + dy) * 32 + 32] = tile4(px, 0, 0)
         for t, w, s in words:
             px = draw(s, g, w * 8, plain=True)
             for cy in (0, 1):

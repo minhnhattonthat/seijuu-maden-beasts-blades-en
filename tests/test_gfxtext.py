@@ -43,6 +43,7 @@ def test_plain_words_fit_and_stay_in_place():
     for off, words in gfxtext.PLAIN.items():
         mine = {t + cy * 16 + cx for t, w, _ in words for cy in (0, 1) for cx in range(w)}
         mine |= {t + cx for t, w, _ in gfxtext.HALF.get(off, []) for cx in range(w)}
+        mine |= {t + dy for _, _, ts in gfxtext.DIGITS.get(off, []) for t in ts for dy in (0, 16)}
         for i in range(len(old[off]) // 32):
             if i not in mine:
                 assert gfx[off][i * 32:i * 32 + 32] == old[off][i * 32:i * 32 + 32], f"{off:06X} tile {i:02X}"
