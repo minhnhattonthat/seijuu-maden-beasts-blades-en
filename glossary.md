@@ -323,13 +323,14 @@ thou/thee ("thou ... forsooth" in b089, ", verily" in b094: unify in polish).
 
 Formations (labels split over two lines, so not linted): フォーメーション Formation; チャリオット Chariot, スクウェア Square,
 ドラゴン Dragon, ハーフムーン Half Moon, ナイトフォース Knight Force, アタックフォース Attack Force, ダイヤモンド Diamond,
-グリフォン Griffon.
+グリフォン Griffin (same spelling as the beast).
 
 ## Buildings and town menus
 | JP | EN | max | notes | Avoid |
 |---|---|---|---|---|
 | さかば / かじや / どうぐや / きょうかい | Tavern / Smithy / Items / Church | 8 | town building list | |
-| ビーストいちば / とうぎじょう / やどや | Beast Market / Arena / Inn | 8 | 酒場/鍛冶屋/道具屋/教会/闘技場/宿屋 in dialogue: tavern, smithy, item shop, church, arena, inn | |
+| ビーストいちば / とうぎじょう / やどや | Beasts / Arena / Inn | 8 | town-menu labels; "Beasts" is the label only (Beast Market didn't fit). 酒場/鍛冶屋/道具屋/教会/闘技場/宿屋 in dialogue: tavern, smithy, item shop, church, arena, inn | |
+| ビースト市場 | Beast Market | | the place's full name in dialogue | |
 | しゅうかいじょう / ひろば / みんか / しゅじんこうんち / しろ / ごうてい | Hall / Plaza / House / Home / Castle / Mansion | 8 | | |
 | 酒場 / 鍛冶屋 / 道具屋 / 教会 / 宿屋 | tavern / smith / shop / church / inn | | lint terms for dialogue | |
 

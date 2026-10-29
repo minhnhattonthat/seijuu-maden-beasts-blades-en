@@ -14,5 +14,5 @@ E77952 rewritten; laughs, statue it/them and W.M. label mirror the JP.
 - Story identities to confirm on a full playthrough: Erinshe (E54F70-E550D0 vs E55BA6..); ジャン vs Landenbaum Jean
   vs Old Man Junk (E70B23..); E48B93 speaker label (JP says プラナ); E760AC お姉様 to Hila; C1733E speaker;
   E43260 speakerless; E651E0 悪の華; E6A5CA/E7A94F/E7AA60 hints; CF3DD9-CF3EF3 compliment variants
-- 至高神様 as "O Supreme God" in the endings; Zukan pun lost (C15928)
+- 至高神様 as "O Supreme God" in the endings (Zukan pun done 2026-10-29: "the walking beast encyclopedia")
 - Wave-1 review minors: `work/tl/b031/b037/b038/b039.review.md` (gitignored; summarised in git log aa5a84f)

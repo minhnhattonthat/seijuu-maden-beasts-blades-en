@@ -5,9 +5,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
-steps = [[sys.executable, "-X", "utf8", "-m", "pytest", "-q", "-p", "no:cacheprovider", str(ROOT / "tests")]]
-if (ROOT / "tools" / "lint.py").exists():
-    steps.append([sys.executable, "-X", "utf8", str(ROOT / "tools" / "lint.py")])
+steps = [[sys.executable, "-X", "utf8", "-m", "pytest", "-q", "-p", "no:cacheprovider", str(ROOT / "tests")],
+         [sys.executable, "-X", "utf8", str(ROOT / "tools" / "lint.py")]]
 
 for cmd in steps:
     r = subprocess.run(cmd, cwd=ROOT)

@@ -11,6 +11,15 @@ Updated at the end of every session. Keep it to what the next session needs; his
   Post-release polish (optional): shop_sell "Healing Arrow" touches the next entry's gem icon (0 px gap); open
   in-game checks below (action entry, G9/G10 unseen variants, G7 Trade/Assign, world-map arrival message), story
   questions in `docs/tl-followups.md`.
+- **Phase 6 review fixes (2026-10-29, codex review `.harness/reviews/...-phase6.md`):** (1) Griffon -> Griffin
+  everywhere (formation C2C970 + 7 dialogue lines; glossary formation note). (2) Honorifics restored (D1): Pal-chan,
+  Jimmy-chan x5, Tron-kun, Ekers-san x2, Hannes-san, Charon-sama x2, Alba-chan x5, Mutsujiro-san; lines rewrapped.
+  (3) New `tools/lint.py` (read-only lint of `script/*.json`: en.tbl, code multiset, glossary + Avoid, ordinals,
+  honorifics on katakana glossary names, dialogue 35 cells), run unconditionally by `check.py`, `tests/test_lint.py`;
+  the honorific rule is shared with `batches.py check` (`batches.honorifics`), whose term match now reads " / " as a
+  space. Lint failed with 26 errors on the old script, 0 now; all 150 batches check OK (out.tsv synced from script).
+  Minors: Zukan pun adapted (C15928 "the walking beast encyclopedia"); glossary splits ビーストいちば "Beasts" (label)
+  from ビースト市場 "Beast Market" (dialogue). Release v1.0 zip below predates these fixes: rebuilt as v1.0 after.
 - **Phase 6 (2026-10-27):** `tools/batches.py` split/check/merge/fit (`tests/test_batches.py`): batches `work/tl/bNNN.tsv` (gitignored; merged English lives in `script/*.json`), per-file form/limit table `FORMS` (dlg 35/line word-wrapped by merge with quote indent, narration 40, names 8/10, menus 8 or the JP's own width), glossary lint (katakana/kanji whole-run), code multiset. `glossary.md` seeded (characters, places, story terms; my romanisations, no web source exists), `docs/synopsis.md` (from prologue/intro/endings + term pass), `docs/style-reference.md`, `docs/translator-brief.md`. Pilot b001-b003 (prologue, intro, ice-cave/Rundstedt scene) merged, checked in-game (`--qa E7792E=` box: name line + quote + indent ok). Untranslated JP shows garbled in the EN build (kana codes hold lowercase): expected until translated. **Wave 1 done:** b004-b039 (every non-event file) translated and merged, except b020 (buildings) and C0BAF7 (world-map info box), both held back (below). Build ok (3121 writes), smoke ok, shop/world map/status shots ok (`work/qa/wave1z.png`, `work/qa/warp/status_items/final.png`).
   - Check rules changed: over-limit **names/menus are `LONG` warnings, not errors** (D4: full names; 455 LONG lines now, list with `batches.py check b004 ...`); `{c0B}` (shop text) counts as a line break.
   - `locations` is now a SEQ run (`extract.SEQ`, packed as stubs): nothing points at a location name, and 21 short slots couldn't hold English. **Not checked in-game yet:** world-map arrival message `{icall:1D947E}に着きました` should show the English name.

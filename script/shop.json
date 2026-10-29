@@ -117,7 +117,7 @@
 {"id": "C158C6", "jp": "{clear}滞在料金は{num:C09CA17E}Gになります。{c0B}よろしいですか?{c0B}{end}", "en": "{clear}The charge for your stay is {num:C09CA17E}G.{c0B}Is that all right?{c0B}{end}"},
 {"id": "C158E7", "jp": "{clear}ありがとうございます。{c0B}それでは、奥の部屋をご利用下さい。{end}", "en": "{clear}Thank you very much.{c0B}Please use the room in the back.{end}"},
 {"id": "C1590C", "jp": "{clear}おつれさまがお待ちです。{c0B}どうぞ奥の部屋へ。{end}", "en": "{clear}Your companion is waiting.{c0B}Please, go on to the back room.{end}"},
-{"id": "C15928", "jp": "わしは、この世のビーストのことなら{c0B}何でも知っているズーカンじゃ{wait}{end}", "en": "Ah, I am Zukan! I know everything{c0B}about every beast in this world!{wait}{end}"},
+{"id": "C15928", "jp": "わしは、この世のビーストのことなら{c0B}何でも知っているズーカンじゃ{wait}{end}", "en": "I'm Zukan, the walking beast{c0B}encyclopedia! I know them all!{wait}{end}"},
 {"id": "C1594D", "jp": "{clear}ビーストのことを聞きたいか?{c0B}{end}", "en": "{clear}Do you wish to hear about beasts?{c0B}{end}"},
 {"id": "C1595F", "jp": "{clear}どのビーストについて知りたいんじゃ?{c0B}{end}", "en": "{clear}Which beast shall I tell you of?{c0B}{end}"},
 {"id": "C15975", "jp": "{clear}ビーストがおらんではないか!{c0B}{wait}{end}", "en": "{clear}Why, you have no beasts!{c0B}{wait}{end}"},

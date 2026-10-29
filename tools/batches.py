@@ -174,6 +174,28 @@ def term_in(term, jp):
     return False
 
 
+SUFFIX = {"ちゃん": "chan", "くん": "kun", "さん": "san", "さま": "sama", "様": "sama", "どの": "dono", "殿": "dono"}
+# 殿下 is "Your Highness" (glossary), 様さま/様様 the "hooray for X" idiom: not honorifics on the name
+HONOR = re.compile("(ちゃん|くん|さん|さま|様(?!さま|様)|どの|殿(?!下))")
+
+
+def names(terms):
+    """[(jp, en)] glossary rows that are katakana names (a suffix after one is an honorific)."""
+    return [(j, t) for j, t, _ in terms if j and all(kind(c) == "k" for c in j) and t[:1].isupper()]
+
+
+def honorifics(jp, en, names):
+    """Messages for each name+suffix in the JP whose English lacks Name-suffix (D1: honorifics kept)."""
+    text = re.sub(r"\s+", " ", re.sub(r"\{(nl|c0C|c0B|clear)\}", " ", en)).lower()
+    out = []
+    for j, t in names:
+        for m in () if j not in jp else re.finditer(re.escape(j) + HONOR.pattern, jp):
+            want = f"{t}-{SUFFIX[m.group(1)]}"
+            if not (m.start() and kind(jp[m.start() - 1]) == "k") and want.lower() not in text:  # glued: another name
+                out.append(f"honorific: {j}{m.group(1)} -> {want}")
+    return out
+
+
 def split(files, chars):
     TL.mkdir(parents=True, exist_ok=True)
     BUILD.mkdir(exist_ok=True)
@@ -279,11 +301,13 @@ def check(b, idx=None, en_tbl=None, terms=None):
         if re.search(r"(\{(var|icall|num)[^}]*\})(st|nd|rd|th)\b", en):
             errs.append((i, "ordinal suffix glued to a variable"))
         for j, t, avoid in terms:
-            if term_in(j, jp) and t.lower() not in en.lower():  # "The Supreme God" at a sentence start is fine
+            # case-folded: "The Supreme God" at a sentence start is fine; a forced break " / " reads as a space
+            if term_in(j, jp) and t.lower() not in re.sub(r"\s*/\s*|\s+", " ", en).lower():
                 errs.append((i, f"glossary: {j} -> {t}"))
             for a in avoid:
                 if re.search(rf"\b{re.escape(a)}\b", en):
                     errs.append((i, f"glossary avoid: {a} (use {t})"))
+        errs += [(i, m) for m in honorifics(jp, en, names(terms))]
     return errs, warns
 
 
