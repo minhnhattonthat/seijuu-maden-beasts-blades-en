@@ -35,6 +35,18 @@ def test_menu_entries_show_their_english():
     assert n == 86
 
 
+def test_plain_words_fit_and_stay_in_place():
+    """Every PLAIN word fits its tiles; tiles outside the words keep their pixels."""
+    gfx = build.unpack_gfx(ORIG)
+    old = dict(gfx)
+    gfxtext.plain(gfx)
+    for off, words in gfxtext.PLAIN.items():
+        mine = {t + cy * 16 + cx for t, w, _ in words for cy in (0, 1) for cx in range(w)}
+        for i in range(len(old[off]) // 32):
+            if i not in mine:
+                assert gfx[off][i * 32:i * 32 + 32] == old[off][i * 32:i * 32 + 32], f"{off:06X} tile {i:02X}"
+
+
 def test_untouched_tiles_stay():
     """Tiles no record entry used (the battle HP gauge art, unused words) keep their original pixels."""
     gfx = build.unpack_gfx(ORIG)

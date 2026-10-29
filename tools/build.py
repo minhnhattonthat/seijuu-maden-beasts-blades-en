@@ -394,6 +394,7 @@ def build(orig, mark=False, qa=()):
     gfx[STATUS_MAP] = status_map(Table.load(ROOT / "tbl" / "en.tbl"), gfx[STATUS_MAP])
     gfx[PARTY_MAP] = status_map(Table.load(ROOT / "tbl" / "en.tbl"), gfx[PARTY_MAP], party=True)
     maps = gfxtext.menus(orig, gfx)
+    gfxtext.plain(gfx)
     if mark:
         skip = {o for n, es in extract.units(orig).items() if n in NO_MARKER for o, *_ in es}
         t = Table.load(ROOT / "tbl" / "jp.tbl")

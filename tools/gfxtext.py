@@ -38,6 +38,15 @@ MENUS = {
 }
 
 
+# Plain words drawn in place (no records to rewrite): 4bpp LZ block -> [(top-left tile, width in tiles, English)];
+# a word is tiles t..t+w-1 over t+16..t+16+w-1. Ink colour 1 on 0, no outline.
+PLAIN = {
+    0x0D3838: [  # status-screen tile set (BG1 at VRAM 0): command list, exchange and party words
+        (0xA0, 6, "Dismiss"), (0xA6, 4, "Trade"), (0xAA, 4, "Party"), (0xC0, 6, "Formation"), (0xC6, 6, "Status"),
+        (0xCC, 4, "Equip"), (0xE0, 6, "Items"), (0xE6, 4, "Party"), (0xEA, 4, "Assign")],
+}
+
+
 def glyphs():
     """{char: (top row, [row strings])}"""
     out = {}
@@ -51,20 +60,43 @@ def glyphs():
     return out
 
 
-def draw(s, g):
-    """16 x 48 colour indices: s centred, fill 1, outline 3, the window's 0/2 checker behind."""
+def draw(s, g, w=W, plain=False):
+    """16 x w colour indices: s centred, fill 1, outline 3, the window's 0/2 checker behind (plain: ink 1 on 0)."""
     ink, x = set(), 0
     for ch in s:
         top, rows = g[ch]
         for r, row in enumerate(rows):
             ink |= {(x + c, top + DY + r) for c, p in enumerate(row) if p == "#"}
         x += len(rows[0]) + 1
-    x0 = (W - (x - 1)) // 2
-    assert x0 >= 1, f"{s!r}: {x - 1} px, wider than {W - 2}"
-    ink = {(px + x0, py) for px, py in ink}
+    x0 = (w - (x - 1)) // 2
+    assert x0 >= (0 if plain else 1), f"{s!r}: {x - 1} px, wider than {w - (0 if plain else 2)}"
+    ink = {(px + x0, py - (DY if plain else 0)) for px, py in ink}
+    if plain:
+        return [[1 if (x, y) in ink else 0 for x in range(w)] for y in range(H)]
     edge = {(px + dx, py + dy) for px, py in ink for dx in (-1, 0, 1) for dy in (-1, 0, 1)} - ink
-    return [[1 if (x, y) in ink else 3 if (x, y) in edge else 2 if (x + y) % 2 else 0 for x in range(W)]
+    return [[1 if (x, y) in ink else 3 if (x, y) in edge else 2 if (x + y) % 2 else 0 for x in range(w)]
             for y in range(H)]
+
+
+def tile4(px, cx, cy):
+    """The 4bpp SNES tile at cell (cx, cy) of a drawn row (planes 0/1 then 2/3)."""
+    rows = [px[cy * 8 + y][cx * 8:cx * 8 + 8] for y in range(8)]
+    pl = [[sum((v >> p & 1) << (7 - i) for i, v in enumerate(r)) for r in rows] for p in range(4)]
+    return bytes(b for y in range(8) for b in (pl[0][y], pl[1][y])) + bytes(b for y in range(8) for b in (pl[2][y], pl[3][y]))
+
+
+def plain(gfx):
+    """Draw the PLAIN words into their blocks (in place)."""
+    g = glyphs()
+    for off, words in PLAIN.items():
+        raw = bytearray(gfx[off])
+        for t, w, s in words:
+            px = draw(s, g, w * 8, plain=True)
+            for cy in (0, 1):
+                for cx in range(w):
+                    o = (t + cy * 16 + cx) * 32
+                    raw[o:o + 32] = tile4(px, cx, cy)
+        gfx[off] = bytes(raw)
 
 
 def tile(px, cx, cy):
