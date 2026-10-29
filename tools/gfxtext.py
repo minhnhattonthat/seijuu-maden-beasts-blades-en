@@ -78,10 +78,11 @@ def glyph8(font8, table, ch):
 
 # G2 title copyright (LZ C7C10D, 4bpp): one 8 px line in tiles 40-4F, ©BPS/ORG/ kept, メディアワークス from x 66 (the / ends at 63).
 TITLE_CHR, TITLE_TILE, TITLE_X, TITLE_INK = 0x07C10D, 0x40, 66, 0xF
+LOGO_CHR = 0x075BE9
 
 
 def title(gfx, font8, table):
-    """Redraw メディアワークス as MediaWorks on the title screen (gfx edited in place)."""
+    """Redraw メディアワークス as MediaWorks and drop the logo's katakana (gfx edited in place)."""
     raw = bytearray(gfx[TITLE_CHR])
     px = [sum((untile4(raw, TITLE_TILE + cx)[y] for cx in range(16)), []) for y in range(8)]
     for row in px:
@@ -98,6 +99,15 @@ def title(gfx, font8, table):
     for cx in range(16):
         raw[(TITLE_TILE + cx) * 32:(TITLE_TILE + cx + 1) * 32] = tile4(px, cx, 0)
     gfx[TITLE_CHR] = bytes(raw)
+    # G1 logo (LZ C75BE9, 4bpp): drop the ビースト&ブレイド reading (D5); its ink is colours C/D, in tiles 374-37B
+    # and the top row of 384-38A, where the BLADES art uses neither
+    raw = bytearray(gfx[LOGO_CHR])
+    for t in [*range(0x374, 0x37C), *range(0x384, 0x38B)]:
+        px = untile4(raw, t)
+        for y in range(8 if t < 0x380 else 1):
+            px[y] = [0 if v in (0xC, 0xD) else v for v in px[y]]
+        raw[t * 32:t * 32 + 32] = tile4(px, 0, 0)
+    gfx[LOGO_CHR] = bytes(raw)
 
 
 def poem(gfx, font8, table):
