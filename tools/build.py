@@ -396,6 +396,7 @@ def build(orig, mark=False, qa=()):
     maps = gfxtext.menus(orig, gfx)
     gfxtext.plain(gfx)
     gfxtext.poem(gfx, gfx[MENU_FONT], Table.load(ROOT / "tbl" / "en.tbl"))
+    gfxtext.title(gfx, gfx[MENU_FONT], Table.load(ROOT / "tbl" / "en.tbl"))
     if mark:
         skip = {o for n, es in extract.units(orig).items() if n in NO_MARKER for o, *_ in es}
         t = Table.load(ROOT / "tbl" / "jp.tbl")

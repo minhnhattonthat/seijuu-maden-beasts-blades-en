@@ -67,14 +67,43 @@ POEM = ["When eleven holy beasts gather,", "the path of Light is shown;", "when 
         "That is the hour of judgment.", "Beware the hour of great change."]
 
 
+def glyph8(font8, table, ch):
+    """8 rows of ch from the 8x8 menu font: columns of colour-3 ink, trimmed; a space is 2 blank columns."""
+    t = (table.encode(ch)[0] - 0x10) * 16
+    rows = [[(font8[t + y * 2] >> (7 - x) & 1) | (font8[t + y * 2 + 1] >> (7 - x) & 1) << 1 for x in range(8)]
+            for y in range(8)]
+    cols = [x for x in range(8) if any(r[x] == 3 for r in rows)]
+    return [[3 if r[x] == 3 else 0 for x in range(cols[0], cols[-1] + 1)] for r in rows] if cols else [[0, 0]] * 8
+
+
+# G2 title copyright (LZ C7C10D, 4bpp): one 8 px line in tiles 40-4F, ©BPS/ORG/ kept, メディアワークス from x 66 (the / ends at 63).
+TITLE_CHR, TITLE_TILE, TITLE_X, TITLE_INK = 0x07C10D, 0x40, 66, 0xF
+
+
+def title(gfx, font8, table):
+    """Redraw メディアワークス as MediaWorks on the title screen (gfx edited in place)."""
+    raw = bytearray(gfx[TITLE_CHR])
+    px = [sum((untile4(raw, TITLE_TILE + cx)[y] for cx in range(16)), []) for y in range(8)]
+    for row in px:
+        row[TITLE_X - 1:] = [0] * (128 - TITLE_X + 1)
+    x = TITLE_X
+    for ch in "MediaWorks":
+        g = glyph8(font8, table, ch)
+        assert x + len(g[0]) <= 128, "title: MediaWorks too wide"
+        for y in range(8):
+            for c, v in enumerate(g[y]):
+                if v:
+                    px[y][x + c] = TITLE_INK
+        x += len(g[0]) + 1
+    for cx in range(16):
+        raw[(TITLE_TILE + cx) * 32:(TITLE_TILE + cx + 1) * 32] = tile4(px, cx, 0)
+    gfx[TITLE_CHR] = bytes(raw)
+
+
 def poem(gfx, font8, table):
     """Draw POEM into the poem's tile block and map (gfx edited in place). font8: the built 8x8 menu font."""
-    def glyph(ch):  # columns of colour-3 ink, trimmed; a space is 2 blank columns
-        t = (table.encode(ch)[0] - 0x10) * 16
-        rows = [[(font8[t + y * 2] >> (7 - x) & 1) | (font8[t + y * 2 + 1] >> (7 - x) & 1) << 1 for x in range(8)]
-                for y in range(8)]
-        cols = [x for x in range(8) if any(r[x] == 3 for r in rows)]
-        return [[3 if r[x] == 3 else 0 for x in range(cols[0], cols[-1] + 1)] for r in rows] if cols else [[0, 0]] * 8
+    def glyph(ch):
+        return glyph8(font8, table, ch)
 
     old = gfx[POEM_MAP]
     m = [old[i] | old[i + 1] << 8 for i in range(0, len(old), 2)]
