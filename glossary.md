@@ -585,12 +585,12 @@ after renaming one in `script/`; hand rows above win over these.
 | チェインメイル | Chain Mail | | | |
 | スケイルメイル | Scale Mail | | | |
 | モーモーつなぎ | Moo-Moo Suit | | | |
-| かわのむねあて | Leather Breastplate | | | |
+| かわのむねあて | Leather Cuirass | | | was Leather Breastplate (2026-10-29: sell list wraps a name's second word into 9 cells) |
 | ミスリルよろい | Mithril Armor | | | |
 | プレートコート | Plate Coat | | | |
 | おおよろい | Great Armor | | | |
 | ブレストメイル | Breast Mail | | | |
-| てつのむねあて | Iron Breastplate | | | |
+| てつのむねあて | Iron Cuirass | | | was Iron Breastplate |
 | プレートメイル | Plate Mail | | | |
 | ガウスアーマ | Gauss Armor | | | |
 | はがねのよろい | Steel Armor | | | |

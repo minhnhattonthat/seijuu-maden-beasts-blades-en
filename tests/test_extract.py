@@ -47,6 +47,21 @@ def test_script_files_match_rom():
     assert got == want
 
 
+def test_choice_page_fits():
+    """A {choice} page (question lines + options) fits the 3-line box, else Yes/No lands alone on the next page."""
+    def lines(s):
+        head, _, opts = s.partition("{choice")
+        page = re.split(r"\{c0C\}|\{clear\}", head)[-1]
+        q = [x for x in re.split(r"\{nl\}|\{c0B\}", page) if re.sub(r"\{[^}]*\}", "", x).strip()]
+        return len(q) + len(opts.split("}", 1)[1].replace("{end}", "").split("{nl}"))
+    bad = []
+    for f in (ROOT / "script").glob("*.json"):
+        for r in json.loads(f.read_text(encoding="utf-8")):
+            if "{choice" in r.get("en", "") and lines(r["en"]) > max(3, lines(r["jp"])):
+                bad.append(r["id"])
+    assert bad == []
+
+
 def test_no_japanese_left_in_script():
     """Every unit with Japanese has English, and no English holds Japanese (name_grid: layout only, unused)."""
     jp = re.compile(r"[぀-ヿ一-鿿]")

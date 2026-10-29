@@ -6,6 +6,9 @@
 local BEAST = { 0x03, 0x00, 0x00, 0x0A, 0x01, 0xEE, 0xD7, 0xB4, 0xB6, 0x00, 0x00, 0x00, 0x00, 0x00, 0x07, 0x7F,
                 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x0C, 0x00, 0x22, 0x22, 0x08, 0x05, 0x09, 0x01, 0x02, 0x10,
                 0x07, 0x15, 0x15, 0x2E, 0x63, 0x57, 0x00, 0x13, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0xFF }
+-- the same with an English-build name: a {call} to the Platinum Dragon name field (C6705F), the longest beast name
+local BEAST_EN = { table.unpack(BEAST) }
+for i, b in ipairs({ 0x0F, 0xFF, 0x5F, 0x70, 0xC6, 0x00, 0x00, 0x00, 0x00 }) do BEAST_EN[5 + i] = b end
 SCENES = {
   -- boot path (route only)
   intro = { boot_only = true, boot = "1400 -", settle = 30, frames = 1500 },
@@ -24,11 +27,24 @@ SCENES = {
   shop_60 = { scn = 1, map = 0, ev = 12, after = "500 -;6 a;200 -", frames = 8000 },
   -- weapon shop: buy list (C6 name fields in the 8x8 font)
   shop_buy = { scn = 1, map = 0, ev = 12, after = "500 -;6 a;200 -;6 a;200 -", frames = 8200 },
+  -- the same shop's Sell and Upgrade lists, with weapons/armor/items poked into the hero's bag ($62B0, see status_items)
+  shop_sell = { scn = 1, map = 0, ev = 12, bytes = { [0x7E62B0] = {
+                  0x00, 0x2A, 0x01, 0x00, 0x09, 0x01, 0x01, 0x0B, 0x01, 0x01, 0x00, 0x01, 0x03, 0x0B, 0x01, 0x04, 0x03, 0x01,
+                  0x00, 0x12, 0x01, 0xFF } },
+                after = "500 -;6 a;200 -;6 down;40 -;6 a;200 -;6 a;200 -", frames = 8300 },
+  shop_upgrade = { scn = 1, map = 0, ev = 12, bytes = { [0x7E62B0] = {
+                  0x00, 0x2A, 0x01, 0x00, 0x09, 0x01, 0x00, 0x12, 0x01, 0x00, 0x30, 0x01, 0xFF } },
+                after = "500 -;6 a;200 -;6 down;40 -;6 down;40 -;6 a;200 -;6 a;200 -", frames = 8400 },
   shop_62 = { scn = 1, map = 0, ev = 9, after = "500 -;6 a;200 -", frames = 8000 },
   shop_64 = { scn = 1, map = 0, ev = 2, after = "500 -;6 a;200 -", frames = 8000 },
   inn_66 = { scn = 1, map = 0, ev = 21, after = "500 -;6 a;200 -", frames = 8000 },
   shop_68 = { scn = 1, map = 0, ev = 40, after = "500 -;6 a;200 -", frames = 8000 },
   shop_6a = { scn = 1, map = 0, ev = 20, after = "500 -;6 a;200 -", frames = 8000 },
+  -- church: Buy list (item names + effect lines + prices)
+  church_buy = { scn = 1, map = 0, ev = 20, after = "500 -;6 a;200 -;6 a;200 -", frames = 8200 },
+  -- the same list, cursor walked right x4 and down (highlight / wrap checks)
+  church_cur = { scn = 1, map = 0, ev = 20, frames = 8600,
+                 after = "500 -;6 a;200 -;6 a;200 -;6 right;40 -;6 right;40 -;6 right;40 -;6 right;40 -;6 down;60 -" },
   shop_6c = { scn = 1, map = 0, ev = 14, after = "500 -;6 a;200 -", frames = 8000 },
   -- beast shop with 5 beasts in the hero's unit (status_beast's record in slots 1-5): list drawer C0DFD7 prints
   -- "Beast Pack" (C0E109) once $A180 >= 5
@@ -36,6 +52,8 @@ SCENES = {
                      [0x7E60DA] = BEAST, [0x7E6109] = BEAST, [0x7E6138] = BEAST },
                    after = "500 -;6 down;30 -;6 a;300 -;6 a;300 -;6 down;30 -;6 down;30 -;6 down;30 -;6 down;30 -;6 down;60 -",
                    frames = 8900 },
+  shop_6c_en = { scn = 1, map = 0, ev = 14, bytes = { [0x7E607C] = BEAST_EN, [0x7E60AB] = BEAST },
+                 after = "500 -;6 down;30 -;6 a;300 -;6 a;300 -", frames = 8700 },
   shop_6e = { scn = 1, map = 0, ev = 15, after = "500 -;6 a;200 -", frames = 8000 },
   shop_70 = { scn = 6, map = 0, ev = 66, after = "500 -;6 a;200 -", frames = 8000 },
   shop_72 = { scn = 1, map = 0, ev = 17, after = "500 -;6 a;200 -", frames = 8000 },
@@ -66,7 +84,7 @@ SCENES = {
                      0x00, 0x09, 0x01, 0x01, 0x00, 0x01, 0x02, 0x00, 0x02, 0x03, 0x00, 0x03, 0x04, 0x00, 0x01, 0xFF } },
                    after = "240 -;6 a;40 -;6 down;20 -;6 down;20 -;6 down;20 -;6 a;400 -;6 down;40 -;6 a;200 -;6 a;200 -",
                    settle = 0,
-                   frames = 8200 },
+                   frames = 8800 },
   -- the same with a full bag (28 entries: kind 0 weapon + level, 1 armor, 2 food, 3/4 items + count), then 30 downs
   -- to the last row: proof of the list scroll
   status_items_full = { scn = 35, map = 2, x = 0x80, y = 0x68, bytes = { [0x7E62B0] = {

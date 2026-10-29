@@ -14,6 +14,7 @@ import argparse
 import re
 import subprocess
 import sys
+import textwrap
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -244,8 +245,6 @@ def repack(orig, text, gfx, strict=True, asm=False, maps=()):
         elif off not in fields and off not in extract.MENU_SET and n - len(b) >= 6:
             free.append([off + len(b), off + n])  # same for a string that shrank in place
         w.write(off, b, f"text_{0xC00000 | off:06X}")
-    if asm:  # the old half-width glyph code text.asm cut off (docs/re/hooks.md): free space in bank C3
-        free += [[0x031B84, 0x031C12], [0x03276D, 0x03278C]]
     for name, lo, hi in seq:
         if any(lo <= o < hi and text[o][1] != t.decode(orig, o)[0] for o in text):
             free.append([pack_run(w, t, orig, text, name, lo, hi), hi])  # nothing points past the packed list
@@ -288,6 +287,18 @@ def choice_indent(s):
     6 px space put an English glyph's left columns there (JP's full-width glyphs have a blank margin)."""
     m = re.search(r"\{choice:[0-9A-Fa-f]+\}", s)
     return s if not m else s[:m.end()] + re.sub(r"(^|\{nl\}) (?! )", r"\1  ", s[m.end():])
+
+
+EFFECTS = [(lo & 0x3FFFFF, hi & 0x3FFFFF) for n, lo, hi in extract.RUNS if n in ("effects", "effects2")]
+
+
+def effect_box(s):
+    """Item effect line (buy-list effect box, text.asm: 16 cells x 2 rows, 8x8 printer straight to VRAM): word-wrap
+    to two lines of 16, each blank-padded so it covers the previous item's line."""
+    lines = textwrap.wrap(s.removesuffix("{end}"), 16, break_long_words=False)
+    if len(lines) > 2 or max(map(len, lines), default=0) > 16:
+        raise SystemExit(f"effect line over 2 x 16 cells: {s!r}")
+    return "{nl}".join(x.ljust(16) for x in (lines + ["", ""])[:2]) + "{end}"
 
 
 NAME_GRID = 0x07EAC9  # LZ: name-entry grid tilemap, 20 tiles x 39 rows (tile = code - $10, $20xx; E7 = blank).
@@ -412,7 +423,8 @@ def build(orig, mark=False, qa=()):
         text = {o: (w, s if o in skip or not s.replace("{end}", "").strip() else marker(t, o, w, s))
                 for o, (w, s) in text.items()}
     else:
-        en = {o: choice_indent(s) for o, s in extract.load_en().items()}  # script/*.json over the original units
+        en = {o: effect_box(s) if any(lo <= o < hi for lo, hi in EFFECTS) else choice_indent(s)
+              for o, s in extract.load_en().items()}  # script/*.json over the original units
     over = {int(k, 16) & 0x3FFFFF: v for k, v in (q.split("=", 1) for q in qa)}
     for off, s in (({} if mark else en) | over).items():
         if off not in text:

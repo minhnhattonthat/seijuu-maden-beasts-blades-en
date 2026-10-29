@@ -41,6 +41,13 @@ def test_choice_indent():
         assert all(len(o) <= 35 for o in opts.split("{nl}")), f"{0xC00000 | off:06X}"
 
 
+def test_effect_box():
+    assert build.effect_box("Heal one ally's HP{end}") == "Heal one ally's {nl}HP              {end}"
+    for off, s in build.extract.load_en().items():  # every effect line fits 2 x 16 (raises otherwise)
+        if any(lo <= off < hi for lo, hi in build.EFFECTS):
+            build.effect_box(s)
+
+
 def test_status_map():
     en = build.Table.load(ROOT / "tbl" / "en.tbl")
     raw = build.status_map(en, GFX[build.STATUS_MAP])

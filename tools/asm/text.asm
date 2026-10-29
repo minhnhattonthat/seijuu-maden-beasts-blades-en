@@ -18,22 +18,52 @@ org $C325E9
 	jmp bulk_half
 
 ; the old half-width glyph routines C31B74 / C3275D are unreachable now: trampolines live there
+; A lone glyph (next byte is a control code, {call}/{var} included, or a kanji) takes the game's own 6 px path
+; (as C31B84 / C3276D), so a name inserted mid-line keeps single spacing ("Obtained Raisins!", not
+; "Obtained  Raisins !"); C31BA7 loads it, now from the English font
 org $C31B74
 typed_half:
 	jsl compose
+	bcs .half
 	jsr $19BE		; rest of the full-width loader: half-tile phase shift
 	ldx $4754
 	jsr ($133B,x)		; typed draw for the current box mode (as C31993)
 	jmp $1933		; engine exit (PLB PLP RTL)
+.half:
+	lda #$7E
+	pha
+	plb
+	jsr $1BA7		; load + phase shift (X = glyph offset)
+	lda $474E
+	ldx $4754
+	bit #$01
+	bne +
+	jsr ($133F,x)
+	jmp $1933
++	jsr ($133B,x)
+	jmp $1933
 	warnpc $C31BA7
+org $C31BAA
+	lda.l font,x		; was the Japanese half-width font CA0000 (12 B/glyph; ours is 16)
 
 org $C3275D
 bulk_half:
 	jsl compose
+	bcs .half
 	jsr $19BE
 	ldx $4754
 	jsr ($1343,x)		; bulk draw (as C32627)
 	jmp $2587		; next code
+.half:
+	jsr $1BA7
+	lda $474E
+	ldx $4754
+	bit #$01
+	bne +
+	jsr ($1347,x)
+	jmp $2587
++	jsr ($1343,x)
+	jmp $2587
 	warnpc $C3278C
 
 ; line width for centred scroll lines (prologue, intro, endings, credits): follow {call} stubs, count an English
@@ -273,6 +303,48 @@ org $C0FAE9
 org $C0FB29
 	jsl wrapname
 
+; item/church buy list (C0C7AD; up to 9 entries, was 3 columns of 8 cells, 2 rows apart): one column of 26 cells,
+; one row apart, so full names fit. Window 28x5 -> 28x9; the price box (C8B4), the effect box (C8F6) and its other
+; variant (C8D8) move 4 rows down; the effect box is 16x2 at col 1 (effect lines are two {nl} lines of 16)
+org $C0C87E
+	db $09			; grid window height
+org $C0C844
+	dw $001C		; column step: always the next row (CMP #$1C)
+org $C0C851
+	nop #3			; second INC $4B9F
+org $C0C02B			; highlight table (buffer byte offset, cells) per entry
+	dw 2,26, 58,26, 114,26, 170,26, 226,26, 282,26, 338,26, 394,26, 450,26	; row*56+2 (asar math is left to right)
+org $C0CA17
+	db $01			; up: index-1 (was -3)
+org $C0CA28
+	db $01			; down: index+1
+org $C0C8BB
+	db $0C			; price box y
+org $C0C8DF
+	db $0C
+org $C0C8F7
+	db $01			; effect box x
+org $C0C8FD
+	db $0C			; effect box y
+org $C0C903
+	db $10			; effect box width
+org $C0C909
+	db $02			; effect box height
+org $C0C959
+	db $0D			; price text row (also kept in $C1AE for the redraw)
+org $C0C986
+	db $0D
+org $C0C9A3
+	db $02			; effect text col
+org $C0C9A9
+	db $0D			; effect text row
+org $C0CABB
+	db $0D
+org $C0CAE1
+	db $02
+org $C0CAE7
+	db $0D
+
 ; beast buy list (C0E845, two columns of 14 in a 28-cell buffer): a name over 13 wraps onto the entry's blank
 ; lower row, LV: moves there too (X+9). Was JSL $C32912, LDA $4B9D / CLC / ADC #9 / STA $4B9D, LDA $4B9D / CLC / ADC #5
 org $C0E88E
@@ -282,6 +354,40 @@ org $C0E892
 	nop #6
 org $C0E8B3
 	jsl beastnx
+	nop #3
+; beast sell list (C0DA64, names from the beast records in RAM): the same three hooks
+org $C0DA91
+	jsl beastname
+org $C0DA95
+	jsl beastlv
+	nop #6
+org $C0DAC1
+	jsl beastnx
+	nop #3
+; beast sell list at the beast shop (C0DFD7, one beast per entry row: name col 1, LV: col 10, unit col 17): name in
+; 9 cells, the rest on the blank lower row (Salamander, 10, starts at col 0)
+org $C0E029
+	jsl name9
+; item sell list (C0CC3E) and weapon upgrade list (C0D0xx), two columns of 14 (icon, name, LV:/count at X+9): name
+; as the beast list (13, then the blank lower row), LV:/count on the lower row at X+10 so a 9-char line 2 clears it
+org $C0CCAC
+	jsl sellname
+org $C0CC81			; empty slot: X+9
+	jsl selllv
+	nop #6
+org $C0CCC3
+	jsl selllv
+	nop #6
+org $C0CCEC
+	jsl sellnx
+	nop #3
+org $C0D124
+	jsl sellname
+org $C0D138
+	jsl selllv
+	nop #6
+org $C0D157
+	jsl sellnx
 	nop #3
 
 ; status equip rows (names col 9, build.STATUS_CODE) and beast skills (col 16): C26C9E blanks the whole field
@@ -323,8 +429,14 @@ compose:			; in: [$32] at an English code. out: $36DD buffer filled, $32 past 1-
 	asl
 	asl
 	bra .go
-.single:
-	lda #$0000		; glyph 10 = space
+.single:			; out: carry set, X = the glyph's offset, $474D = 1 (half width), DB restored
+	plx
+	sep #$20
+	lda #$01
+	sta $474D
+	plb
+	sec
+	rtl
 .go:
 	sta $7F			; second glyph's offset
 	plx
@@ -362,6 +474,7 @@ compose:			; in: [$32] at an English code. out: $36DD buffer filled, $32 past 1-
 	cpy #$0013
 	bne .second
 	plb
+	clc			; two glyphs composed
 	rtl
 
 measure:			; replaces C32CA4: width of the line at [$32] in 8 px cells -> $4B8E
@@ -818,6 +931,52 @@ beastnx:			; C0E8B3, after LV: back to the name row; out A = next column X (stri
 	lda $4B9D
 	clc
 	adc #$0005
+	rtl
+
+name9:				; C0E029, beast sell list: wrapname with W=9
+	php
+	rep #$30
+	lda #$0009
+	jmp wn_go
+
+sellname:			; C0CCAC, C0D124: beastname, then $4BA7 back to line 1's start (the caller puts the icon
+	jsl beastname		; at $4BA7-2). Any M/X
+	php
+	rep #$20
+	lda $4B9F		; row * 56 + col * 2 + $4BA4. shortcut: 56 = both lists' 28-cell buffer ($4BA1)
+	asl a
+	asl a
+	asl a
+	pha
+	asl a
+	asl a
+	asl a
+	sec
+	sbc $01,s
+	sta $01,s
+	lda $4B9D
+	asl a
+	clc
+	adc $01,s
+	adc $4BA4
+	sta $4BA7
+	pla
+	plp
+	rtl
+
+selllv:				; sell/upgrade lists, after the name: LV:/count on the entry's lower row, X+10. M16
+	lda $4B9D
+	clc
+	adc #$000A
+	sta $4B9D
+	inc $4B9F
+	rtl
+
+sellnx:				; after LV:/count: back to the name row; out A = next column X (stride 14). M16
+	dec $4B9F
+	lda $4B9D
+	clc
+	adc #$0004
 	rtl
 	warnpc $E81000
 

@@ -30,7 +30,7 @@ MENUS = {
         "-- 26 27 2A 2B --": "Move", "-- 28 29 2A 2B --": "Action", "00 01 02 03 04 05": "Camp",
         "06 07 08 09 0A 0B": "Status", "20 21 22 23 24 25": "Meet", "-- 2C 2D 2E 2F --": "Enter"}),
     0x0BD21F: ({0xC0B97F: 4, 0xC0B9E1: 4}, {
-        "-- 00 01 02 03 --": "Confirm", "04 05 06 07 08 09": "Reset", "-- 20 21 22 23 --": "Wait",
+        "-- 00 01 02 03 --": "Check", "04 05 06 07 08 09": "Reset", "-- 20 21 22 23 --": "Wait",
         "-- 0A 0B 0C 0D --": "Cancel", "-- 04 05 0E 0F --": "Resume"}),
     0x0BD44D: ({0xC0BA43: 2, 0xC0BA79: 2, 0xC0BAAB: 2}, {  # world-map X menu and map view
         "-- 0A 0B 0C 0D --": "Map", "-- 06 07 08 09 --": "Save", "-- 2C 2D 2E 2F --": "Cities",
