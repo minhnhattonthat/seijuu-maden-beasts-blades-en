@@ -2,8 +2,9 @@
 
 Updated at the end of every session. Keep it to what the next session needs; history is in git.
 
-- **Phase:** 9 (release) done: v1.0 zip built and verified, **not published** (owner's call: `gh release create`
-  is theirs). Re-verified 2026-10-30 at 25198ef: build == zip patch output (a2b16059...), `check.py` ok. No phase
+- **Phase:** 9 (release) done and **published 2026-10-30** at the owner's request: repo made public, release
+  https://github.com/minhnhattonthat/seijuu-maden-beasts-blades-en/releases/tag/v1.0 (zip, patched SHA-1
+  a2b16059...). Next: player bug reports (GitHub issues). Re-verified 2026-10-30 at 25198ef: build == zip patch output (a2b16059...), `check.py` ok. No phase
   left; only the optional polish/in-game checks below.
 - **Release v1.0 (2026-10-29):** QA pass 3 fixes committed (b963049); full EN tour re-run (44 scenes ok, 603 printed
   pointers, 0 outside units); visual-QA pass 4 on the 34 changed sheets: all ok (`verdicts/p4_chunk_*.tsv`); gate 110/110
