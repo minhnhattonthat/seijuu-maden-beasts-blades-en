@@ -9,6 +9,21 @@ no game data you can play; you need your own dump of the Japanese game.
 **Found a bug?** [Report it](../../issues/new/choose): untranslated text, typos, overflow, crashes. Attaching a savestate
 helps most.
 
+## Translation status
+
+| Part | Status |
+|---|---|
+| Dialogue / story | Translated |
+| Menus, item/skill/beast names, shops, status screens | Translated |
+| Battle and world-map command menus (graphics) | Translated |
+| Title screen | Translated (the logo's 聖獣魔伝 romanised as "Seijuu Maden") |
+| Intro crawl and poem | Translated (intro keeps the game's own English verses; its Japanese subtitles are removed) |
+| Name entry | Translated (English letter grid) |
+| Endings and staff credits | Translated |
+
+Known issues: a few long beast/enemy names are cut at 13 letters on status screens; the army header is abbreviated
+("№ N King"). Start from a cold boot: old savestates show garbage.
+
 ## What's here
 
 | Path | What it is |
